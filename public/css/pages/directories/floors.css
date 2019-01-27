@@ -1,0 +1,78 @@
+.card-body > .map {
+	width: 100%; 
+	height: 240px;
+	transition: all .2s ease-in-out;
+}
+
+.card-body:hover > .map {
+	transform: scale(1.1);
+}
+
+.card-body {
+	position: relative;
+	padding: 0;
+	height: 200px;
+	overflow: hidden;
+}
+
+.map-cover {
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	background: transparent;
+	cursor: pointer;
+	background: rgba(0, 0, 0, 0.8);
+	padding: 40px 20px;
+}
+
+.map-cover h2 {
+	color: #FFF;
+}
+
+.card-body .actions {
+	display: none;
+	position: absolute;
+	left: 0;
+	bottom: 0;
+	width: 100%;
+	height: 50px;
+}
+
+.card-body:hover .actions {
+	display: block;
+}
+
+.card-body .actions a {
+    color: #FFF;
+    display: block;
+}
+
+.card-body .actions > div > div {
+    padding: 0;
+}
+
+.card-body .actions > div > div > a {
+    padding: 15px;
+    border: 1px solid #FFF;
+}
+
+.card-body .actions > div > div > a:hover {
+	text-decoration: none;
+}
+
+.card-body .blank {
+	border: 2px dashed #CACACA;
+	width: 100%;
+	height: 100%;
+	cursor: pointer;
+}
+
+.card-body .blank i {
+	transition: all .2s ease-in-out;
+}
+
+.card-body .blank:hover i {
+	transform: scale(1.5);
+}

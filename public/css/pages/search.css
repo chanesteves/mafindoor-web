@@ -1,0 +1,234 @@
+html {
+	overflow-y: hidden;
+}
+
+#map {
+	position: absolute; 
+	top: 50px; 
+	bottom: 0; 
+	left: 0;
+	right: 0;
+	width: 100%;
+	height: 100%;
+}
+
+.nav-item img {
+	width: 20px;
+	height: 20px;
+	border-radius: 10px;
+}
+
+.nav-building-name {
+	margin-right: 5px;
+}
+
+.sidebar-fixed .sidebar,
+.sidebar .sidebar-nav,
+.sidebar .nav {
+	width: auto !important;
+}
+
+.building-logo {
+	width: 50px;
+	height: 50px;
+	border-radius: 25px;
+	margin: 5px;
+}
+
+.building-name {
+	padding: 10px;
+	font-size: 18px;
+	text-align: left;
+}
+
+.building-address {
+	font-size: 12px;
+	margin-top: -15px;
+	text-align: left;
+	padding-left: 10px;
+}
+
+.building-details {
+	white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    width: 75%;
+}
+
+.modal .building-link {
+	margin: 5px;
+}
+
+.nav-link .nav-icon {
+	float: right;
+	margin-top: 5px !important;
+}
+
+#pnl-floors {
+	position: fixed;
+	bottom: 20px;
+	right: 20px;
+	background-color: #FFF;
+	opacity: 0.9;
+	border-radius: 10px;
+	border: 2px solid #CCC;
+}
+
+#pnl-floors hr {
+	margin-top: 0;
+	margin-bottom: 0;
+	border-color: #CCC;
+}
+
+#pnl-floors a {
+	font-size: 24px;
+	font-weight: bold;
+	padding: 5px 25px;
+	font-family: monospace;
+}
+
+#pnl-floors a.active,
+#pnl-floors a:hover {
+	background-color: #36a1bf;
+	color: #FFF;
+}
+
+.annotation-background {
+	width: 45;
+    height: 60;
+    padding-left: 5px;
+    padding-top: 1px;
+}
+
+.mapboxgl-popup-close-button {
+	display: none;
+}
+
+.annotation-background-image {
+	width: 30px;
+	height: 30px;
+}
+
+.mapboxgl-popup-content {
+	background-color: transparent; 
+    background: url(marker_container.png);
+    background-size: 60px;
+    box-shadow: none;
+}
+
+.mapboxgl-popup-tip {
+	display: none;
+}
+
+#pnl-search {
+	position: fixed;
+	top: 70px;
+	right: 20px;
+	background-color: #FFF;
+	opacity: 0.9;
+	border-radius: 10px;
+	border: 2px solid #CCC;
+	padding: 5px;
+	width: 265px;
+	z-index: 10;
+}
+
+#pnl-results {
+	margin-top: 50px;
+	width: 100%;
+	max-height: 290px;
+    overflow-y: auto;
+}
+
+.thumbnail-sm {
+	width: 30px;
+    height: 30px;
+    border-radius: 15px;
+    margin: 5px;
+}
+
+.result-item {
+	padding-left: 15px;
+	padding-right: 15px;
+}
+
+#pnl-results .name {
+	padding: 5px;
+    color: #7a909c;
+    width: 190px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+#pnl-results hr {
+	margin-top: 0;
+	margin-bottom: 0;
+}
+
+#pnl-results .annotation .name {
+	padding: 0px 5px;
+}
+
+#pnl-results .sub-name {
+	padding: 0px 5px;
+    color: #7a909c;
+    width: 190px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    font-weight: normal;
+    font-size: 10px;
+}
+
+#pnl-results a.active,
+#pnl-results a:hover {
+	text-decoration: none;
+}
+
+#pnl-results a.active .result-item,
+#pnl-results a:hover .result-item {
+	background-color: #7a909c;
+}
+
+#pnl-results a.active .name,
+#pnl-results a.active .sub-name,
+#pnl-results a:hover .name,
+#pnl-results a:hover .sub-name {
+	color: #FFF !important;
+}
+
+.sub-category-title,
+.annotation-title {
+	padding: 5px;
+}
+
+.annotation-title {
+	margin-top: -5px;
+}
+
+.annotation-title b {
+	width: 150px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    display: block;
+    margin: auto;
+}
+
+.annotation-title div  {
+	font-size: 12px;
+	margin-top: -5px;
+}
+
+.back-annotation {
+	left: 10px;
+    border-radius: 50%;
+    position: absolute;
+}
+
+@media (max-width: 768px) {
+  .near-container {
+    display: none;
+  }
+}
