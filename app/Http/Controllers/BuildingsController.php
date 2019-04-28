@@ -17,6 +17,28 @@ use Illuminate\Http\Request;
 
 class BuildingsController extends Controller
 {
+	public function createAllSlugs () {
+		$buildings = Building::all();
+
+		foreach ($buildings as $building) {
+			$slug = str_slug($building->name);
+			$build = Building::where('slug', $slug)->first();
+			$count = 0;
+
+			while ($build && $building->id != $build->id) {
+				$count++;
+				$slug = str_slug($building->name . $count);
+				$build = Building::where('slug', $slug)->first();
+			}
+
+			$building->slug = str_slug($slug);
+			
+			$building->save();
+		}
+
+		return 'DONE!!!';
+	}
+
 	public function exportBuildings () {
 		$buildings = Building::all();
 
@@ -71,6 +93,20 @@ class BuildingsController extends Controller
 		$building->creator_id = Auth::id();
 		$building->save();
 
+		$slug = str_slug($building->name);
+		$build = Building::where('slug', $slug)->first();
+		$count = 0;
+
+		while ($build && $building->id != $build->id) {
+			$count++;
+			$slug = str_slug($building->name . $count);
+			$build = Building::where('slug', $slug)->first();
+		}
+
+		$building->slug = str_slug($slug);
+		
+		$building->save();
+
 		return array('status' => 'OK', 'result' => $building);
 	}
 
@@ -99,6 +135,18 @@ class BuildingsController extends Controller
 		$building->creator_id = Auth::id();
 		$building->save();
 
+		$slug = str_slug($building->name);
+		$build = Building::where('slug', $slug)->first();
+		$count = 0;
+
+		while ($build && $building->id != $build->id) {
+			$count++;
+			$slug = str_slug($building->name . $count);
+			$build = Building::where('slug', $slug)->first();
+		}
+
+		$building->slug = str_slug($slug);
+
 		return array('status' => 'OK', 'result' => $building);
 	}
 
@@ -115,17 +163,31 @@ class BuildingsController extends Controller
 	}
 
 	public function ajaxShowBuildings (Request $request) {
-		$buildings = Building::select(DB::raw('buildings.*, IFNULL(buildings.unlocked_at, user_buildings.unlocked_at) as unlocked_at'))
-							->leftJoin('user_buildings', function ($q) {
-								$q->on('user_buildings.building_id', 'buildings.id');
-								$q->whereNull('user_buildings.deleted_at');
-							})->leftJoin('users', function ($q) use ($request) {
-								$q->on('user_buildings.user_id', 'users.id');
-								$q->where('users.id', $request->id);
-								$q->whereNull('users.deleted_at');
-							})->where('status', 'live')->get();
+		$distance = 'NULL';
+		$buildings = Building::with('floors')->whereNotNull('name');
 
-		return array('status' => 'OK', 'buildings' => $buildings);	
+		if ($request->lng && $request->lat) {
+			$distance = 'SQRT(POW(floors.longitude - ' . $request->lng . ', 2) + POW(floors.latitude - ' . $request->lat . ', 2))';
+
+			$buildings = Building::with('floors')
+									->leftJoin('floors', function ($q) {
+										$q->on('floors.building_id', 'buildings.id');
+										$q->where('floors.label', 'G');
+										$q->whereNull('floors.deleted_at');
+									})->orderByRaw($distance);
+		}
+
+		if ($request->user_id)
+			$buildings = $buildings->select(DB::raw('buildings.*, IFNULL(buildings.unlocked_at, user_buildings.unlocked_at) as unlocked_at, ' . $distance . ' as distance'))
+								->leftJoin('user_buildings', function ($q) use ($request) {
+									$q->on('user_buildings.building_id', 'buildings.id');
+									$q->where('user_buildings.user_id', $request->user_id);
+									$q->whereNull('user_buildings.deleted_at');
+								})->where('buildings.status', 'live');
+		else
+			$buildings = $buildings->select(DB::raw(DB::raw('buildings.*, ' . $distance . ' as distance')))->where('buildings.status', 'live');
+
+		return array('status' => 'OK', 'buildings' => $buildings->limit(5)->get(), 'current_building' => $buildings->havingRaw('IFNULL(distance, 100) <= buildings.max_radius')->first());	
 	}
 
 	public function ajaxUploadLogo(Request $request, $id)

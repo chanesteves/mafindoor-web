@@ -42,6 +42,11 @@ class User extends Authenticatable
         return $this->belongsTo('App\Person', 'id', 'id');
     }
 
+    public function roles()
+    {
+        return $this->belongsToMany('App\Role', 'user_roles', 'user_id', 'role_id')->withTimestamps();
+    }
+
     /**
      * Route notifications for the mail channel.
      *

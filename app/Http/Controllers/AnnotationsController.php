@@ -19,6 +19,28 @@ use Illuminate\Http\Request;
 
 class AnnotationsController extends Controller
 {
+	public function createAllSlugs () {
+		$annotations = Annotation::all();
+
+		foreach ($annotations as $annotation) {
+			$slug = str_slug($annotation->name);
+			$anno = Annotation::where('slug', $slug)->first();
+			$count = 0;
+
+			while ($anno && $annotation->id != $anno->id) {
+				$count++;
+				$slug = str_slug($annotation->name . $count);
+				$anno = Annotation::where('slug', $slug)->first();
+			}
+
+			$annotation->slug = str_slug($slug);
+			
+			$annotation->save();
+		}
+
+		return 'DONE!!!';
+	}
+
 	public function exportAnnotations (Request $request) {
 		$floor = Floor::find($request->floor_id);
 
@@ -63,18 +85,38 @@ class AnnotationsController extends Controller
 	{
 		$this->validate($request, [
 			'name' => 'required',
+			'map_name' => 'required',
 			'longitude' => 'required',
 			'latitude' => 'required',
+			'min_zoom' => 'required',
+			'max_zoom' => 'required',
 			'sub_category_id' => 'required'
 		]);
 
 		$annotation = new Annotation;
 
 		$annotation->name = $request->name;
+		$annotation->map_name = $request->map_name;
 		$annotation->longitude = $request->longitude;
 		$annotation->latitude = $request->latitude;
+		$annotation->min_zoom = $request->min_zoom;
+		$annotation->max_zoom = $request->max_zoom;
 		$annotation->sub_category_id = $request->sub_category_id;
 		$annotation->floor_id = $request->floor_id;
+		$annotation->save();
+
+		$slug = str_slug($annotation->name);
+		$anno = Annotation::where('slug', $slug)->first();
+		$count = 0;
+
+		while ($anno && $annotation->id != $anno->id) {
+			$count++;
+			$slug = str_slug($annotation->name . $count);
+			$anno = Annotation::where('slug', $slug)->first();
+		}
+
+		$annotation->slug = str_slug($slug);
+		
 		$annotation->save();
 
 		return array('status' => 'OK', 'result' => $annotation);
@@ -90,8 +132,11 @@ class AnnotationsController extends Controller
 	{
 		$this->validate($request, [
 			'name' => 'required',
+			'map_name' => 'required',
 			'longitude' => 'required',
 			'latitude' => 'required',
+			'min_zoom' => 'required',
+			'max_zoom' => 'required',
 			'sub_category_id' => 'required',
 			'floor_id' => 'required'
 		]);
@@ -102,10 +147,27 @@ class AnnotationsController extends Controller
 			return array('status' => 'ERROR', 'error' => 'Annotation not found.');
 
 		$annotation->name = $request->name;
+		$annotation->map_name = $request->map_name;
 		$annotation->longitude = $request->longitude;
 		$annotation->latitude = $request->latitude;
+		$annotation->min_zoom = $request->min_zoom;
+		$annotation->max_zoom = $request->max_zoom;
 		$annotation->floor_id = $request->floor_id;
 		$annotation->sub_category_id = $request->sub_category_id;
+		$annotation->save();
+
+		$slug = str_slug($annotation->name);
+		$anno = Annotation::where('slug', $slug)->first();
+		$count = 0;
+
+		while ($anno && $annotation->id != $anno->id) {
+			$count++;
+			$slug = str_slug($annotation->name . $count);
+			$anno = Annotation::where('slug', $slug)->first();
+		}
+
+		$annotation->slug = str_slug($slug);
+		
 		$annotation->save();
 
 		return array('status' => 'OK', 'result' => $annotation);

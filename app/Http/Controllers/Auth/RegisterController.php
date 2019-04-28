@@ -94,8 +94,7 @@ class RegisterController extends Controller
             'last_name' => 'required',
             'email' => 'required',            
             'username' => 'required',            
-            'password' => 'required',
-            'gender' => 'required'
+            'password' => 'required'
         ]);
 
         $user = User::where(array('username' => $request->username))->first();
@@ -114,7 +113,10 @@ class RegisterController extends Controller
 
         $person->first_name = $request->first_name;
         $person->last_name = $request->last_name;
-        $person->gender = $request->gender;
+        
+        if ($request->gender)
+            $person->gender = $request->gender;
+        
         $person->email = $request->email;
         $person->save();
 
@@ -129,7 +131,12 @@ class RegisterController extends Controller
 
         $user->save();
 
-        $person->user->notify(new UserCreated($person->user));
+        try {
+            $person->user->notify(new UserCreated($person->user));
+        }
+        catch (\Exception $e) {
+            // insert code here
+        }
 
         $user = User::with('person')->find($person->id);
 

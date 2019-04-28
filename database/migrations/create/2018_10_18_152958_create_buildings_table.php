@@ -20,6 +20,8 @@ class CreateBuildingsTable extends Migration
             $table->string('address')->default('');
             $table->enum('status', ['pending', 'in progress', 'live'])->default('pending');
             $table->integer('creator_id')->nullable();
+            $table->double('max_radius')->default(0.0025);
+            $table->string('slug')->default('');
             $table->timestamp('unlocked_at')->nullable();
             $table->timestamps();
             $table->softDeletes();

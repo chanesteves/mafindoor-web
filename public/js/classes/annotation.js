@@ -10,8 +10,11 @@ Annotation.prototype.store = function (param, callback) {
 	data = { 
 				_token: CSRF,
 				'name' : param.name,
+				'map_name' : param.map_name,
 				'longitude' : param.longitude,
 				'latitude' : param.latitude,
+				'min_zoom' : param.min_zoom,
+				'max_zoom' : param.max_zoom,
 				'sub_category_id' : param.sub_category_id,
 				'floor_id' : param.floor_id
 			};
@@ -36,8 +39,11 @@ Annotation.prototype.update = function (param, callback) {
 	data = { 
 				_token: CSRF,
 				'name' : param.name,
+				'map_name' : param.map_name,
 				'longitude' : param.longitude,
 				'latitude' : param.latitude,
+				'min_zoom' : param.min_zoom,
+				'max_zoom' : param.max_zoom,
 				'sub_category_id' : param.sub_category_id,
 				'floor_id' : param.floor_id
 			};

@@ -10,6 +10,8 @@
 
     <title>{{ config('app.name', 'Mafindoor') }}</title>
 
+    <link href="img/pages/favicon.png?version=1.2.0" rel="shortcut icon">
+
     <!-- Icons-->
     <link href="{{ asset('plugins/coreui-icons/css/coreui-icons.min.css') }}" rel="stylesheet">
     <link href="{{ asset('plugins/flag-icon-css/css/flag-icon.min.css') }}" rel="stylesheet">
@@ -19,6 +21,8 @@
     <link href="{{ asset('css/style.css?version=1.1.2') }}" rel="stylesheet">
 
     <link href="{{ asset('plugins/pace-progress/css/pace.min.css') }}" rel="stylesheet">
+
+    <link href="img/pages/favicon.png?version=1.2.0" rel="shortcut icon">
 
     @if(Request::path() == 'auth/register' || Request::path() == 'register')
         <link href="{{ asset('css/pages/auth/register.css') }}" rel="stylesheet">
@@ -66,13 +70,6 @@
                 <div class="col-md-4">
                     For any questions: <br>
                     <strong>Email us at</strong> <a href="mailto:support@mafindoor.com">support@mafindoor.com</a> <br>
-
-                    <strong>Call us at</strong> <br>
-                    (052) 740-6214 | (+63) 917-143-5116 <br>
-                    (+63) 998-591-4749 | (+63) 998-591-4751 <br><br>
-                    <strong>Visit our office</strong> <br>
-                    Unit 203 Pineda Bldg, Rizal St., Brgy. 25, <br>
-                    Legazpi City, Philippines, 4500 <br><br>
                 </div>
                 <div class="col-md-4">
                     <br/>
@@ -87,9 +84,6 @@
             </section>
         </div>
         <section class="row breath">
-            <div class="col-md-4 text-center">
-                <p style="font-size: 14px;">Powered by <a href="https://collabux.com" target="_blank"><b>CollabUX Web Solutions, Co.</b></a></p>
-            </div>
             <div class="col-md-4 text-center">
                 <p style="font-size: 14px;">© 2018 Mafindoor. All Rights Reserved</p>
             </div>
