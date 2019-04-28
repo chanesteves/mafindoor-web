@@ -73,7 +73,7 @@
           <div class="card-body text-center">
             <div>
               <h2>Sign up</h2>
-              <p>Join thousands of mafindoor users who find it easy to see what <i>Google Maps</i> can't show and reach where <i>Waze</i> can't go.</p>
+              <p>Join thousands of mazers who find it easy to see what <i>Google Maps</i> can't show and reach where <i>Waze</i> can't go.</p>
               <a class="btn btn-primary active mt-3" href="/auth/register">Register Now!</a>
             </div>
           </div>

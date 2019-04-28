@@ -12,22 +12,22 @@ Annotations.prototype.bindAnnotations = function () {
 	$('#ddl-building-id').unbind('change').on('change', function () {
 		var id = $(this).val();
 
-		$('#ddl-floor-id option').hide();
-		$('#ddl-floor-id option[data-building-id=' + id + ']').show();
+		$('#ddl-building-id option').hide();
+		$('#ddl-building-id option[data-building-id=' + id + ']').show();
 
-		var floor_building_id = $('#ddl-floor-id option:selected').data('building-id');
+		var floor_building_id = $('#ddl-building-id option:selected').data('building-id');
 
 		$('#btn-add-annotation').removeAttr('disabled');
 
 		if (floor_building_id != id) {
-			if ($('#ddl-floor-id option[data-building-id=' + id + ']').length == 0) {
-				$('#ddl-floor-id').val('');
+			if ($('#ddl-building-id option[data-building-id=' + id + ']').length == 0) {
+				$('#ddl-building-id').val('');
 
 				$('#btn-add-annotation').attr('disabled', 'disabled');
 			}
 			else {
-				var id = $('#ddl-floor-id option[data-building-id=' + id + ']').eq(0).attr('value');
-				$('#ddl-floor-id').val(id);	
+				var id = $('#ddl-building-id option[data-building-id=' + id + ']').eq(0).attr('value');
+				$('#ddl-building-id').val(id);	
 			}
 		}
 	});
@@ -126,21 +126,15 @@ Annotations.prototype.bindAnnotations = function () {
 		}
 
 		var name = $('#txt-add-annotation-name').val();
-		var map_name = $('#txt-add-annotation-map-name').val();
 		var longitude = $('#txt-add-annotation-longitude').val();
 		var latitude = $('#txt-add-annotation-latitude').val();
-		var min_zoom = $('#txt-add-annotation-min-zoom').val();
-		var max_zoom = $('#txt-add-annotation-max-zoom').val();
 		var sub_category_id = $('#ddl-add-annotation-sub-category-id').val();
 		var floor_id = $('#ddl-floor-id').val();
 
 		var annotation_obj = {
 			'name' : name,
-			'map_name' : map_name,
 			'longitude' : longitude,
 			'latitude' : latitude,
-			'min_zoom' : min_zoom,
-			'max_zoom' : max_zoom,
 			'sub_category_id' : sub_category_id,
 			'floor_id' : floor_id
 		};
@@ -202,12 +196,9 @@ Annotations.prototype.bindAnnotations = function () {
 			if (data.status == 'OK') {
 				$('#hdn-edit-annotation-id').val(data.annotation.id);
 				$('#txt-edit-annotation-name').val(data.annotation.name);
-				$('#txt-edit-annotation-map-name').val(data.annotation.map_name);
 				$('#ddl-edit-annotation-sub-category-id').val(data.annotation.sub_category_id);
 				$('#txt-edit-annotation-longitude').val(data.annotation.longitude);
 				$('#txt-edit-annotation-latitude').val(data.annotation.latitude);
-				$('#txt-edit-annotation-min-zoom').val(data.annotation.min_zoom);
-				$('#txt-edit-annotation-max-zoom').val(data.annotation.max_zoom);
 			}
 		});
 	});
@@ -224,22 +215,16 @@ Annotations.prototype.bindAnnotations = function () {
 
 		var id = $('#hdn-edit-annotation-id').val();
 		var name = $('#txt-edit-annotation-name').val();
-		var map_name = $('#txt-edit-annotation-map-name').val();
 		var longitude = $('#txt-edit-annotation-longitude').val();
 		var latitude = $('#txt-edit-annotation-latitude').val();
-		var min_zoom = $('#txt-edit-annotation-min-zoom').val();
-		var max_zoom = $('#txt-edit-annotation-max-zoom').val();
 		var sub_category_id = $('#ddl-edit-annotation-sub-category-id').val();
 		var floor_id = $('#ddl-floor-id').val();
 
 		var floor_obj = {
 			'id' : id,
 			'name' : name,
-			'map_name' : map_name,
 			'longitude' : longitude,
 			'latitude' : latitude,
-			'min_zoom' : min_zoom,
-			'max_zoom' : max_zoom,
 			'sub_category_id' : sub_category_id,
 			'floor_id' : floor_id
 		};

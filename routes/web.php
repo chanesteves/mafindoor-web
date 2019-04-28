@@ -44,47 +44,18 @@ Route::post('subCategories/{subCategory}/ajaxUpdate', 'SubCategoriesController@a
 Route::post('subCategories/{subCategory}/ajaxDestroy', 'SubCategoriesController@ajaxDestroy');
 Route::post('subCategories/{subCategory}/ajaxUploadLogo', 'SubCategoriesController@ajaxUploadLogo');
 Route::post('userSubCategorySearches/ajaxStore', 'UserSubCategorySearchesController@ajaxStore');
-Route::post('users/ajaxStore', 'UsersController@ajaxStore');
-Route::post('users/{user}/ajaxShow', 'UsersController@ajaxShow');
-Route::post('users/{user}/ajaxUpdate', 'UsersController@ajaxUpdate');
-Route::post('users/{user}/ajaxDestroy', 'UsersController@ajaxDestroy');
-Route::post('roles/ajaxStore', 'RolesController@ajaxStore');
-Route::post('roles/{role}/ajaxShow', 'RolesController@ajaxShow');
-Route::post('roles/{role}/ajaxUpdate', 'RolesController@ajaxUpdate');
-Route::post('roles/{role}/ajaxDestroy', 'RolesController@ajaxDestroy');
-Route::post('menus/ajaxStore', 'MenusController@ajaxStore');
-Route::post('menus/{menu}/ajaxShow', 'MenusController@ajaxShow');
-Route::post('menus/{menu}/ajaxUpdate', 'MenusController@ajaxUpdate');
-Route::post('menus/{menu}/ajaxDestroy', 'MenusController@ajaxDestroy');
 
 Route::get('buildings/exportBuildings', 'BuildingsController@exportBuildings');
 Route::get('floors/exportFloors', 'FloorsController@exportFloors');
 Route::get('annotations/exportAnnotations', 'AnnotationsController@exportAnnotations');
 
-Route::get('buildings/createAllSlugs', 'BuildingsController@createAllSlugs');
-Route::get('floors/createAllSlugs', 'FloorsController@createAllSlugs');
-Route::get('annotations/createAllSlugs', 'AnnotationsController@createAllSlugs');
-Route::get('subCategories/createAllSlugs', 'SubCategoriesController@createAllSlugs');
-
 Auth::routes();
-
-Route::get('search', 'PagesController@search');
-Route::get('search/buildings/{building?}', 'PagesController@search');
-Route::get('search/buildings/{building?}/floors/{floor?}', 'PagesController@search');
-Route::get('search/buildings/{building?}/floors/{floor?}/annotations/{annotation?}', 'PagesController@search');
-Route::get('search/buildings/{building?}/floors/{floor?}/subCategories/{sub_category?}', 'PagesController@search');
 
 // directories
 Route::get('venues', 'PagesController@venues');
 Route::get('floors', 'PagesController@floors');
 Route::get('annotations', 'PagesController@annotations');
-
-// maintenance
 Route::get('categories', 'PagesController@categories');
-
-// permissions
-Route::get('users', 'PagesController@users');
-Route::get('privileges', 'PagesController@privileges');
 
 Route::get('auth/register', 'Auth\RegisterController@getRegister');
 Route::get('auth/login', 'Auth\LoginController@getLogin');

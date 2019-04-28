@@ -10,8 +10,6 @@
 
     <title>{{ config('app.name', 'Mafindoor') }}</title>
 
-    <link href="img/pages/favicon.png?version=1.2.0" rel="shortcut icon">
-
     <!-- Icons-->
     <link href="{{ asset('plugins/coreui-icons/css/coreui-icons.min.css') }}" rel="stylesheet">
     <link href="{{ asset('plugins/flag-icon-css/css/flag-icon.min.css') }}" rel="stylesheet">
@@ -21,8 +19,6 @@
     <link href="{{ asset('css/style.css?version=1.1.2') }}" rel="stylesheet">
 
     <link href="{{ asset('plugins/pace-progress/css/pace.min.css') }}" rel="stylesheet">
-
-    <link href="img/pages/favicon.png?version=1.2.0" rel="shortcut icon">
 
     @if(Request::path() == 'auth/register' || Request::path() == 'register')
         <link href="{{ asset('css/pages/auth/register.css') }}" rel="stylesheet">

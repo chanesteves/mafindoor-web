@@ -30,9 +30,6 @@ class ComposerServiceProvider extends ServiceProvider
                 else {
                     Session::put('warning', null);
                 }
-
-                $user->last_logged_at = date('Y-m-d H:i:s');
-                $user->save();
             }
 
             $view->with(array());

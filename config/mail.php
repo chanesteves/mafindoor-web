@@ -55,7 +55,7 @@ return [
     |
     */
 
-    'from' => ['address' => 'support@mafindoor.com', 'name' => 'Mafindoor'],
+    'from' => ['address' => 'info@collabux.com', 'name' => 'Maze'],
 
     /*
     |--------------------------------------------------------------------------
@@ -81,9 +81,9 @@ return [
     |
     */
 
-    'username' => env('MAIL_USERNAME', 'support@mafindoor.com'),
+    'username' => env('MAIL_USERNAME', 'info@collabux.com'),
 
-    'password' => env('MAIL_PASSWORD', 'Mafind00t###'),
+    'password' => env('MAIL_PASSWORD', 'Notcollabux123$$'),
 
     /*
     |--------------------------------------------------------------------------

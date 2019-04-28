@@ -25,7 +25,6 @@ class CreateFloorsTable extends Migration
             $table->double('min_zoom')->default(0);
             $table->enum('status', ['pending', 'in progress', 'live'])->default('pending');
             $table->integer('building_id')->nullable();
-            $table->string('slug')->default('');
             $table->integer('creator_id')->nullable();
             $table->timestamps();
             $table->softDeletes();

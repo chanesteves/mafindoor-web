@@ -17,28 +17,6 @@ use Illuminate\Http\Request;
 
 class FloorsController extends Controller
 {
-	public function createAllSlugs () {
-		$floors = Floor::all();
-
-		foreach ($floors as $floor) {
-			$slug = str_slug($floor->name);
-			$flo = Floor::where('slug', $slug)->first();
-			$count = 0;
-
-			while ($flo && $floor->id != $flo->id) {
-				$count++;
-				$slug = str_slug($floor->name . $count);
-				$flo = Floor::where('slug', $slug)->first();
-			}
-
-			$floor->slug = str_slug($slug);
-			
-			$floor->save();
-		}
-
-		return 'DONE!!!';
-	}
-
 	public function exportFloors (Request $request) {
 		$building = Building::find($request->building_id);
 
@@ -122,25 +100,11 @@ class FloorsController extends Controller
 		$floor->creator_id = Auth::id();
 		$floor->save();
 
-		$slug = str_slug($floor->name);
-		$flo = Floor::where('slug', $slug)->first();
-		$count = 0;
-
-		while ($flo && $floor->id != $flo->id) {
-			$count++;
-			$slug = str_slug($floor->name . $count);
-			$flo = Floor::where('slug', $slug)->first();
-		}
-
-		$floor->slug = str_slug($slug);
-		
-		$floor->save();
-
 		return array('status' => 'OK', 'result' => $floor);
 	}
 
 	public function ajaxShow($id) {
-		$floor = Floor::with('building', 'building.floors', 'building.floors.annotations', 'building.floors.annotations.floor', 'building.floors.annotations.floor.building', 'building.floors.annotations.sub_category', 'building.floors.annotations.sub_category.category', 'annotations', 'annotations.sub_category', 'annotations.sub_category.category')->find($id);
+		$floor = Floor::find($id);
 
 		return array('status' => 'OK', 'floor' => $floor);
 	}
@@ -176,20 +140,6 @@ class FloorsController extends Controller
 		$floor->status = $request->status;
 		$floor->building_id = $request->building_id;
 		$floor->creator_id = Auth::id();
-		$floor->save();
-
-		$slug = str_slug($floor->name);
-		$flo = Floor::where('slug', $slug)->first();
-		$count = 0;
-
-		while ($flo && $floor->id != $flo->id) {
-			$count++;
-			$slug = str_slug($floor->name . $count);
-			$flo = Floor::where('slug', $slug)->first();
-		}
-
-		$floor->slug = str_slug($slug);
-		
 		$floor->save();
 
 		return array('status' => 'OK', 'result' => $floor);

@@ -23,11 +23,6 @@ class Floor extends Model
 	 */
 	protected $table = 'floors';
 
-    public function building()
-    {
-        return $this->belongsTo('App\Building', 'building_id', 'id');
-    }
-
     public function annotations()
     {
         return $this->hasMany('App\Annotation', 'floor_id', 'id');

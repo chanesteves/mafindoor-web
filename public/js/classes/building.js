@@ -90,22 +90,16 @@ Building.prototype.show = function (id, callback) {
 	});
 }
 
-Building.prototype.showBuildings = function (param, callback) {
+Building.prototype.destroy = function (id, callback) {
 	CSRF = $("meta[name='csrf-token']").attr('content');
 
-	data = { 
-				_token: CSRF,
-				'lng' : param.lng,
-				'lat' : param.lat
-			};
-
 	$.ajax({
-		url: '/buildings/ajaxShowBuildings',
+		url: '/buildings/' + id + '/ajaxDestroy',
 		type: 'POST',
 		dataType: "json",
-		data: data,
+		data: {_token: CSRF},
 		success: function(data){
-			if (callback)
+			if (data.status == 'OK')
 				callback(data);
 		}, error:function (xhr, error, ajaxOptions, thrownError){
 			console.log(xhr.responseText);

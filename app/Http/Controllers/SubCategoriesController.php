@@ -13,28 +13,6 @@ use Illuminate\Http\Request;
 
 class SubCategoriesController extends Controller
 {
-	public function createAllSlugs () {
-		$sub_categories = SubCategory::all();
-
-		foreach ($sub_categories as $sub_category) {
-			$slug = str_slug($sub_category->name);
-			$sub_cat = SubCategory::where('slug', $slug)->first();
-			$count = 0;
-
-			while ($sub_cat && $sub_category->id != $sub_cat->id) {
-				$count++;
-				$slug = str_slug($sub_category->name . $count);
-				$sub_cat = SubCategory::where('slug', $slug)->first();
-			}
-
-			$sub_category->slug = str_slug($slug);
-			
-			$sub_category->save();
-		}
-
-		return 'DONE!!!';
-	}
-
     /*****************/
 	/**** AJAX *******/
 	/*****************/
@@ -55,20 +33,6 @@ class SubCategoriesController extends Controller
 		$sub_category->name = $request->name;
 		$sub_category->icon = $request->icon;
 		$sub_category->category_id = $request->category_id;
-		$sub_category->save();
-
-		$slug = str_slug($sub_category->name);
-		$sub_cat = SubCategory::where('slug', $slug)->first();
-		$count = 0;
-
-		while ($sub_cat && $sub_category->id != $sub_cat->id) {
-			$count++;
-			$slug = str_slug($sub_category->name . $count);
-			$sub_cat = SubCategory::where('slug', $slug)->first();
-		}
-
-		$sub_category->slug = str_slug($slug);
-		
 		$sub_category->save();
 
 		return array('status' => 'OK', 'result' => $sub_category);
@@ -94,20 +58,6 @@ class SubCategoriesController extends Controller
 		$sub_category->name = $request->name;
 		$sub_category->icon = $request->icon;
 		$sub_category->category_id = $request->category_id;
-		$sub_category->save();
-
-		$slug = str_slug($sub_category->name);
-		$sub_cat = SubCategory::where('slug', $slug)->first();
-		$count = 0;
-
-		while ($sub_cat && $sub_category->id != $sub_cat->id) {
-			$count++;
-			$slug = str_slug($sub_category->name . $count);
-			$sub_cat = SubCategory::where('slug', $slug)->first();
-		}
-
-		$sub_category->slug = str_slug($slug);
-		
 		$sub_category->save();
 
 		return array('status' => 'OK', 'result' => $sub_category);

@@ -16,16 +16,11 @@ class CreateAnnotationsTable extends Migration
         Schema::create('annotations', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name')->default('');
-            $table->string('map_name')->default('');
-            $table->string('map_marker')->nullable();
             $table->string('logo')->nullable();
             $table->double('longitude')->default(0);
             $table->double('latitude')->default(0);
-            $table->double('min_zoom')->nullable();
-            $table->double('max_zoom')->nullable();
             $table->integer('sub_category_id');
             $table->integer('floor_id');
-            $table->string('slug')->default('');
             $table->timestamps();
             $table->softDeletes();
         });

@@ -1,6 +1,13 @@
 /node_modules
+/public/files/persons
 /public/hot
+/public/images/annotations
+/public/images/buildings
+/public/images/categories
+/public/images/persons
+/public/images/sub_categories
 /public/storage
 /storage/*.key
 /vendor
 .env
+composer.lock

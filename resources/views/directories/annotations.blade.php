@@ -5,7 +5,7 @@
   <form id="frm-main-filter" method="GET" action="/annotations">
     <div class="row main-filter">    
       <div class="col-md-5 col-4">
-        <select id="ddl-building-id" name="building_id" class="form-control input-lg" required>
+        <select id="ddl-annotation-id" name="building_id" class="form-control input-lg" required>
           @foreach($buildings as $build)
             <option value="{{ $build->id }}" {{ $building && $building->id == $build->id ? 'selected' : '' }} >{{ $build->name }}</option>
           @endforeach
@@ -13,9 +13,8 @@
       </div>
       <div class="col-md-5 col-4">
         <select id="ddl-floor-id" name="floor_id" class="form-control input-lg" required>
-          <option value="" data-building-id="" ></option>
           @foreach($floors as $flo)
-            <option value="{{ $flo->id }}" data-building-id="{{ $flo->building_id }}" {{ $floor && $floor->id == $flo->id ? 'selected' : '' }} >{{ $flo->name }}</option>
+            <option value="{{ $flo->id }}" data-annotation-id="{{ $flo->building_id }}" {{ $floor && $floor->id == $flo->id ? 'selected' : '' }} >{{ $flo->name }}</option>
           @endforeach
         </select>
       </div>
@@ -91,21 +90,15 @@
           <div class="modal-body">
             <div class="alert alert-info"><i class="fa fa-info-circle"></i> Fields with asterisks (*) are required</div>
             <div class="row">
-              <div class="col-md-6">
+              <div class="col-md-12">
                 <div class="form-group">
                   <label>* Name</label>
                   <input id="txt-add-annotation-name" type="text" class="form-control" name="name" autocomplete="off" />
                 </div>
               </div>
-              <div class="col-md-6">
-                <div class="form-group">
-                  <label>* Map Name</label>
-                  <input id="txt-add-annotation-map-name" type="text" class="form-control" name="map_name" autocomplete="off" />
-                </div>
-              </div>
             </div>
             <div class="row">
-              <div class="col-md-12">
+              <div class="col-md-6">
                 <div class="form-group">
                   <label>* Category</label>
                   <select id="ddl-add-annotation-sub-category-id" class="form-control" name="sub_category">
@@ -122,6 +115,12 @@
                   </select>
                 </div>
               </div>
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label> Icon</label>
+                  <input id="txt-add-annotation-logo" type="text" class="form-control" name="logo" autocomplete="off" />
+                </div>
+              </div>
             </div>
             <div class="row">
               <div class="col-6">
@@ -131,16 +130,6 @@
               <div class="col-6">
                 <label>* Latitude</label>
                 <input id="txt-add-annotation-latitude" type="number" class="form-control" name="latitude" step="0.000001" autocomplete="off" />
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-6">
-                <label>* Min Zoom</label>
-                <input id="txt-add-annotation-min-zoom" type="number" class="form-control" name="min_zoom" step="0.000001" autocomplete="off" />
-              </div>
-              <div class="col-6">
-                <label>* Max Zoom</label>
-                <input id="txt-add-annotation-max-zoom" type="number" class="form-control" name="max_zoom" step="0.000001" autocomplete="off" />
               </div>
             </div>
           </div>
@@ -167,16 +156,10 @@
           <div class="modal-body">
             <div class="alert alert-info"><i class="fa fa-info-circle"></i> Fields with asterisks (*) are required</div>
             <div class="row">
-              <div class="col-md-6">
+              <div class="col-md-12">
                 <div class="form-group">
                   <label>* Name</label>
                   <input id="txt-edit-annotation-name" type="text" class="form-control" name="name" autocomplete="off" />
-                </div>
-              </div>
-              <div class="col-md-6">
-                <div class="form-group">
-                  <label>* Map Name</label>
-                  <input id="txt-edit-annotation-map-name" type="text" class="form-control" name="map_name" autocomplete="off" />
                 </div>
               </div>
             </div>
@@ -207,16 +190,6 @@
               <div class="col-6">
                 <label>* Latitude</label>
                 <input id="txt-edit-annotation-latitude" type="number" class="form-control" name="latitude" step="0.000001" autocomplete="off" />
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-6">
-                <label>* Min Zoom</label>
-                <input id="txt-edit-annotation-min-zoom" type="number" class="form-control" name="min_zoom" step="0.000001" autocomplete="off" />
-              </div>
-              <div class="col-6">
-                <label>* Max Zoom</label>
-                <input id="txt-edit-annotation-max-zoom" type="number" class="form-control" name="max_zoom" step="0.000001" autocomplete="off" />
               </div>
             </div>
           </div>
