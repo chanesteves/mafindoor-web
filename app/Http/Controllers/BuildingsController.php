@@ -6,6 +6,7 @@ use Auth;
 use Excel;
 use Session;
 use DB;
+use View;
 
 use App\User;
 use App\Building;
@@ -17,6 +18,24 @@ use Illuminate\Http\Request;
 
 class BuildingsController extends Controller
 {
+	/**
+	 * Display the specified resource.
+	 *
+	 * @param  int  $id
+	 * @return Response
+	 */
+	public static function show(Request $request, $id)
+	{
+		$building = Building::find($id);
+
+		return View::make('buildings.show')->with(array(
+														'page' => 'Show Building', 
+														'building' => $building
+
+													)
+												);
+	}
+
 	public function createAllSlugs () {
 		$buildings = Building::all();
 

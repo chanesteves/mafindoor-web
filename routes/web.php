@@ -15,6 +15,9 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('buildings/{building}', 'BuildingsController@show');
+Route::get('buildings/{building}-(:any?)', 'BuildingsController@show');
+
 Route::post('buildings/ajaxShowBuildings', 'BuildingsController@ajaxShowBuildings');
 Route::post('buildings/ajaxStore', 'BuildingsController@ajaxStore');
 Route::post('buildings/{building}/ajaxUpdate', 'BuildingsController@ajaxUpdate');
