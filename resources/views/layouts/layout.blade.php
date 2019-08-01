@@ -9,6 +9,13 @@
 
 <html lang="en">
   <head>
+    @if (isset($page) && $page == 'Show Building')
+      <meta property='og:title' content='Mafindoor - {{ $building->name }}'/>
+      <meta property='og:image' content='{{ $building->image }}'/>
+      <meta property='og:description' content='Thanks Mafindoor for helping me find my ways inside {{ $building->name }}'/>
+      <meta property='og:url' content='{{ \URL::to("/") }}'/>
+    @endif
+
     <base href="./">
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -48,11 +55,6 @@
       <link href="{{ asset('plugins/croppie/croppie.css') }}" rel="stylesheet">
     @elseif (isset($page) && $page == 'Users')
       <link href="{{ asset('css/pages/permissions/users.css') }}" rel="stylesheet">
-    @elseif (isset($page) && $page == 'Show Building')
-      <meta property='og:title' content='Mafindoor - {{ $building->name }}'/>
-      <meta property='og:image' content='{{ $building->image }}'/>
-      <meta property='og:description' content='Thanks Mafindoor for helping me find my ways inside {{ $building->name }}'/>
-      <meta property='og:url' content='{{ \URL::to("/") }}'/>
     @endif
 
     <link href="{{ asset('css/override.css?version=1.4.5') }}" rel="stylesheet">
