@@ -10,8 +10,8 @@
 <html lang="en">
   <head>
     @if (isset($page) && $page == 'Show Building')
-      <meta property="og:type" content='website">
-      <meta property="og:title" content='Mafindoor - {{ $building->name }}">
+      <meta property="og:type" content="profile">
+      <meta property="og:title" content="Mafindoor - {{ $building->name }}">
       <meta property="og:image" content="{{ $building->image }}">
       <meta property="og:description" content="Thanks Mafindoor for helping me find my ways inside {{ $building->name }}">
       <meta property="og:url" content="{{ \URL::to("/") }}/buildings/{{ $building->id }}-{{ $building->slug }}">
