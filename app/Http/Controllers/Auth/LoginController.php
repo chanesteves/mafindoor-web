@@ -127,6 +127,11 @@ class LoginController extends Controller
             $person->email = $request->get('email');
             $person->save();
 
+            if (!$person->image && $request->get('image') != '') {
+                $person->image = $request->get('image');
+                $person->save();
+            }
+
             if (!$person->user)
                 $user = new User;
 
