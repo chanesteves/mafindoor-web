@@ -137,7 +137,7 @@ class LoginController extends Controller
 
             $user->save();
 
-            $person->user->notify(new UserCreated($person->user));
+            $user->notify(new UserCreated($person->user));
 
             $user = User::with('person')->find($person->id);
 
