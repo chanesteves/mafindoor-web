@@ -107,6 +107,13 @@ class LoginController extends Controller
             $user->api_token = uniqid();
             $user->save();
 
+            $person = $user->person;
+            
+            if ((!$person->image || $person->image == '') && $request->get('image') != '') {
+                $person->image = $request->get('image');
+                $person->save();
+            }
+
             return array('status' => 'OK', 'user' => $user);
         }
 
