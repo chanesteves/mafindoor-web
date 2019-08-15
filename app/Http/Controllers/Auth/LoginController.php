@@ -119,7 +119,7 @@ class LoginController extends Controller
             $person->first_name = $request->get('first_name');
             $person->last_name = $request->get('last_name');
             
-            if ($request->get('gender'))
+            if ($request->get('gender') == 'female')
                 $person->gender = $request->get('gender');
             else
                 $person->gender = 'male';
