@@ -19,7 +19,7 @@
 	<link href="/css/pages/animate.css" rel="stylesheet" media="screen">
 	<link href="/css/pages/ionicons.css" rel="stylesheet" media="screen">
 
-	<link href="/css/pages/buildings/show.css" rel="stylesheet" media="screen">
+	<link href="/css/pages/buildings/show.css?version=1.4.0" rel="stylesheet" media="screen">
 
 	<link rel="stylesheet" href="/css/pages/nivo-lightbox.css" type="text/css" />
 	<link rel="stylesheet" href="/css/pages/nivo-themes/default/default.css" type="text/css" />
@@ -115,7 +115,7 @@
 					<span class="address">{{ $building->address }}</span>
 				</h1>
 				<div class="row">
-					<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+					<div class="col-lg-3 col-md-3 col-sm-6 col-xs-6">
 						<div class="row">
 							<div class="col-xs-5">
 								<div class="circle-icon-rspv">
@@ -128,7 +128,7 @@
 							</div>
 						</div>
 					</div>
-					<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+					<div class="col-lg-3 col-md-3 col-sm-6 col-xs-6">
 						<div class="row">
 							<div class="col-xs-5">
 								<div class="circle-icon-rspv">
@@ -141,7 +141,7 @@
 							</div>
 						</div>
 					</div>
-					<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+					<div class="col-lg-3 col-md-3 col-sm-6 col-xs-6">
 						<div class="row">
 							<div class="col-xs-5">
 								<div class="circle-icon-rspv">
@@ -154,7 +154,7 @@
 							</div>
 						</div>
 					</div>
-					<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+					<div class="col-lg-3 col-md-3 col-sm-6 col-xs-6">
 						<div class="row">
 							<div class="col-xs-5">
 								<div class="circle-icon-rspv">
@@ -173,30 +173,30 @@
 				<br/>
 				<div id="stores" class="row">
 					<div class="col-md-12">
-						<h2>Stores/Spaces Inside SM City Legazpi</h2>
+						<h2>Stores/Spaces Inside {{ $building->name }}</h2>
 						<table id="datatable_tabletools_annotations" class="table table-bordered">
 							<thead>
-					          <th>Name</th>
-					          <th>Location</th>
-					          <th>Category</th>
-					          <td></td>
+					          <th class="name">Name</th>
+					          <th class="near">Location</th>
+					          <th class="category text-center">Category</th>
+					          <td class="action"></td>
 					        </thead>
 					        <tbody>
 						        @foreach($building->spaces()->orderBy('name')->get() as $annotation)
 						        	<tr>
-						        		<td>
+						        		<td class="name">
 						        			<img src="{{ $annotation->logo }}" width="40" />
 						        			&nbsp;
 	                						<strong>{{ $annotation->name }}</strong>
 						        		</td>
-						        		<td>
+						        		<td class="near">
 						        			<strong>{{ $annotation->floor->name }}</strong>
 						        			<div class="nowrap"><small>Near {{ $annotation->nears_str() }}</small></div>
 						        		</td>
-						        		<td class="text-center">
+						        		<td class="category text-center">
 						        			<label class="label label-primary">{{ strtoupper($annotation->sub_category->name) }}</label>
 						        		</td>
-						        		<td>
+						        		<td class="action">
 						        			<a href="#maps" class="btn btn-sm btn-secondary show-in-map" data-annotation-slug="{{ $annotation->slug }}"  data-floor-slug="{{ $annotation->floor->slug }}" data-building-slug="{{ $annotation->floor->building->slug }}" >Show In Map</a>
 						        		</td>
 						        	</tr>
@@ -268,22 +268,12 @@
 		// general variables
 		myWindow = $(window)
 		windowHeight = myWindow.height()
+		windowWidth = myWindow.width()
 		header = $('#header')
 		// svgRect = $('#svg-rect')
 		showNav = $('#show-nav')
 		hideNav = $('#hide-nav')
 		navUl = $('#nav-ul')
-
-		// set header height
-		if (windowHeight>=900) {
-			header.css('height', windowHeight - 250)
-		}
-		else{
-			header.css('height', windowHeight)
-		}
-
-		headerHeight = header.outerHeight()
-		headerWidth = header.outerWidth()
 
 		$(document).ready(function() {
 
@@ -321,9 +311,9 @@
 
 			$("#images-carousel").owlCarousel({
 				items : 1,
-				itemsDesktop : [1199,4],
-				itemsDesktopSmall : [980,3],
-				itemsTablet: [768,2],
+				itemsDesktop : [1199,1],
+				itemsDesktopSmall : [980,1],
+				itemsTablet: [768,1],
 				itemsMobile : [480,1],
 				autoPlay: 8000,
 				dots: false,
@@ -345,6 +335,8 @@
 
 				$('iframe').attr('src', main_url + '/search/buildings/' + building_slug + '/floors/' + floor_slug + '/annotations/' + annotation_slug);
 			});
+
+			$(window).trigger('resize');
 		});
 		// Responsive navigation show/hide
 		function showNavig() {
@@ -386,6 +378,25 @@
 			headerWidth = header.outerWidth()
 			// svgRect.attr('height', 1.5*headerHeight)
 			// svgRect.attr('width', 2*headerWidth)
+
+			if (windowWidth<=667) {
+				header.css('height', 280)
+				$('.owl-prev').css('top', 140)
+				$('.owl-next').css('top', 140)
+			}
+			else if (windowWidth<=768) {
+				header.css('height', 560)
+				$('.owl-prev').css('top', 280)
+				$('.owl-next').css('top', 280)
+			}
+			else {
+				header.css('height', 768)
+				$('.owl-prev').css('top', 384)
+				$('.owl-next').css('top', 384)	
+			}
+
+			headerHeight = header.outerHeight()
+			headerWidth = header.outerWidth()
 		});
 
 		// scrollTo buttons
