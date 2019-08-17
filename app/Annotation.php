@@ -36,7 +36,7 @@ class Annotation extends Model
     }
 
     public function nears() {
-        return Annotation::select(DB::raw("name, SQRT(POW(longitude - " . $this->longitude . ", 2) + POW(latitude - " . $this->latitude . ", 2)) as distance"))->where('floor_id', $this->floor_id)->orderBy('distance')->limit(5);
+        return Annotation::select(DB::raw("name, SQRT(POW(longitude - " . $this->longitude . ", 2) + POW(latitude - " . $this->latitude . ", 2)) as distance"))->where('floor_id', $this->floor_id)->where('id', '!=', $this->id)->orderBy('distance')->limit(5);
     }
 
     public function nears_str() {
