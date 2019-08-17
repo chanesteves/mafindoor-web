@@ -2,6 +2,8 @@
 
 namespace App;
 
+use DB;
+
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -31,5 +33,25 @@ class Annotation extends Model
     public function floor()
     {
         return $this->belongsTo('App\Floor', 'floor_id', 'id');
+    }
+
+    public function nears() {
+        return Annotation::select(DB::raw("name, SQRT(POW(longitude - " . $this->longitude . ", 2) + POW(latitude - " . $this->latitude . ", 2)) as distance"))->where('floor_id', $this->floor_id)->orderBy('distance')->limit(5);
+    }
+
+    public function nears_str() {
+        $nears = $this->nears()->get();
+
+        $count = 0;
+        $str = '';
+        foreach ($nears as $near) {
+            if ($count > 0)
+                $str .= ', ';
+
+            $str .= $near->name;
+            $count++;
+        }
+
+        return $str;
     }
 }

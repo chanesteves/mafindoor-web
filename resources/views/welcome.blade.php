@@ -27,7 +27,7 @@
 		<div id='menu-bar' class='animated fadeIn'>
 			<div class='container'>
 				<div class='logo'>
-					<img src="img/pages/logo.png?version=1.2.0" alt>
+					<a href="/"><img src="img/pages/logo.png?version=1.2.0" alt /></a>
 				</div>
 				<nav  id="nav" class='nav'>
 					<ul class='nav-inner'>
@@ -73,13 +73,11 @@
 					<a id="show-nav" title="Show navigation"><div></div></a>
     				<a id="hide-nav" title="Hide navigation"><div></div></a>
 					<ul id='nav-ul' class='nav-inner'>
-						<li><a href="#header">Home</a></li>
-						<li class='current'><a href="#about">About</a></li>
+						<li class='current'><a href="#header">Home</a></li>
+						<li><a href="#about">About</a></li>
 						<li><a href="#features">Features</a></li>
-						<li><a href="#screenshots">Screens</a></li>
-						<li><a href="#reviews">Reviews</a></li>
+						<li><a href="#screenshots">Venues</a></li>
 						<li><a href="#download">Download</a></li>
-						<li id='off-nav'></li>
 					</ul>
 				</nav>
 			</div>
@@ -282,7 +280,7 @@
 					<a href="https://plus.google.com/u/0/103858053761972961832" target="_blank" class='icon ion-social-googleplus-outline'></a>
 					<!-- <a href="" class='icon ion-social-instagram'></a> -->
 				</p>
-				<p class='copyright'>Copyright © 2018 Mafindoor</p>
+				<p class='copyright'>Copyright © 2019 Mafindoor</p>
 			</div>
 		</div>
 	</footer>
