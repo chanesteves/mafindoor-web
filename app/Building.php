@@ -28,6 +28,19 @@ class Building extends Model
         return $this->hasMany('App\Floor', 'building_id', 'id');
     }
 
+    public function annotations() {
+        $floor_ids = $this->floors()->pluck('id');
+
+        return Annotation::whereIn('floor_id', $floor_ids);
+    }
+
+    public function spaces() {
+        $others_category = Category::where('name', 'Others')->first();
+        $others_sub_category_ids = $others_category->sub_categories->pluck('id');
+
+        return $this->annotations()->whereNotIn('sub_category_id', $others_sub_category_ids);
+    }
+
     public function creator()
     {
         return $this->belongsTo('App\User', 'creator_id', 'id');
