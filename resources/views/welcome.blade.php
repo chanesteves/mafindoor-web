@@ -8,7 +8,7 @@
 	<link href="css/pages/bootstrap.css" rel="stylesheet" media="screen">
 	<link href="css/pages/owl.theme.css" rel="stylesheet" media="screen">
 	<link href="css/pages/owl.carousel.css" rel="stylesheet" media="screen">
-	<link href="css/pages/style-col1.css?version=1.2.0" rel="stylesheet" media="screen">
+	<link href="css/pages/style-col1.css?version=1.4.1" rel="stylesheet" media="screen">
 	<link href="css/pages/animate.css" rel="stylesheet" media="screen">
 	<link href="css/pages/ionicons.css" rel="stylesheet" media="screen">
 	<link rel="stylesheet" href="css/pages/nivo-lightbox.css" type="text/css" />
@@ -28,6 +28,9 @@
 			<div class='container'>
 				<div class='logo'>
 					<a href="/"><img src="img/pages/logo.png?version=1.2.0" alt /></a>
+				</div>
+				<div class='search'>
+					<input class="form-control main-autocomplete" placeholder="Search venues by name or address...">
 				</div>
 				<nav  id="nav" class='nav'>
 					<ul class='nav-inner'>
@@ -293,6 +296,9 @@
 	<script src="js/pages/jquery.nav.js"></script>
 	<script src="js/pages/jquery.scrollTo.min.js"></script>
 	<script src="js/pages/nivo-lightbox.min.js"></script>
+
+	<script src="{{ asset('/plugins/jquery-autocomplete/dist/jquery.autocomplete.min.js') }}"></script>
+
 	<script type="text/javascript">
 		// general variables
 		myWindow = $(window)
@@ -347,6 +353,7 @@
 				itemsTablet: [768,2],
 				itemsMobile : [480,1],
 			});
+
 			$("#reviews-carousel").owlCarousel({
 				items : 1,
 				itemsDesktop : [1199,1],
@@ -354,6 +361,47 @@
 				itemsTablet: [768,1],
 				itemsMobile : [480,1],
 				autoPlay: 8000,
+			});
+
+			$('.main-autocomplete').autocomplete({
+			    serviceUrl: '/buildings/ajaxSearch',
+			    appendTo: $('body'),
+				forceFixPosition: true,
+				html: true,
+				minChars: 0,
+				showNoSuggestionNotice: true,
+				noSuggestionNotice: '<center>No results found</center>',
+			    onSelect: function (data) {
+			    	if (data.type == 'building')
+			        	window.location.href = '/buildings/' + data.id + '-' + data.slug;
+			        else
+			        	window.location.href = '/search/buildings/' + suggestion.floor.building_id + '/floors/' + suggestion.floor_id + '/annotations/' + suggestion.id;
+			    },
+				formatResult: function (suggestion, currentValue) {
+
+					var s_link;
+
+					if (suggestion.type == 'building')
+						s_link = '/buildings/' + suggestion.id + '-' + suggestion.slug;
+					else
+						s_link = '/search/buildings/' + suggestion.floor.building_id + '/floors/' + suggestion.floor_id + '/annotations/' + suggestion.id;
+
+					var pattern = '(' + currentValue.replace(/[|\\{}()[\]^$+*?.]/g, "\\$&") + ')';
+
+					var photo = suggestion.image;
+
+					return '<a class="place_link" href="' + s_link + '"><div class="row">'
+						+		'<div class="col-xs-2">'
+						+			'<span class="image-holder image-holder-xs">'
+						+				'<img class="thumbnail-sm" src="' + photo + '" />'
+						+			'</span>'
+						+		'</div>'
+						+		'<div class="col-xs-10">'
+						+			'<div class="name"><b>' + suggestion.value.replace(new RegExp(pattern, 'gi'), '<span class="highlight">$1<\/span>') + '</b></div>'
+						+			'<div class="desc"><span>' + suggestion.description.replace(new RegExp(pattern, 'gi'), '<span class="highlight">$1<\/span>') + '</span></div>'
+						+		'</div>'
+						+	'</div></a>';
+				}
 			});
 		});
 		// Responsive navigation show/hide
