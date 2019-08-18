@@ -15,7 +15,7 @@
 	<link href="/css/pages/bootstrap.css" rel="stylesheet" media="screen">
 	<link href="/css/pages/owl.theme.css" rel="stylesheet" media="screen">
 	<link href="/css/pages/owl.carousel.css" rel="stylesheet" media="screen">
-	<link href="/css/pages/style-col1.css?version=1.2.0" rel="stylesheet" media="screen">
+	<link href="/css/pages/style-col1.css?version=1.4.1" rel="stylesheet" media="screen">
 	<link href="/css/pages/animate.css" rel="stylesheet" media="screen">
 	<link href="/css/pages/ionicons.css" rel="stylesheet" media="screen">
 
@@ -40,7 +40,10 @@
 			<div class='container'>
 				<div class='logo'>
 					<a href="/"><img src="/img/pages/logo.png?version=1.2.0" alt /></a>
-				</div>
+				</div>			
+				<div class='search'>
+					<input class="form-control main-autocomplete" placeholder="Search venues by name or address...">
+				</div>	
 				<nav  id="nav" class='nav'>
 					<ul class='nav-inner'>
 						<li class='current'><a href="#header">Home</a></li>
@@ -264,6 +267,8 @@
 
 	<script src="//cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
 
+	<script src="{{ asset('/plugins/jquery-autocomplete/dist/jquery.autocomplete.min.js') }}"></script>
+
 	<script type="text/javascript">
 		// general variables
 		myWindow = $(window)
@@ -334,6 +339,47 @@
 				var main_url = $('#hdn-main-url').val();
 
 				$('iframe').attr('src', main_url + '/search/buildings/' + building_slug + '/floors/' + floor_slug + '/annotations/' + annotation_slug);
+			});
+
+			$('.main-autocomplete').autocomplete({
+			    serviceUrl: '/buildings/ajaxSearch',
+			    appendTo: $('body'),
+				forceFixPosition: true,
+				html: true,
+				minChars: 0,
+				showNoSuggestionNotice: true,
+				noSuggestionNotice: '<center>No results found</center>',
+			    onSelect: function (data) {
+			    	if (data.type == 'building')
+			        	window.location.href = '/buildings/' + data.id + '-' + data.slug;
+			        else
+			        	window.location.href = '/search/buildings/' + suggestion.floor.building_id + '/floors/' + suggestion.floor_id + '/annotations/' + suggestion.id;
+			    },
+				formatResult: function (suggestion, currentValue) {
+
+					var s_link;
+
+					if (suggestion.type == 'building')
+						s_link = '/buildings/' + suggestion.id + '-' + suggestion.slug;
+					else
+						s_link = '/search/buildings/' + suggestion.floor.building_id + '/floors/' + suggestion.floor_id + '/annotations/' + suggestion.id;
+
+					var pattern = '(' + currentValue.replace(/[|\\{}()[\]^$+*?.]/g, "\\$&") + ')';
+
+					var photo = suggestion.image;
+
+					return '<a class="place_link" href="' + s_link + '"><div class="row">'
+						+		'<div class="col-xs-2">'
+						+			'<span class="image-holder image-holder-xs">'
+						+				'<img class="thumbnail-sm" src="' + photo + '" />'
+						+			'</span>'
+						+		'</div>'
+						+		'<div class="col-xs-10">'
+						+			'<div class="name"><b>' + suggestion.value.replace(new RegExp(pattern, 'gi'), '<span class="highlight">$1<\/span>') + '</b></div>'
+						+			'<div class="desc"><span>' + suggestion.description.replace(new RegExp(pattern, 'gi'), '<span class="highlight">$1<\/span>') + '</span></div>'
+						+		'</div>'
+						+	'</div></a>';
+				}
 			});
 
 			$(window).trigger('resize');

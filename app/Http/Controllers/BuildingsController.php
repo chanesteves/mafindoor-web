@@ -10,6 +10,7 @@ use View;
 
 use App\User;
 use App\Building;
+use App\Annotation;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
@@ -207,6 +208,45 @@ class BuildingsController extends Controller
 			$buildings = $buildings->select(DB::raw(DB::raw('buildings.*, ' . $distance . ' as distance')))->where('buildings.status', 'live');
 
 		return array('status' => 'OK', 'buildings' => $buildings->limit(5)->get(), 'current_building' => $buildings->havingRaw('IFNULL(distance, 100) <= buildings.max_radius')->first());	
+	}
+
+	public function ajaxSearch (Request $request) {
+		$str = preg_replace('/(^|&)\+[^&]*/', ' ', $request->query->get('query'));
+		$str = preg_replace('/ +/', '%', $str);
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       
+		$buildings = Building::selectRaw("id, slug, logo as image, name as value, address as description, 'building' as type")
+							->whereRaw('CONCAT(name, address) LIKE \'%' . $str . '%\' AND status = \'live\'')
+							->orWhereRaw('CONCAT(address, name) LIKE \'%' . $str . '%\' AND status = \'live\'')
+							->get();
+
+		 if ($str != '') {
+			$annotations = Annotation::selectRaw("annotations.id, annotations.slug, annotations.logo as image, annotations.name as value, 'annotation' as type, floor_id")
+								->with('floor')
+								->join('floors', 'floors.id', 'floor_id')
+								->join('buildings', 'buildings.id', 'building_id')
+								->whereRaw('CONCAT(annotations.name, buildings.name) LIKE \'%' . $str . '%\'')
+								->orWhereRaw('CONCAT(buildings.name, annotations.name) LIKE \'%' . $str . '%\'')
+								->get();
+
+			 foreach ($annotations as $annotation) {
+			 	if (!$annotation->image || $annotation->image == '')
+			 		$annotation->image = $annotation->sub_category ? $annotation->sub_category->icon : '';
+
+			 	if (!$annotation->image || $annotation->image == '')
+			 		$annotation->image = $annotation->sub_category && $annotation->sub_category->category ? $annotation->sub_category->category->icon : '';
+
+			 	$annotation->description = $annotation->floor && $annotation->floor->building ? $annotation->floor->building->name . ', ' . $annotation->floor->name : '';
+			 }
+
+			 $result = $buildings->merge($annotations);
+		}
+		else {
+			$result = $buildings;
+		}
+
+		$result = $result->take(5);
+
+		 return array('status' => 'OK', 'result' => $result->toArray(), 'suggestions' => $result);
 	}
 
 	public function ajaxUploadLogo(Request $request, $id)
