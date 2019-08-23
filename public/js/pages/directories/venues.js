@@ -1,5 +1,12 @@
 var venues = new Venues();
 
+var uploadCrop;
+var dropzone;
+var images;
+var sharable_photo;
+
+var site_url = $('#hdn-site-url').val()
+
 function Venues(){
     
 }
@@ -190,7 +197,7 @@ Venues.prototype.bindVenues = function () {
 	$('.building-upload-logo').on('click',function(){
         var id = $(this).data('id');
 
-        $('#hdn-upload-building-id').val(id);
+        $('#hdn-upload-building-logo-id').val(id);
         
         $('.file-photo').hide();
         $('.croppie').hide();
@@ -199,17 +206,17 @@ Venues.prototype.bindVenues = function () {
         $('.croppie-remove').click();
     })
 
-	$('#pnl-upload-container').on('click', function () {
-        $('#file-photo-upload').click();
+	$('#pnl-upload-logo-container').on('click', function () {
+        $('#file-photo-upload-logo').click();
     });
 
     var uploadCrop;
     var uploadProfileStatus = 'NO_FILE';
 
-    $('#file-photo-upload').on('change', function (e) {
+    $('#file-photo-upload-logo').on('change', function (e) {
         $('.croppie').show();
-        $('#pnl-upload-container h3').hide();
-        $('#pnl-upload-container').off('click');
+        $('#pnl-upload-logo-container h3').hide();
+        $('#pnl-upload-logo-container').off('click');
 
         var input = e.target;
         var reader;
@@ -218,7 +225,7 @@ Venues.prototype.bindVenues = function () {
             reader = new FileReader();
 
             reader.onload = function (e) {
-                uploadCrop = new Croppie(document.getElementById('pnl-upload'), {
+                uploadCrop = new Croppie(document.getElementById('pnl-upload-logo'), {
                     enableExif: true,
                     viewport: {
                         width: 200,
@@ -246,11 +253,11 @@ Venues.prototype.bindVenues = function () {
                     uploadCrop.destroy();
 
                     $('.croppie').hide();
-                    $('#pnl-upload-container h3').show();
-                    $('#pnl-upload-container').on('click', function () {
-                        $('#file-photo-upload').click();
+                    $('#pnl-upload-logo-container h3').show();
+                    $('#pnl-upload-logo-container').on('click', function () {
+                        $('#file-photo-upload-logo').click();
                     });
-                    $('#file-photo-upload').val('');
+                    $('#file-photo-upload-logo').val('');
                     $('.upload-status').hide();
                 });
 
@@ -269,7 +276,7 @@ Venues.prototype.bindVenues = function () {
 
     $('#btn-upload-building-logo').unbind('click').on('click', function (event) {
         uploadCrop.result('canvas', 'viewport').then(function (src) {
-           var id = $('#hdn-upload-building-id').val();
+           var id = $('#hdn-upload-building-logo-id').val();
 
            var CSRF = $("meta[name='csrf-token']").attr('content');
 
@@ -452,6 +459,113 @@ Venues.prototype.bindVenues = function () {
             request.send(form_data);
 		}
 	});
+
+	$('.building-upload-images').unbind('click').on('click', function () {
+		var id = $(this).data('id');
+
+		$('#hdn-upload-building-images-id').val(id);
+		$('#frm-gallery').attr('action', '/buildings/' + id + '/ajaxUploadImages');
+
+		images = [];
+
+		building.show(id, function (data) {
+			if (data.status == 'OK') {
+				var photos = data.building.images;
+
+				$('#frm-gallery .dz-image-preview').remove();
+
+				dropzone = Dropzone.forElement("#frm-gallery");
+
+                for (var index = 0; index < photos.length; index++) {
+                    filename = photos[index].url.substring(photos[index].url.lastIndexOf('/') + 1);
+                    filename = filename.substring(filename.lastIndexOf('\\') + 1);
+                    file = { id : photos[index].id, name : filename, size : 12345, serverId : filename, xhr : { responseText : photos[index].url }};
+
+                    dropzone.emit("addedfile", file);
+                    dropzone.options.thumbnail.call(dropzone, file, site_url + photos[index].url);
+                }
+
+                $('.dz-progress').hide();
+			}
+		});
+	});
+
+	$('#btn-upload-building-images').unbind('click').on('click', function () {
+		var id = $('#hdn-upload-building-images-id').val();
+
+		var building_obj = {
+			id : id,
+			images : images
+		}
+
+		$('#modal-upload-building-images').modal('hide');
+		modal.show('info', 'fa-refresh fa-spin', 'Saving...', 'Please wait while we are saving the building images.', null);
+
+		building.storeImages(building_obj, function (data) {
+			if (data.status == 'OK')
+				modal.set('success', 'fa-check-circle', 'Success', 'Venue images successfully saved.', { ok : function () {
+					window.location.reload();
+				}});
+			else
+				modal.set('danger', 'fa-times-circle', 'Oops', data.error, { ok : true });
+		});
+	});
+
+	$('.building-upload-sharable-photo').unbind('click').on('click', function () {
+	    var id = $(this).data('id');
+
+	    $('#hdn-upload-building-sharable-photo-id').val(id);
+	    $('#frm-sharable-photo').attr('action', '/buildings/' + id + '/ajaxUploadImage');
+
+	    $('#modal-upload-building-sharable-photo .alert-danger').hide();
+
+	    building.show(id, function (data) {
+	      if (data.status == 'OK') {
+	        var photo = data.building.image;
+
+	        $('#frm-gallery .dz-image-preview').remove();
+
+	        dropzone = Dropzone.forElement("#frm-sharable-photo");
+
+	        if (photo) {
+		        filename = photo.substring(photo.lastIndexOf('/') + 1);
+		        filename = filename.substring(filename.lastIndexOf('\\') + 1);
+		        file = { name : filename, size : 12345, serverId : filename, xhr : { responseText : photo }};
+
+		        dropzone.emit("addedfile", file);
+		        dropzone.options.thumbnail.call(dropzone, file, site_url + photo);
+		    }
+
+	        $('.dz-progress').hide();
+	      }
+	    });
+	 });
+
+	$('#btn-upload-building-sharable-photo').unbind('click').on('click', function () {
+    	var id = $('#hdn-upload-building-sharable-photo-id').val();
+
+    	if (!sharable_photo || sharable_photo == '') {
+    		$('#modal-upload-building-sharable-photo .alert-danger').html('<i class="fa fa-times-circle"></i>&nbsp;Please upload a sharable photo').show();
+    		return;
+    	}
+
+	    var building_obj = {
+	      id : id,
+	      image : sharable_photo
+	    }
+
+	    $('#modal-upload-building-sharable-photo').modal('hide');
+	    	modal.show('info', 'fa-refresh fa-spin', 'Saving...', 'Please wait while we are saving the building sharable photo.', null);
+
+		    building.storeImage(building_obj, function (data) {
+		      if (data.status == 'OK')
+		        modal.set('success', 'fa-check-circle', 'Success', 'Venue sharable photo successfully saved.', { ok : function () {
+		          window.location.reload();
+		        }});
+		      else
+		        modal.set('danger', 'fa-times-circle', 'Oops', data.error, { ok : true });
+    	});
+  	});
 }
 
 Venues.prototype.reloadPageContent = function (data, message, callback) {
@@ -461,3 +575,129 @@ Venues.prototype.reloadPageContent = function (data, message, callback) {
 $(document).ready(function(){
 	venues.bindVenues();
 });
+
+Dropzone.options.frmGallery = {
+    acceptedFiles: ".jpeg,.jpg,.png,.gif",
+    addRemoveLinks: true,
+    dictDefaultMessage: "Click Here to Upload Additional Images",
+    init: function () {
+    	this.on("processing", function(file) {
+	      this.options.url = $('#frm-gallery').attr('action');
+	    });
+
+	    var _this = this;
+
+    	this.on("addedfile", function (file) {                     
+            if (file.id) {
+            	var idName = file.id;
+            	var removeButton = Dropzone.createElement('<a class="btn btn-block btn-danger" id="' + idName +'-remove" data-id="' + idName + '" style="color: #FFF; border-radius: 0;" data-original-title="Remove"><i class="fa fa-trash"></i>&nbsp;&nbsp;Remove</a>');
+                        
+	            removeButton.addEventListener("click", function (e) {
+	                e.preventDefault();
+	                e.stopPropagation();
+
+	                _this.removeFile(file);
+
+		            var id = $(e.target).data('id');
+
+		            images = images.filter(function(value, index, arr){
+					    return value != id;
+					});
+		        });
+
+		        file.previewElement.appendChild(removeButton); 
+	            images.push(idName);
+            }
+        });
+
+        this.on("success", function(file, responseText) { 
+            if (responseText.status == 'OK') {
+            	var idName = responseText.image.id;
+	            var removeButton = Dropzone.createElement('<a class="btn btn-block btn-danger" id="' + idName +'-remove" data-id="' + idName + '" style="color: #FFF; border-radius: 0; border: 1px solid #CCC;" data-original-title="Remove"><i class="fa fa-times"></i>&nbsp;&nbsp;Remove</a>');
+                        
+	            removeButton.addEventListener("click", function (e) {
+	                e.preventDefault();
+	                e.stopPropagation();
+
+	                _this.removeFile(file);
+
+		            var id = $(e.target).data('id');
+
+		            images = images.filter(function(value, index, arr){
+					    return value != id;
+					});
+		        });
+
+		        file.previewElement.appendChild(removeButton); 
+	            images.push(idName);
+            }
+        });
+
+        this.on("removedfile", function(file) { 
+            // insert code here      
+        });
+    }
+};
+
+Dropzone.options.frmSharablePhoto = {
+    acceptedFiles: ".jpeg,.jpg,.png,.gif",
+    maxFiles: 1,
+    addRemoveLinks: true,
+    dictDefaultMessage: "Click Here to Upload A Sharable Photo",
+    init: function () {
+      	this.on("processing", function(file) {
+	      this.options.url = $('#frm-sharable-photo').attr('action');
+	    });
+
+	    var _this = this;
+
+    	this.on("addedfile", function (file) {                     
+            if (file.xhr && file.xhr.responseText) {
+            	var idName = file.xhr.responseText;
+            	var removeButton = Dropzone.createElement('<a class="btn btn-block btn-danger" id="sharable-photo-remove" data-path="' + idName + '" style="color: #FFF; border-radius: 0;" data-original-title="Remove"><i class="fa fa-trash"></i>&nbsp;&nbsp;Remove</a>');
+                        
+	            removeButton.addEventListener("click", function (e) {
+	                e.preventDefault();
+	                e.stopPropagation();
+
+	                _this.removeFile(file);
+
+		            sharable_photo = '';
+		        });
+
+		        file.previewElement.appendChild(removeButton); 
+	            sharable_photo = idName;
+            }
+        });
+
+        this.on("success", function(file, responseText) { 
+            if (responseText.status == 'OK') {
+            	var idName = responseText.path;
+	            var removeButton = Dropzone.createElement('<a class="btn btn-block btn-danger" id="sharable-photo-remove" data-path="' + idName + '" style="color: #FFF; border-radius: 0; border: 1px solid #CCC;" data-original-title="Remove"><i class="fa fa-times"></i>&nbsp;&nbsp;Remove</a>');
+                        
+	            removeButton.addEventListener("click", function (e) {
+	                e.preventDefault();
+	                e.stopPropagation();
+
+	                _this.removeFile(file);
+
+		            var path = $(e.target).data('path');
+
+		            sharable_photo = '';
+		        });
+
+		        file.previewElement.appendChild(removeButton); 
+	            sharable_photo = idName;
+            }
+        });
+
+        this.on("removedfile", function(file) { 
+            // insert code here      
+        });
+
+        this.on("maxfilesexceeded", function(file) {
+            this.removeAllFiles();
+            this.addFile(file);
+     	});
+    }
+};

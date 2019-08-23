@@ -279,7 +279,7 @@ Annotations.prototype.bindAnnotations = function () {
 	$('.annotation-upload-logo').on('click',function(){
         var id = $(this).data('id');
 
-        $('#hdn-upload-annotation-id').val(id);
+        $('#hdn-upload-annotation-logo-id').val(id);
         
         $('.file-photo').hide();
         $('.croppie').hide();
@@ -288,17 +288,17 @@ Annotations.prototype.bindAnnotations = function () {
         $('.croppie-remove').click();
     })
 
-	$('#pnl-upload-container').on('click', function () {
-        $('#file-photo-upload').click();
+	$('#pnl-upload-logo-container').on('click', function () {
+        $('#file-photo-upload-logo').click();
     });
 
     var uploadCrop;
     var uploadProfileStatus = 'NO_FILE';
 
-    $('#file-photo-upload').on('change', function (e) {
+    $('#file-photo-upload-logo').on('change', function (e) {
         $('.croppie').show();
-        $('#pnl-upload-container h3').hide();
-        $('#pnl-upload-container').off('click');
+        $('#pnl-upload-logo-container h3').hide();
+        $('#pnl-upload-logo-container').off('click');
 
         var input = e.target;
         var reader;
@@ -307,7 +307,7 @@ Annotations.prototype.bindAnnotations = function () {
             reader = new FileReader();
 
             reader.onload = function (e) {
-                uploadCrop = new Croppie(document.getElementById('pnl-upload'), {
+                uploadCrop = new Croppie(document.getElementById('pnl-upload-logo'), {
                     enableExif: true,
                     viewport: {
                         width: 200,
@@ -335,11 +335,11 @@ Annotations.prototype.bindAnnotations = function () {
                     uploadCrop.destroy();
 
                     $('.croppie').hide();
-                    $('#pnl-upload-container h3').show();
-                    $('#pnl-upload-container').on('click', function () {
-                        $('#file-photo-upload').click();
+                    $('#pnl-upload-logo-container h3').show();
+                    $('#pnl-upload-logo-container').on('click', function () {
+                        $('#file-photo-upload-logo').click();
                     });
-                    $('#file-photo-upload').val('');
+                    $('#file-photo-upload-logo').val('');
                     $('.upload-status').hide();
                 });
 
@@ -358,7 +358,7 @@ Annotations.prototype.bindAnnotations = function () {
 
     $('#btn-upload-annotation-logo').unbind('click').on('click', function (event) {
         uploadCrop.result('canvas', 'viewport').then(function (src) {
-           var id = $('#hdn-upload-annotation-id').val();
+           var id = $('#hdn-upload-annotation-logo-id').val();
 
            var CSRF = $("meta[name='csrf-token']").attr('content');
 
@@ -544,10 +544,13 @@ Annotations.prototype.bindAnnotations = function () {
             request.send(form_data);
 		}
 	});
-}
 
-Annotations.prototype.reloadPageContent = function (data, message, callback) {
-    annotations.bindAnnotations();
+	$('.annotation-upload-images').unbind('click').on('click', function () {
+		var id = $(this).data('id');
+
+		$('#hdn-upload-annotation-images-id').val(id);
+		$('#frm-gallery').attr('action', '/annotations/' + id + '/ajaxUploadImages');
+	});
 }
 
 $(document).ready(function(){

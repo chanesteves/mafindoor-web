@@ -67,7 +67,7 @@
                   <div class="dropdown-menu" x-placement="top-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, -188px, 0px);">
                     <a href="javascript:void(0)" data-target="#modal-edit-annotation" class="dropdown-item annotation-edit"  data-toggle="modal" data-id="{{ $annotation->id }}" data-placement="top" data-original-title="Edit"><i class="fa fa-pencil"></i> Edit</a>
                     <a href="javascript:void(0)" class="dropdown-item annotation-remove" data-id="{{ $annotation->id }}" data-placement="top" data-original-title="Remove"><i class="fa fa-trash-o"></i> Remove</a>
-                    <a href="javascript:void(0)" data-target="#modal-upload-annotation-logo" class="dropdown-item annotation-upload-logo" data-toggle="modal" data-id="{{ $annotation->id }}" data-placement="top" data-original-title="Upload Logo"><i class="fa fa-upload"></i> Upload Logo</a>
+                    <a href="javascript:void(0)" data-target="#modal-upload-annotation-logo" class="dropdown-item annotation-upload-logo" data-toggle="modal" data-id="{{ $annotation->id }}" data-placement="top" data-original-title="Upload Logo"><i class="fa fa-upload"></i> Upload Logo</a>                    
                   </div>
                 </div>
               </td>
@@ -241,24 +241,24 @@
         <form id="frm-upload-annotation-logo" method="POST" action="">
           <input type="hidden" name="_token" value="{{ csrf_token() }}">
           <input name="_method" type="hidden" value="PATCH">
-          <input id="hdn-upload-annotation-id" type="hidden">
+          <input id="hdn-upload-annotation-logo-id" type="hidden">
           <div class="modal-body">
             <div class="row">
               <div class="col-md-12">
-                <div id="pnl-upload-container" class="photo-upload-container">
+                <div id="pnl-upload-logo-container" class="photo-upload-container">
                   <br/>
                   <center>
                     <h3>Browse Photo...</h3>
                     <div class="row">
                       <div class="col-md-2"></div>
-                        <div id="pnl-upload" class="croppie col-md-8">
+                        <div id="pnl-upload-logo" class="croppie col-md-8">
                       </div>
                       <div class="col-md-2"></div>
                     </div>
                   </center>
                 </div>
                 <div class="buttons croppie">
-                  <input id="file-photo-upload" name="file-photo-upload" accept="image/*" class="file-photo" type="file">
+                  <input id="file-photo-upload-logo" name="file-photo-upload-logo" accept="image/*" class="file-photo" type="file">
                   <center>
                     <button  type="button" class="btn btn-primary croppie-remove"><i class="fa fa-trash"></i> Remove</button>
                     <button  type="button" class="btn btn-primary croppie-rotate" data-deg="-90"><i class="fa fa-undo"></i> Rotate Left</button>

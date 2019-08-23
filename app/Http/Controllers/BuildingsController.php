@@ -11,6 +11,7 @@ use View;
 use App\User;
 use App\Building;
 use App\Annotation;
+use App\Image;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
@@ -131,7 +132,7 @@ class BuildingsController extends Controller
 	}
 
 	public function ajaxShow($id) {
-		$building = Building::with('floors', 'floors.annotations', 'floors.annotations.sub_category', 'floors.annotations.sub_category.user_searches', 'floors.annotations.sub_category.category', 'floors.annotations.floor')->find($id);
+		$building = Building::with('images', 'floors', 'floors.annotations', 'floors.annotations.sub_category', 'floors.annotations.sub_category.user_searches', 'floors.annotations.sub_category.category', 'floors.annotations.floor')->find($id);
 
 		return array('status' => 'OK', 'building' => $building);
 	}
@@ -370,5 +371,114 @@ class BuildingsController extends Controller
 		else {
 			return array('status' => 'ERROR', 'error' => 'Error encountered while uploading file.');
 		}
+	}
+
+	public function ajaxUploadImages(Request $request, $id)
+	{
+		$building = Building::find($id);
+
+		if (!$building)
+			return array('status' => 'ERROR', 'error' => 'Building not found.');
+
+		if ($request->hasFile('file')) {
+			$ds = DIRECTORY_SEPARATOR;
+			$storeFolder = $ds . 'images' . $ds . 'buildings' . $ds . $id . $ds . 'photos';
+
+			if ($request->file('file')->isValid()) {
+				if(!is_dir(public_path() . $storeFolder)) {
+			      	mkdir(public_path() . $storeFolder, 0755, TRUE);
+			    }
+
+			    $file = $request->file('file');
+			    $filename = uniqid() . '.' . $file->guessClientExtension();
+			    
+				if ($targetFile = $file->move(public_path() . $storeFolder, $filename)) {
+		    		$pseudoFile = str_replace(public_path() . $storeFolder, $storeFolder, $targetFile);
+
+					$image = new Image;
+					$image->url = $pseudoFile;
+					$image->save();
+
+		    		return array('status' => 'OK', 'image' => $image);
+			    }
+			    else {
+			    	return array('status' => 'ERROR', 'error' => 'Error encountered while uploading images.');
+		    	}
+			}
+			else {
+		    	return array('status' => 'ERROR', 'error' => 'Error encountered while uploading images.');
+	    	}
+		}
+		else {
+			return array('status' => 'ERROR', 'error' => 'Error encountered while uploading images.');
+		}
+	}
+
+	public function ajaxStoreImages (Request $request, $id) {
+		$building = Building::find($id);
+
+		if (!$building)
+			return array('status' => 'ERROR', 'error' => 'Building not found.');
+
+		$images = array();
+
+		if ($request->images) 
+			$images = $request->images;
+
+		$building->images()->sync($images);
+		$building->save();
+
+		return array('status' => 'OK', 'building' => $building);
+	}
+
+	public function ajaxUploadImage(Request $request, $id)
+	{
+		$building = Building::find($id);
+
+		if (!$building)
+			return array('status' => 'ERROR', 'error' => 'Building not found.');
+
+		if ($request->hasFile('file')) {
+			$ds = DIRECTORY_SEPARATOR;
+			$storeFolder = $ds . 'images' . $ds . 'buildings' . $ds . $id . $ds . 'image';
+
+			if ($request->file('file')->isValid()) {
+				if(!is_dir(public_path() . $storeFolder)) {
+			      	mkdir(public_path() . $storeFolder, 0755, TRUE);
+			    }
+
+			    $file = $request->file('file');
+			    $filename = uniqid() . '.' . $file->guessClientExtension();
+			    
+				if ($targetFile = $file->move(public_path() . $storeFolder, $filename)) {
+		    		$pseudoFile = str_replace(public_path() . $storeFolder, $storeFolder, $targetFile);
+
+		    		return array('status' => 'OK', 'path' => $pseudoFile);
+			    }
+			    else {
+			    	return array('status' => 'ERROR', 'error' => 'Error encountered while uploading images.');
+		    	}
+			}
+			else {
+		    	return array('status' => 'ERROR', 'error' => 'Error encountered while uploading images.');
+	    	}
+		}
+		else {
+			return array('status' => 'ERROR', 'error' => 'Error encountered while uploading images.');
+		}
+	}
+
+	public function ajaxStoreImage (Request $request, $id) {
+		$building = Building::find($id);
+
+		if (!$building)
+			return array('status' => 'ERROR', 'error' => 'Building not found.');
+
+		if ($request->image) 
+			$building->image = $request->image;
+
+		$building->save();
+
+		return array('status' => 'OK', 'building' => $building);
 	}
 }
