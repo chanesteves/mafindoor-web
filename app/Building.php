@@ -45,4 +45,9 @@ class Building extends Model
     {
         return $this->belongsTo('App\User', 'creator_id', 'id');
     }
+
+    public function images()
+    {
+        return $this->belongsToMany('App\Image', 'building_images', 'building_id', 'image_id')->withTimestamps();
+    }
 }

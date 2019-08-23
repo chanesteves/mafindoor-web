@@ -59,6 +59,8 @@
                     <a href="javascript:void(0)" data-target="#modal-edit-venue" class="dropdown-item venue-edit"  data-toggle="modal" data-id="{{ $building->id }}" data-placement="top" data-original-title="Edit"><i class="fa fa-pencil"></i> Edit</a>
                     <a href="javascript:void(0)" class="dropdown-item venue-remove" data-id="{{ $building->id }}" data-placement="top" data-original-title="Remove"><i class="fa fa-trash-o"></i> Remove</a>
                     <a href="javascript:void(0)" data-target="#modal-upload-building-logo" class="dropdown-item building-upload-logo" data-toggle="modal" data-id="{{ $building->id }}" data-placement="top" data-original-title="Upload Logo"><i class="fa fa-upload"></i> Upload Logo</a>
+                    <a href="javascript:void(0)" data-target="#modal-upload-building-sharable-photo" class="dropdown-item building-upload-sharable-photo" data-toggle="modal" data-id="{{ $building->id }}" data-placement="top" data-original-title="Upload Sharable Photo"><i class="fa fa-share"></i> Upload Sharable Photo</a>
+                    <a href="javascript:void(0)" data-target="#modal-upload-building-images" class="dropdown-item building-upload-images" data-toggle="modal" data-id="{{ $building->id }}" data-placement="top" data-original-title="Upload Images"><i class="fa fa-image"></i> Upload Images</a>
                   </div>
                 </div>
               </td>
@@ -166,7 +168,7 @@
     <div class="modal-dialog modal-primary" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h4 class="modal-title">Upload Annotation Logo</h4>
+          <h4 class="modal-title">Upload Building Logo</h4>
           <button class="close" type="button" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">×</span>
           </button>
@@ -174,24 +176,24 @@
         <form id="frm-upload-building-logo" method="POST" action="">
           <input type="hidden" name="_token" value="{{ csrf_token() }}">
           <input name="_method" type="hidden" value="PATCH">
-          <input id="hdn-upload-building-id" type="hidden">
+          <input id="hdn-upload-building-logo-id" type="hidden">
           <div class="modal-body">
             <div class="row">
               <div class="col-md-12">
-                <div id="pnl-upload-container" class="photo-upload-container">
+                <div id="pnl-upload-logo-container" class="photo-upload-container">
                   <br/>
                   <center>
-                    <h3>Browse Photo...</h3>
+                    <h3>Browse Logo...</h3>
                     <div class="row">
                       <div class="col-md-2"></div>
-                        <div id="pnl-upload" class="croppie col-md-8">
+                        <div id="pnl-upload-logo" class="croppie col-md-8">
                       </div>
                       <div class="col-md-2"></div>
                     </div>
                   </center>
                 </div>
                 <div class="buttons croppie">
-                  <input id="file-photo-upload" name="file-photo-upload" accept="image/*" class="file-photo" type="file">
+                  <input id="file-photo-upload-logo" name="file-photo-upload" accept="image/*" class="file-photo" type="file">
                   <center>
                     <button  type="button" class="btn btn-primary croppie-remove"><i class="fa fa-trash"></i> Remove</button>
                     <button  type="button" class="btn btn-primary croppie-rotate" data-deg="-90"><i class="fa fa-undo"></i> Rotate Left</button>
@@ -215,6 +217,63 @@
             <button id="btn-upload-building-logo" class="btn btn-primary" type="submit">Save</button>
           </div>
         </form>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="modal-upload-building-sharable-photo" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog modal-primary" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">Upload Building Sharable Photo</h4>
+          <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">×</span>
+          </button>
+        </div>        
+        <input id="hdn-upload-building-sharable-photo-id" type="hidden">
+        <div class="modal-body">
+          <div class="row">            
+            <div class="col-md-12">
+              <div class="alert alert-danger"><i class="fa fa-times"></i></div>
+              <form id="frm-sharable-photo" action="/buildings/ajaxUploadImage" class="dropzone" enctype="multipart/form-data" >
+                  <div class="dz-default dz-message"><span>Click Here to Upload A Sharable Photo</span></div>
+                  <input type="hidden" name="_token" value="{{ csrf_token() }}">
+              </form>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" type="button" data-dismiss="modal">Close</button>
+          <button id="btn-upload-building-sharable-photo" class="btn btn-primary" type="submit">Save</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="modal-upload-building-images" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog modal-primary" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">Upload Building Images</h4>
+          <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">×</span>
+          </button>
+        </div>        
+        <input id="hdn-upload-building-images-id" type="hidden">
+        <div class="modal-body">
+          <div class="row">
+            <div class="col-md-12">
+              <form id="frm-gallery" action="/buildings/ajaxUploadImages" class="dropzone" enctype="multipart/form-data" >
+                  <div class="dz-default dz-message"><span>Click Here to Upload Additional Images</span></div>
+                  <input type="hidden" name="_token" value="{{ csrf_token() }}">
+              </form>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" type="button" data-dismiss="modal">Close</button>
+          <button id="btn-upload-building-images" class="btn btn-primary" type="submit">Save</button>
+        </div>
       </div>
     </div>
   </div>

@@ -112,3 +112,47 @@ Building.prototype.showBuildings = function (param, callback) {
 		}
 	});
 }
+
+Building.prototype.storeImages = function (param, callback) {
+	CSRF = $("meta[name='csrf-token']").attr('content');
+
+	data = { 
+				_token: CSRF,
+				'images' : param.images
+			};
+			
+	$.ajax({
+		url: '/buildings/' + param.id + '/ajaxStoreImages',
+		type: 'POST',
+		dataType: "json",
+		data: data,
+		success: function(data){
+			if (callback)
+				callback(data);
+		}, error:function (xhr, error, ajaxOptions, thrownError){
+			console.log(xhr.responseText);
+		}
+	});
+}
+
+Building.prototype.storeImage = function (param, callback) {
+	CSRF = $("meta[name='csrf-token']").attr('content');
+
+	data = { 
+				_token: CSRF,
+				'image' : param.image
+			};
+			
+	$.ajax({
+		url: '/buildings/' + param.id + '/ajaxStoreImage',
+		type: 'POST',
+		dataType: "json",
+		data: data,
+		success: function(data){
+			if (callback)
+				callback(data);
+		}, error:function (xhr, error, ajaxOptions, thrownError){
+			console.log(xhr.responseText);
+		}
+	});
+}

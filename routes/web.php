@@ -26,6 +26,10 @@ Route::post('buildings/{building}/ajaxDestroy', 'BuildingsController@ajaxDestroy
 Route::post('buildings/{building}/ajaxShow', 'BuildingsController@ajaxShow');
 Route::post('buildings/{building}/ajaxUploadLogo', 'BuildingsController@ajaxUploadLogo');
 Route::post('buildings/ajaxImportBuildings', 'BuildingsController@ajaxImportBuildings');
+Route::post('buildings/{building}/ajaxUploadImages', 'BuildingsController@ajaxUploadImages');
+Route::post('buildings/{building}/ajaxUploadImage', 'BuildingsController@ajaxUploadImage');
+Route::post('buildings/{building}/ajaxStoreImages', 'BuildingsController@ajaxStoreImages');
+Route::post('buildings/{building}/ajaxStoreImage', 'BuildingsController@ajaxStoreImage');
 Route::post('floors/ajaxStore', 'FloorsController@ajaxStore');
 Route::post('floors/{floor}/ajaxUpdate', 'FloorsController@ajaxUpdate');
 Route::post('floors/{floor}/ajaxDestroy', 'FloorsController@ajaxDestroy');
@@ -60,6 +64,7 @@ Route::post('menus/ajaxStore', 'MenusController@ajaxStore');
 Route::post('menus/{menu}/ajaxShow', 'MenusController@ajaxShow');
 Route::post('menus/{menu}/ajaxUpdate', 'MenusController@ajaxUpdate');
 Route::post('menus/{menu}/ajaxDestroy', 'MenusController@ajaxDestroy');
+Route::post('images/{image}/ajaxDestroy', 'ImagesController@ajaxDestroy');
 
 Route::get('buildings/exportBuildings', 'BuildingsController@exportBuildings');
 Route::get('floors/exportFloors', 'FloorsController@exportFloors');

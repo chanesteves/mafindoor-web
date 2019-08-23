@@ -76,21 +76,20 @@
 				</linearGradient>
 			</defs>
 			<rect id='svg-rect' width="3000" height="1050" fill="url(#grad)"/>
-		</svg> -->
-		<!-- <video autoplay muted loop id="vid_loop">
-		  <source src="/videos/pages/loop.mp4" type="video/mp4">
-		</video> -->
-		<div id="images-carousel" class="owl-carousel wow fadeInUp text-center">
-			<a href='/img/carousel1.jpg' class='item' data-lightbox-gallery="gallery1">
-				<img src="/img/pages/carousel1.jpg" class='img-responsive' alt>
-			</a>
-			<a href='/img/carousel2.jpg' class='item' data-lightbox-gallery="gallery1">
-				<img src="/img/pages/carousel2.jpg" class='img-responsive' alt>
-			</a>
-			<a href='/img/carousel3.jpg' class='item' data-lightbox-gallery="gallery1">
-				<img src="/img/pages/carousel3.jpg" class='img-responsive' alt>
-			</a>
-		</div>
+		</svg> -->		
+		@if ($building->images->count() > 0)
+			<div id="images-carousel" class="owl-carousel wow fadeInUp text-center">
+				@foreach($building->images as $image)
+					<a href='{{ $image->url }}' class='item' data-lightbox-gallery="gallery1">
+						<img src="{{ $image->url }}" class='img-responsive' alt>
+					</a>
+				@endforeach
+			</div>
+		@else
+			<video autoplay muted loop id="vid_loop">
+			  <source src="/videos/pages/loop.mp4" type="video/mp4">
+			</video>
+		@endif
 	</div>
 		<div id='menu-bar-fixed'>
 			<div class='container'>
