@@ -474,9 +474,7 @@ class BuildingsController extends Controller
 		if (!$building)
 			return array('status' => 'ERROR', 'error' => 'Building not found.');
 
-		if ($request->image) 
-			$building->image = $request->image;
-
+		$building->image = $request->image;
 		$building->save();
 
 		return array('status' => 'OK', 'building' => $building);
