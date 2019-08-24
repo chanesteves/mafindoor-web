@@ -544,11 +544,6 @@ Venues.prototype.bindVenues = function () {
 	$('#btn-upload-building-sharable-photo').unbind('click').on('click', function () {
     	var id = $('#hdn-upload-building-sharable-photo-id').val();
 
-    	if (!sharable_photo || sharable_photo == '') {
-    		$('#modal-upload-building-sharable-photo .alert-danger').html('<i class="fa fa-times-circle"></i>&nbsp;Please upload a sharable photo').show();
-    		return;
-    	}
-
 	    var building_obj = {
 	      id : id,
 	      image : sharable_photo

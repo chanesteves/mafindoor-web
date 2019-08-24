@@ -49,6 +49,12 @@ class PagesController extends Controller
 		$distance = 'NULL';
 		$buildings = Building::whereNotNull('name');
 
+		if ($request->header && $request->header == 'no')
+			Session::put('header', 'no');
+
+		if ($request->sidebar && $request->sidebar == 'no')
+			Session::put('sidebar', 'no');
+
 		if ($request->lng && $request->lat) {
 			$distance = 'SQRT(POW(floors.longitude - ' . $request->lng . ', 2) + POW(floors.latitude - ' . $request->lat . ', 2))';
 
