@@ -212,7 +212,7 @@
 				<br/>
 				<div id="maps" class="row">
 					<div class="col-md-12">
-						<h2>Indoor Maps of SM City Legazpi</h2>
+						<h2>Indoor Maps of {{ $building->name }}</h2>
 						<iframe src="http://localhost:8000/search/buildings/4" width="100%" height="500"></iframe>
 					</div>
 				</div>
