@@ -316,7 +316,7 @@
 }
 
 iframe {
-	border: 1px solid #ccc;
+	border: none;
 }
 
 .btn-sm {

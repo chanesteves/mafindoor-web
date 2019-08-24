@@ -3,7 +3,7 @@
 @section('content')
   @include('partials.notices_content')
 
-  <div id="map">
+  <div id="map" style="top: {{ Session::get('header') == 'no' ? '30px' : '50px' }}" >
   </div>
 
 	<div id="pnl-search" style="display: {{ $search_floor ? '' : 'none' }}">

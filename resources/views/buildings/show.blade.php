@@ -19,7 +19,7 @@
 	<link href="/css/pages/animate.css" rel="stylesheet" media="screen">
 	<link href="/css/pages/ionicons.css" rel="stylesheet" media="screen">
 
-	<link href="/css/pages/buildings/show.css?version=1.4.0" rel="stylesheet" media="screen">
+	<link href="/css/pages/buildings/show.css?version=1.4.1" rel="stylesheet" media="screen">
 
 	<link rel="stylesheet" href="/css/pages/nivo-lightbox.css" type="text/css" />
 	<link rel="stylesheet" href="/css/pages/nivo-themes/default/default.css" type="text/css" />
@@ -213,7 +213,7 @@
 				<div id="maps" class="row">
 					<div class="col-md-12">
 						<h2>Indoor Maps of {{ $building->name }}</h2>
-						<iframe src="{{ \URL::to("/") }}/search/buildings/{{ $building->id }}" width="100%" height="500"></iframe>
+						<iframe src="{{ \URL::to("/") }}/search/buildings/{{ $building->id }}?header=no&sidebar=no" width="100%" height="500"></iframe>
 					</div>
 				</div>
 				<br/>

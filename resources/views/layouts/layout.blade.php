@@ -70,8 +70,7 @@
   </head>
   <body class="app header-fixed sidebar-fixed aside-menu-fixed sidebar-lg-show">
     <input type="hidden" id="hdn-site-url" value="{{ \URL::to("/") }}" />
-
-    <header class="app-header navbar">
+    <header class="app-header navbar" style="display: {{ Session::get('header') == 'no' ? 'none' : 'flex' }}" >
       <button class="navbar-toggler sidebar-toggler d-lg-none mr-auto" type="button" data-toggle="sidebar-show">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -175,7 +174,7 @@
       </div>
     @else
       <div class="app-body">
-        <div class="sidebar">
+        <div class="sidebar" style="display: {{ Session::get('sidebar') == 'no' ? 'none' : 'initial' }}">
           <nav class="sidebar-nav">
             <ul class="nav">
               @if (isset($search_building) && $search_building && $search_building->floors->count() > 0)
@@ -269,7 +268,7 @@
 
     	<script src="{{ asset('js/classes/building.js?version=1.4.3') }}"></script>
       <script src="{{ asset('js/classes/image.js?version=1.4.0') }}"></script>
-    	<script src="{{ asset('js/pages/directories/venues.js?version=1.4.7') }}"></script>      
+    	<script src="{{ asset('js/pages/directories/venues.js?version=1.4.8') }}"></script>      
     @elseif (isset($page) && $page == 'Floors')
       <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.49.0/mapbox-gl.js'></script>
       <script src="{{ asset('js/classes/floor.js?version=1.4.1') }}"></script>
