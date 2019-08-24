@@ -11,9 +11,7 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', 'PagesController@welcome');
 
 Route::get('buildings/ajaxSearch', 'BuildingsController@ajaxSearch');
 Route::get('buildings/{building}', 'BuildingsController@show');
