@@ -241,18 +241,11 @@
 				<h2>Our Venues</h2>
 			</div>
 			<div id="screens-carousel" class="owl-carousel wow fadeInUp text-center">
-				<a href='img/screen1.jpg' class='item' data-lightbox-gallery="gallery1">
-					<img src="img/pages/screen1.jpg" class='img-responsive' alt>
-				</a>
-				<a href='img/screen2.jpg' class='item' data-lightbox-gallery="gallery1">
-					<img src="img/pages/screen2.jpg" class='img-responsive' alt>
-				</a>
-				<a href='img/screen3.jpg' class='item' data-lightbox-gallery="gallery1">
-					<img src="img/pages/screen3.jpg" class='img-responsive' alt>
-				</a>
-				<a href='img/screen4.jpg' class='item' data-lightbox-gallery="gallery1">
-					<img src="img/pages/screen4.jpg" class='img-responsive' alt>
-				</a>
+				@foreach($buildings as $building)
+					<a href='/buildings/{{ $building->id }}-{{ $building->slug }}' class='item' data-lightbox-gallery="gallery1">
+						<img src="{{ $building->image }}" class='img-responsive' alt>
+					</a>
+				@endforeach
 			</div>
 		</div>
 	</section>

@@ -80,7 +80,7 @@
 		@if ($building->images->count() > 0)
 			<div id="images-carousel" class="owl-carousel wow fadeInUp text-center">
 				@foreach($building->images as $image)
-					<a href='{{ $image->url }}' class='item' data-lightbox-gallery="gallery1">
+					<a href='javascript:void()' class='item' data-lightbox-gallery="gallery1">
 						<img src="{{ $image->url }}" class='img-responsive' alt>
 					</a>
 				@endforeach

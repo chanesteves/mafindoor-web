@@ -31,7 +31,16 @@ class PagesController extends Controller
 	 */
 	public function __construct()
 	{
-		$this->middleware('auth')->except('search');
+		$this->middleware('auth')->except('search', 'welcome');
+	}
+
+	public function welcome(Request $request) {
+		$buildings = Building::where('status', 'live')->where('image', '!=', '')->get();
+
+		return View::make('welcome')->with(array(
+													'page' => 'Welcome',
+													'buildings' => $buildings
+												));
 	}
 
 	public function search(Request $request) {
