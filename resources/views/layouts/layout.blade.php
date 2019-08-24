@@ -269,7 +269,7 @@
 
     	<script src="{{ asset('js/classes/building.js?version=1.4.3') }}"></script>
       <script src="{{ asset('js/classes/image.js?version=1.4.0') }}"></script>
-    	<script src="{{ asset('js/pages/directories/venues.js?version=1.4.6') }}"></script>      
+    	<script src="{{ asset('js/pages/directories/venues.js?version=1.4.7') }}"></script>      
     @elseif (isset($page) && $page == 'Floors')
       <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.49.0/mapbox-gl.js'></script>
       <script src="{{ asset('js/classes/floor.js?version=1.4.1') }}"></script>
