@@ -19,7 +19,7 @@
 	<link href="/css/pages/animate.css" rel="stylesheet" media="screen">
 	<link href="/css/pages/ionicons.css" rel="stylesheet" media="screen">
 
-	<link href="/css/pages/buildings/show.css?version=1.4.2" rel="stylesheet" media="screen">
+	<link href="/css/pages/buildings/show.css?version=1.4.3" rel="stylesheet" media="screen">
 
 	<link rel="stylesheet" href="/css/pages/nivo-lightbox.css" type="text/css" />
 	<link rel="stylesheet" href="/css/pages/nivo-themes/default/default.css" type="text/css" />
@@ -57,7 +57,7 @@
 		</div>
 		<div class="container">
 			<div class='row'>					
-				<div class='col-sm-12 animated fadeInRight text-center'>
+				<div class='col-sm-12 animated fadeInRight text-center no-padding'>
 					<h2>Find Your Ways Inside</h2>
 					<h1>{{ $building->name }}</h1>
 					<h2>With Mafindoor</h2>
