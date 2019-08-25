@@ -1058,13 +1058,13 @@ footer .copyright{
     	display: none;
     }
 }
-@media (min-width: 399px) and (max-width: 1024px){
+@media (min-width: 721px) and (max-width: 1024px){
     .search{
     	float: right !important;
     	width: 50% !important;
     }
 }
-@media (max-width: 399px){
+@media (max-width: 720px){
 	.search{
     	float: none !important;
     	display: block;
