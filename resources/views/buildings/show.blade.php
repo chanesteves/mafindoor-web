@@ -19,7 +19,7 @@
 	<link href="/css/pages/animate.css" rel="stylesheet" media="screen">
 	<link href="/css/pages/ionicons.css" rel="stylesheet" media="screen">
 
-	<link href="/css/pages/buildings/show.css?version=1.4.3" rel="stylesheet" media="screen">
+	<link href="/css/pages/buildings/show.css?version=1.4.4" rel="stylesheet" media="screen">
 
 	<link rel="stylesheet" href="/css/pages/nivo-lightbox.css" type="text/css" />
 	<link rel="stylesheet" href="/css/pages/nivo-themes/default/default.css" type="text/css" />
@@ -50,7 +50,7 @@
 						<li><a href="#about">About</a></li>
 						<li><a href="#stores">Stores</a></li>
 						<li><a href="#maps">Maps</a></li>
-						<li><a href="#download">Download</a></li>
+						<!-- <li><a href="#download">Download</a></li> -->
 					</ul>
 				</nav>
 			</div>
@@ -61,10 +61,10 @@
 					<h2>Find Your Ways Inside</h2>
 					<h1>{{ $building->name }}</h1>
 					<h2>With Mafindoor</h2>
-					<div id='header-btn'>
+					<!-- <div id='header-btn'>
 						<a class='btn btn-icon btn-secondary' href=""><span class='icon ion-social-apple'></span><strong>App Store</strong></a>
 						<a class='btn btn-icon btn-primary' href=""><span class='icon ion-social-android'></span><strong>Play Store</strong></a>
-					</div>
+					</div> -->
 				</div>
 			</div>
 		</div>
@@ -102,7 +102,7 @@
 						<li><a href="#about">About</a></li>
 						<li><a href="#stores">Stores</a></li>
 						<li><a href="#maps">Maps</a></li>
-						<li><a href="#download">Download</a></li>
+						<!-- <li><a href="#download">Download</a></li> -->
 					</ul>
 				</nav>
 			</div>
@@ -227,13 +227,14 @@
 	<section id='download'>
 		<div class="container">
 			<div class='wow fadeInDown'>
-				<h2>Download Mafindoor Now</h2>
+				<h2>Mafindoor App Is Comming Soon...</h2>
+				<!-- <h2>Download Mafindoor Now!</h2> -->
 				<p class='subtitle'>Avoid the hassle of finding and waiting for your turn to use <strong>{{ $building->name }}'s</strong> directory.</p>
 			</div>
-			<p class='download-buttons'>
+			<!-- <p class='download-buttons'>
 				<a class='btn btn-icon btn-secondary' href=""><span class='icon ion-social-apple'></span>App Store</a>
 				<a class='btn btn-icon btn-primary' href=""><span class='icon ion-social-android'></span>Play Store</a>
-			</p>
+			</p> -->
 			<div class='floating-phone wow fadeInRightBig'></div>
 		</div>
 	</section>
