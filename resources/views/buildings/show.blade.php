@@ -279,6 +279,17 @@
 		hideNav = $('#hide-nav')
 		navUl = $('#nav-ul')
 
+		// set header height
+		if (windowHeight>=900) {
+			header.css('height', windowHeight - 250)
+		}
+		else{
+			header.css('height', windowHeight)
+		}
+
+		headerHeight = header.outerHeight()
+		headerWidth = header.outerWidth()
+
 		$(document).ready(function() {
 
 			// header animation svg
