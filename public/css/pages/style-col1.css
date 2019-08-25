@@ -832,7 +832,7 @@ footer .copyright{
 	#menu-bar{
 		padding: 15px 0 0 0;
 		height: auto;
-		margin-bottom: 0;
+		margin-bottom: 0px;
 	}
 	#menu-bar .logo{
 		line-height: 42px;
