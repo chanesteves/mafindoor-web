@@ -397,3 +397,7 @@ iframe {
 	    padding: 8px 12px;
 	}
 }
+
+.no-padding {
+    padding: 0 !important;
+}
