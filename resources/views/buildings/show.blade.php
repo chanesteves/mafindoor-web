@@ -15,7 +15,7 @@
 	<link href="/css/pages/bootstrap.css" rel="stylesheet" media="screen">
 	<link href="/css/pages/owl.theme.css" rel="stylesheet" media="screen">
 	<link href="/css/pages/owl.carousel.css" rel="stylesheet" media="screen">
-	<link href="/css/pages/style-col1.css?version=1.4.3" rel="stylesheet" media="screen">
+	<link href="/css/pages/style-col1.css?version=1.4.4" rel="stylesheet" media="screen">
 	<link href="/css/pages/animate.css" rel="stylesheet" media="screen">
 	<link href="/css/pages/ionicons.css" rel="stylesheet" media="screen">
 
