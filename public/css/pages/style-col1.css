@@ -1061,6 +1061,7 @@ footer .copyright{
 @media (min-width: 399px) and (max-width: 1024px){
     .search{
     	float: right !important;
+    	width: 50% !important;
     }
 }
 @media (max-width: 399px){
