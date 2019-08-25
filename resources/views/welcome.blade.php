@@ -38,7 +38,7 @@
 						<li><a href="#about">About</a></li>
 						<li><a href="#features">Features</a></li>
 						<li><a href="#screenshots">Venues</a></li>
-						<li><a href="#download">Download</a></li>
+						<!-- <li><a href="#download">Download</a></li> -->
 					</ul>
 				</nav>
 			</div>
@@ -48,8 +48,8 @@
 				<div class='col-sm-10 col-sm-offset-1 col-md-7 col-md-offset-0 col-md-push-5 col-lg-6 col-lg-push-6 animated fadeInRight'>
 					<h1>Find Your Way Indoors With Mafindoor.</h1>
 					<div id='header-btn'>
-						<a class='btn btn-icon btn-secondary' href=""><span class='icon ion-social-apple'></span><strong>App Store</strong></a>
-						<a class='btn btn-icon btn-primary' href=""><span class='icon ion-social-android'></span><strong>Play Store</strong></a>
+						<!-- <a class='btn btn-icon btn-secondary' href=""><span class='icon ion-social-apple'></span><strong>App Store</strong></a>
+						<a class='btn btn-icon btn-primary' href=""><span class='icon ion-social-android'></span><strong>Play Store</strong></a> -->
 					</div>
 				</div>
 				<div class='col-xs-10 col-xs-offset-1 col-sm-6 col-sm-offset-3 col-md-5 col-md-offset-0 col-md-pull-7 col-lg-5 col-lg-pull-6 col-lg-offset-1'>
@@ -80,7 +80,7 @@
 						<li><a href="#about">About</a></li>
 						<li><a href="#features">Features</a></li>
 						<li><a href="#screenshots">Venues</a></li>
-						<li><a href="#download">Download</a></li>
+						<!-- <li><a href="#download">Download</a></li> -->
 					</ul>
 				</nav>
 			</div>
@@ -227,9 +227,10 @@
 		<div class="container">
 			<p>
 				<span class='text wow fadeInLeft'>
-					<span class='bold'>Download the app right now</span>
+					<!-- <span class='bold'>Download the app right now</span> -->
+					<span class='bold'>Mafindoor app is comming soon...</span>
 				</span>
-				<a href="#download" class='btn btn-primary scrollTo-download wow pulse delay-1s'>Download Now</a>
+				<!-- <a href="#download" class='btn btn-primary scrollTo-download wow pulse delay-1s'>Download Now</a> -->
 			</p>
 		</div>
 	</section>
@@ -254,13 +255,14 @@
 	<section id='download'>
 		<div class="container">
 			<div class='wow fadeInDown'>
-				<h2>Download Mafindoor Now</h2>
+				<h2>Mafindoor App Is Comming Soon...</h2>
+				<!-- <h2>Download Mafindoor Now!</h2> -->
 				<p class='subtitle'>Avoid the hassle of finding and waiting for your turn to use the buildling's directory.</p>
 			</div>
-			<p class='download-buttons'>
+			<!-- <p class='download-buttons'>
 				<a class='btn btn-icon btn-secondary' href=""><span class='icon ion-social-apple'></span>App Store</a>
 				<a class='btn btn-icon btn-primary' href=""><span class='icon ion-social-android'></span>Play Store</a>
-			</p>
+			</p> -->
 			<div class='floating-phone wow fadeInRightBig'></div>
 		</div>
 	</section>

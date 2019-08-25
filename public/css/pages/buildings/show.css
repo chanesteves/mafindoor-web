@@ -187,7 +187,8 @@
 	display: none;
 }
 
-#datatable_tabletools_annotations thead {
+#datatable_tabletools_annotations thead,
+#datatable_tabletools_annotations_length {
 	display: none;
 }
 
