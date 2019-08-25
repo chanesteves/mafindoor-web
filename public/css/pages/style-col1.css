@@ -830,9 +830,9 @@ footer .copyright{
 		font-size: 56px;
 	}
 	#menu-bar{
-		padding: 15px 0;
+		padding: 15px 0 0 0;
 		height: auto;
-		margin-bottom: 20px;
+		margin-bottom: 0px;
 	}
 	#menu-bar .logo{
 		line-height: 42px;
