@@ -215,13 +215,13 @@ class BuildingsController extends Controller
 		$str = preg_replace('/(^|&)\+[^&]*/', ' ', $request->query->get('query'));
 		$str = preg_replace('/ +/', '%', $str);
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        
-		$buildings = Building::selectRaw("id, slug, logo as image, name as value, address as description, 'building' as type")
+		$buildings = Building::selectRaw("id, slug, logo as image, name as value, address as description, 'building' as type, NULL as floor_id")
 							->whereRaw('CONCAT(name, address) LIKE \'%' . $str . '%\' AND status = \'live\'')
 							->orWhereRaw('CONCAT(address, name) LIKE \'%' . $str . '%\' AND status = \'live\'')
 							->get();
 
 		 if ($str != '') {
-			$annotations = Annotation::selectRaw("annotations.id, annotations.slug, annotations.logo as image, annotations.name as value, 'annotation' as type, floor_id")
+			$annotations = Annotation::selectRaw("annotations.id, annotations.slug, annotations.logo as image, annotations.name as value, '' as description, 'annotation' as type, floor_id")
 								->with('floor')
 								->join('floors', 'floors.id', 'floor_id')
 								->join('buildings', 'buildings.id', 'building_id')
@@ -239,7 +239,7 @@ class BuildingsController extends Controller
 			 	$annotation->description = $annotation->floor && $annotation->floor->building ? $annotation->floor->building->name . ', ' . $annotation->floor->name : '';
 			 }
 
-			 $result = $buildings->merge($annotations);
+			 $result = $annotations->merge($buildings);
 		}
 		else {
 			$result = $buildings;

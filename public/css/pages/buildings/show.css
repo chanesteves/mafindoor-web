@@ -10,12 +10,25 @@
 	header {
 		min-height: 560px;
 	}
+
+    .dataTables_info,
+    .dataTables_paginate {
+        float: none !important;
+        text-align: center !important;
+    }
 }
 
 @media (max-width: 667px) {
 	header {
-		min-height: 280px;
+		min-height: 380px;
 	}
+    .owl-carousel .owl-wrapper-outer {
+        top: 140px;
+    }
+    .owl-prev,
+    .owl-next {
+        top: 210px !important;
+    }
 }
 
 #header h1,
@@ -174,10 +187,25 @@
 	display: none;
 }
 
-#datatable_tabletools_annotations thead,
-#datatable_tabletools_annotations_wrapper .dataTables_length,
-#datatable_tabletools_annotations_info {
+#datatable_tabletools_annotations thead {
 	display: none;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button.current, 
+.dataTables_wrapper .dataTables_paginate .paginate_button.current:hover{
+    background: white !important;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button:active,
+.dataTables_wrapper .dataTables_paginate .paginate_button:hover {
+    background: #09b8ed !important;
+    box-shadow: none !important;
+    border-color: #09b8ed !important;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button.disabled, 
+.dataTables_wrapper .dataTables_paginate .paginate_button.disabled:hover {
+    color: #FFF !important;
 }
 
 #accordion-annotations .ui-accordion-header {
@@ -206,6 +234,7 @@
 #datatable_tabletools_annotations {
 	box-shadow: rgba(60, 60, 60, 0.3) 0px 1px 2px 0px, rgba(60, 60, 60, 0.15) 0px 1px 3px 1px;
 	border-radius: 4px;
+    width: 100% !important;
 }
 
 #datatable_tabletools_annotations tr:last-child td {
@@ -218,7 +247,7 @@
 }
 
 #information {
-	position: relative;
+	/*position: relative;*/
 }
 
 #datatable_tabletools_annotations_filter input {
@@ -237,6 +266,11 @@
    	background-image: url(/img/icons/search.svg);
     background-repeat: no-repeat;
     background-position: 14px 14px;
+}
+
+#datatable_tabletools_annotations .name,
+#datatable_tabletools_annotations .desc {
+    text-align: left;
 }
 
 @media (max-width: 667px) {
@@ -272,6 +306,7 @@
 
 #datatable_tabletools_annotations_wrapper {
 	margin-top: -70px;
+    text-align: center;
 }
 
 @media (max-width: 667px) {
@@ -317,6 +352,14 @@
 
 iframe {
 	border: none;
+}
+
+@media (max-width: 367px) {
+    iframe {
+        margin-left: -55px;
+        margin-right: -55px;
+        width: 130%;
+    }
 }
 
 .btn-sm {
