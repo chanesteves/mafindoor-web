@@ -368,12 +368,12 @@
 					var photo = suggestion.image;
 
 					return '<a class="place_link" href="' + s_link + '"><div class="row">'
-						+		'<div class="col-xs-2">'
+						+		'<div class="col-xs-3 col-sm-2">'
 						+			'<span class="image-holder image-holder-xs">'
 						+				'<img class="thumbnail-sm" src="' + photo + '" />'
 						+			'</span>'
 						+		'</div>'
-						+		'<div class="col-xs-10">'
+						+		'<div class="col-xs-9 col-sm-10">'
 						+			'<div class="name"><b>' + suggestion.value.replace(new RegExp(pattern, 'gi'), '<span class="highlight">$1<\/span>') + '</b></div>'
 						+			'<div class="desc"><span>' + suggestion.description.replace(new RegExp(pattern, 'gi'), '<span class="highlight">$1<\/span>') + '</span></div>'
 						+		'</div>'
