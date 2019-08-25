@@ -15,11 +15,11 @@
 	<link href="/css/pages/bootstrap.css" rel="stylesheet" media="screen">
 	<link href="/css/pages/owl.theme.css" rel="stylesheet" media="screen">
 	<link href="/css/pages/owl.carousel.css" rel="stylesheet" media="screen">
-	<link href="/css/pages/style-col1.css?version=1.4.1" rel="stylesheet" media="screen">
+	<link href="/css/pages/style-col1.css?version=1.4.2" rel="stylesheet" media="screen">
 	<link href="/css/pages/animate.css" rel="stylesheet" media="screen">
 	<link href="/css/pages/ionicons.css" rel="stylesheet" media="screen">
 
-	<link href="/css/pages/buildings/show.css?version=1.4.1" rel="stylesheet" media="screen">
+	<link href="/css/pages/buildings/show.css?version=1.4.2" rel="stylesheet" media="screen">
 
 	<link rel="stylesheet" href="/css/pages/nivo-lightbox.css" type="text/css" />
 	<link rel="stylesheet" href="/css/pages/nivo-themes/default/default.css" type="text/css" />
@@ -327,7 +327,7 @@
 		      	navigationText: ['<i class="gallery-icon left" aria-hidden="true"></i>','<i class="gallery-icon right" aria-hidden="true"></i>'],
 			});
 
-			$('#datatable_tabletools_annotations').DataTable({ paginate : false, language: { search: '' } });
+			$('#datatable_tabletools_annotations').DataTable({ language: { search: '' } });
 			$('#datatable_tabletools_annotations_filter input').attr('placeholder', 'Search stores by name, floor, or category...');
 
 			$('.show-in-map').unbind('click').on('click', function () {
@@ -381,7 +381,24 @@
 				}
 			});
 
-			$(window).trigger('resize');
+			windowHeight = myWindow.height()
+			windowWidth = myWindow.width()
+
+			if (windowWidth<=667) {
+				header.css('height', 380)
+				$('.owl-prev').css('top', 140)
+				$('.owl-next').css('top', 140)
+			}
+			else if (windowWidth<=768) {
+				header.css('height', 560)
+				$('.owl-prev').css('top', 380)
+				$('.owl-next').css('top', 380)
+			}
+			else {
+				header.css('height', 768)
+				$('.owl-prev').css('top', 384)
+				$('.owl-next').css('top', 384)	
+			}
 		});
 		// Responsive navigation show/hide
 		function showNavig() {
@@ -411,6 +428,9 @@
 
 		// Resize event handler
 		myWindow.resize(function() {
+			windowHeight = myWindow.height()
+			windowWidth = myWindow.width()
+
 			// show/hide responsive navigation
 			if (myWindow.width()>767) {
 				navUl.css('display','block')
@@ -425,14 +445,14 @@
 			// svgRect.attr('width', 2*headerWidth)
 
 			if (windowWidth<=667) {
-				header.css('height', 280)
+				header.css('height', 380)
 				$('.owl-prev').css('top', 140)
 				$('.owl-next').css('top', 140)
 			}
 			else if (windowWidth<=768) {
 				header.css('height', 560)
-				$('.owl-prev').css('top', 280)
-				$('.owl-next').css('top', 280)
+				$('.owl-prev').css('top', 380)
+				$('.owl-next').css('top', 380)
 			}
 			else {
 				header.css('height', 768)
@@ -459,7 +479,7 @@
 
 
 		footerHeight = $('footer').outerHeight();
-		$('#static-footer').css('margin-top', footerHeight+'px');
+		// $('#static-footer').css('margin-top', footerHeight+'px');
 
 		// scroll event
 		window.onscroll = scroll;

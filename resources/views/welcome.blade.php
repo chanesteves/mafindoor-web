@@ -8,7 +8,7 @@
 	<link href="css/pages/bootstrap.css" rel="stylesheet" media="screen">
 	<link href="css/pages/owl.theme.css" rel="stylesheet" media="screen">
 	<link href="css/pages/owl.carousel.css" rel="stylesheet" media="screen">
-	<link href="css/pages/style-col1.css?version=1.4.1" rel="stylesheet" media="screen">
+	<link href="css/pages/style-col1.css?version=1.4.2" rel="stylesheet" media="screen">
 	<link href="css/pages/animate.css" rel="stylesheet" media="screen">
 	<link href="css/pages/ionicons.css" rel="stylesheet" media="screen">
 	<link rel="stylesheet" href="css/pages/nivo-lightbox.css" type="text/css" />
@@ -122,59 +122,59 @@
 			<div class='row'>	
 				<div class='col-sm-4 col-md-4 col-lg-4 left wow fadeInLeft'>
 					<div class='row'>
-						<div class='col-sm-12 col-md-9 col-lg-9'>
+						<div class='col-sm-8 col-md-9 col-lg-9'>
 							<h4>Zoom in to navigate</h4>
 							<p>Zoom in to see the indoor floor plan of a building.</p>
 						</div>
-						<div class='col-sm-3 col-md-3 col-lg-3'>
+						<div class='hidden-xs col-sm-4 col-md-3 col-lg-3'>
 							<div class='circle-icon-rspv'><div class='icon ion-ios7-plus-outline'></div></div>
 						</div>
 					</div>
-					<div class='row'>
+					<div class='row hidden-xs'>
 						<div class='col-sm-12'>
 							<br/><br/><br/>
 						</div>
 					</div>
 					<div class='row'>
-						<div class='col-sm-12 col-md-9 col-lg-9'>
+						<div class='col-sm-8 col-md-9 col-lg-9'>
 							<h4>View All Floors</h4>
 							<p>Move from one floor to another in just a click of a button.</p>
 						</div>
-						<div class='col-sm-3 col-md-3 col-lg-3'>
+						<div class='hidden-xs col-sm-4 col-md-3 col-lg-3'>
 							<div class='circle-icon-rspv'><div class='icon ion-android-stair-drawer'></div></div>
 						</div>
 					</div>
-					<div class='row'>
+					<div class='row hidden-xs'>
 						<div class='col-sm-12'>
 							<br/><br/><br/>
 						</div>
 					</div>
 				</div>
 				<div class='col-sm-4 col-sm-push-4 col-md-4 col-md-push-4 col-lg-4 col-lg-push-4 right wow fadeInRight'>
-					<div class='row'>
+					<div class='row hidden-xs'>
 						<div class='col-sm-12'>
 							<br/><br/><br/>
 						</div>
 					</div>
 					<div class='row'>
-						<div class='col-sm-3 col-md-3 col-lg-3'>
+						<div class='hidden-xs col-sm-4 col-md-3 col-lg-3'>
 							<div class='circle-icon-rspv'><div class='icon ion-ios7-search'></div></div>
 						</div>
-						<div class='col-sm-12 col-md-9 col-lg-9'>
+						<div class='col-sm-8 col-md-9 col-lg-9'>
 							<h4>Search points of interest</h4>
 							<p>Use search to find your favorite place inside a venue.</p>
 						</div>						
 					</div>
-					<div class='row'>
+					<div class='row hidden-xs'>
 						<div class='col-sm-12'>
 							<br/><br/><br/>
 						</div>
 					</div>
 					<div class='row'>
-						<div class='col-sm-3 col-md-3 col-lg-3'>
+						<div class='hidden-xs col-sm-4 col-md-3 col-lg-3'>
 							<div class='circle-icon-rspv'><div class='icon ion-ios7-bolt-outline'></div></div>
 						</div>
-						<div class='col-sm-12 col-md-9 col-lg-9'>
+						<div class='col-sm-8 col-md-9 col-lg-9'>
 							<h4>Switch Venues</h4>
 							<p>Easily switch you current venue by clicking an item on the sidebar.</p>
 						</div>					
@@ -454,7 +454,7 @@
 
 
 		footerHeight = $('footer').outerHeight();
-		$('#static-footer').css('margin-top', footerHeight+'px');
+		// $('#static-footer').css('margin-top', footerHeight+'px');
 
 		// scroll event
 		window.onscroll = scroll;
