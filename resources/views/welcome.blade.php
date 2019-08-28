@@ -228,7 +228,7 @@
 			<p>
 				<span class='text wow fadeInLeft'>
 					<!-- <span class='bold'>Download the app right now</span> -->
-					<span class='bold'>Mafindoor app is comming soon...</span>
+					<span class='bold'>Mafindoor app is coming soon...</span>
 				</span>
 				<!-- <a href="#download" class='btn btn-primary scrollTo-download wow pulse delay-1s'>Download Now</a> -->
 			</p>
@@ -255,7 +255,7 @@
 	<section id='download'>
 		<div class="container">
 			<div class='wow fadeInDown'>
-				<h2>Mafindoor App Is Comming Soon...</h2>
+				<h2>Mafindoor App Is Coming Soon...</h2>
 				<!-- <h2>Download Mafindoor Now!</h2> -->
 				<p class='subtitle'>Avoid the hassle of finding and waiting for your turn to use the buildling's directory.</p>
 			</div>

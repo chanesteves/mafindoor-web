@@ -227,7 +227,7 @@
 	<section id='download'>
 		<div class="container">
 			<div class='wow fadeInDown'>
-				<h2>Mafindoor App Is Comming Soon...</h2>
+				<h2>Mafindoor App Is Coming Soon...</h2>
 				<!-- <h2>Download Mafindoor Now!</h2> -->
 				<p class='subtitle'>Avoid the hassle of finding and waiting for your turn to use <strong>{{ $building->name }}'s</strong> directory.</p>
 			</div>
