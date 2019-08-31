@@ -12,6 +12,7 @@
 */
 
 Route::get('/', 'PagesController@welcome');
+Route::get('privacy', 'PagesController@privacy');
 
 Route::get('buildings/ajaxSearch', 'BuildingsController@ajaxSearch');
 Route::get('buildings/{building}', 'BuildingsController@show');

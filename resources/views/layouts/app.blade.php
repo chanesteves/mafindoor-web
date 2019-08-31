@@ -18,7 +18,7 @@
     <link href="{{ asset('plugins/fontawesome/css/fontawesome.min.css') }}" rel="stylesheet">
     <link href="{{ asset('plugins/simple-line-icons/css/simple-line-icons.css') }}" rel="stylesheet">
     <!-- Main styles for this application-->
-    <link href="{{ asset('css/style.css?version=1.1.2') }}" rel="stylesheet">
+    <link href="{{ asset('css/style.css?version=1.4.5') }}" rel="stylesheet">
 
     <link href="{{ asset('plugins/pace-progress/css/pace.min.css') }}" rel="stylesheet">
 
@@ -33,7 +33,7 @@
       <button class="navbar-toggler sidebar-toggler d-lg-none mr-auto" type="button" data-toggle="sidebar-show">
         <span class="navbar-toggler-icon"></span>
       </button>
-      <a class="navbar-brand" href="#">
+      <a class="navbar-brand" href="/">
         <img class="navbar-brand-full" src="/img/brand/logo-horizontal.png" width="89" height="25" alt="Maze Logo">
       </a>
         <ul class="nav navbar-nav d-md-down-none">
@@ -59,25 +59,26 @@
             <section class="row">
                 <div class="col-md-4 logo">
                     <center>
-                        <img class="navbar-brand-minimized" src="{{ asset('img/brand/logo-vertical.png') }}" width="200" alt="Mafindoor Logo">
-                        <br/>
+                        <img class="navbar-brand-minimized" src="{{ asset('img/brand/logo-vertical.png?version=1.4.0') }}" width="200" alt="Mafindoor Logo">
+                        <br/><br/>
                         <h4>Find Your Way Indoors</h4>
                         <p>
-                            Join thousands of mafindoor users who find it easy to see what <i>Google Maps</i> can't show and reach where <i>Waze</i> can't go
+                            Join thousands of Mafindoor users who find it easy to see what <i>Google Maps</i> can't show and reach where <i>Waze</i> can't go
                         </p>
                     </center>
                 </div>
                 <div class="col-md-4">
+                    <br/>
                     For any questions: <br>
                     <strong>Email us at</strong> <a href="mailto:support@mafindoor.com">support@mafindoor.com</a> <br>
                 </div>
                 <div class="col-md-4">
-                    <br/>
+                    <br/><br/>
                     <a href="#">About Us</a>
                     <br/>
                     <a href="#">Help Center</a>
                     <br/>
-                    <a href="#">Privacy Policy</a>
+                    <a href="/privacy">Privacy Policy</a>
                     <br/>
                     <a href="#">Terms &amp; Conditions</a>
                 </div>
@@ -85,7 +86,7 @@
         </div>
         <section class="row breath">
             <div class="col-md-4 text-center">
-                <p style="font-size: 14px;">© 2018 Mafindoor. All Rights Reserved</p>
+                <p style="font-size: 14px;">© 2019 Mafindoor. All Rights Reserved</p>
             </div>
             <div class="col-md-4 text-center">
                 <a href="#" target="_blank" class="btn btn-facebook"><i class="fa fa-facebook"></i></a>
