@@ -14180,3 +14180,16 @@ body {
 .pac-container {
   z-index: 10000 !important;
 }
+
+/******************/
+/**** Privacy *****/
+/******************/
+
+.privacy {
+  background-color: #FFF;
+  padding: 50px;
+}
+
+.privacy ul li {
+  list-style: none;
+}

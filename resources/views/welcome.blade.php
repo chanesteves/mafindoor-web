@@ -278,7 +278,16 @@
 					<a href="https://plus.google.com/u/0/103858053761972961832" target="_blank" class='icon ion-social-googleplus-outline'></a>
 					<!-- <a href="" class='icon ion-social-instagram'></a> -->
 				</p>
-				<p class='copyright'>Copyright © 2019 Mafindoor</p>
+				<p class='copyright'>
+					<div class="row">
+						<div class="col-md-6 text-right">
+							Copyright © 2019 Mafindoor
+						</div>
+						<div class="col-md-6 text-left">
+							<a href="/privacy">Privacy Policy</a>
+						</div>
+					</div>
+				</p>
 			</div>
 		</div>
 	</footer>

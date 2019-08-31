@@ -31,7 +31,7 @@ class PagesController extends Controller
 	 */
 	public function __construct()
 	{
-		$this->middleware('auth')->except('search', 'welcome');
+		$this->middleware('auth')->except('search', 'welcome', 'privacy');
 	}
 
 	public function welcome(Request $request) {
@@ -40,6 +40,14 @@ class PagesController extends Controller
 		return View::make('welcome')->with(array(
 													'page' => 'Welcome',
 													'buildings' => $buildings
+												));
+	}
+
+	public function privacy(Request $request) {
+		
+
+		return View::make('privacy')->with(array(
+													'page' => 'Privacy'
 												));
 	}
 
