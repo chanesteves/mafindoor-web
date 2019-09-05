@@ -50,7 +50,7 @@
 						<li><a href="#about">About</a></li>
 						<li><a href="#stores">Stores</a></li>
 						<li><a href="#maps">Maps</a></li>
-						<!-- <li><a href="#download">Download</a></li> -->
+						<li><a href="#download">Download</a></li>
 					</ul>
 				</nav>
 			</div>
@@ -102,7 +102,7 @@
 						<li><a href="#about">About</a></li>
 						<li><a href="#stores">Stores</a></li>
 						<li><a href="#maps">Maps</a></li>
-						<!-- <li><a href="#download">Download</a></li> -->
+						<li><a href="#download">Download</a></li>
 					</ul>
 				</nav>
 			</div>
@@ -227,14 +227,14 @@
 	<section id='download'>
 		<div class="container">
 			<div class='wow fadeInDown'>
-				<h2>Mafindoor App Is Coming Soon...</h2>
-				<!-- <h2>Download Mafindoor Now!</h2> -->
+				<!-- <h2>Mafindoor App Is Coming Soon...</h2> -->
+				<h2>Download Mafindoor Now!</h2>
 				<p class='subtitle'>Avoid the hassle of finding and waiting for your turn to use <strong>{{ $building->name }}'s</strong> directory.</p>
 			</div>
-			<!-- <p class='download-buttons'>
-				<a class='btn btn-icon btn-secondary' href=""><span class='icon ion-social-apple'></span>App Store</a>
-				<a class='btn btn-icon btn-primary' href=""><span class='icon ion-social-android'></span>Play Store</a>
-			</p> -->
+			<p class='download-buttons'>
+				<!-- <a class='btn btn-icon btn-secondary' href=""><span class='icon ion-social-apple'></span>App Store</a> -->
+				<a class='btn btn-icon btn-primary' href="https://play.google.com/store/apps/details?id=com.mafindoor"><span class='icon ion-social-android'></span>Play Store</a>
+			</p>
 			<div class='floating-phone wow fadeInRightBig'></div>
 		</div>
 	</section>
