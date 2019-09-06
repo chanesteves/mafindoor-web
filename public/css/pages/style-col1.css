@@ -1192,3 +1192,45 @@ footer .copyright{
 .autocomplete-selected {
 	background-color: #c8d6e2;
 }
+
+.iframe-wrapper {
+	position: relative;
+}
+
+.iframe-error {
+	position: absolute;
+  	top: 0;
+  	bottom: 0;
+  	left: 0;
+  	right: 0;
+  	background-color: #3679b0;
+  	display: none;
+}
+
+.iframe-error-wrapper {
+  position: relative;
+  height: 100%;
+}
+
+.iframe-error-content {
+  position: absolute;
+  top: 40%;
+  text-align: center;
+  width: 100%;
+}
+
+.iframe-error-content h4 {
+	color: #FFF;
+}
+
+.iframe-error-content .btn {
+  border-radius: 20px;
+  padding: 15px 30px;
+  background-color: #FFF;
+  color: #3679b0 !important;
+  font-weight: bold;
+}
+
+.iframe-error-content img {
+  margin-top: 40px;
+}

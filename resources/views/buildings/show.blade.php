@@ -15,7 +15,7 @@
 	<link href="/css/pages/bootstrap.css" rel="stylesheet" media="screen">
 	<link href="/css/pages/owl.theme.css" rel="stylesheet" media="screen">
 	<link href="/css/pages/owl.carousel.css" rel="stylesheet" media="screen">
-	<link href="/css/pages/style-col1.css?version=1.4.8" rel="stylesheet" media="screen">
+	<link href="/css/pages/style-col1.css?version=1.4.9" rel="stylesheet" media="screen">
 	<link href="/css/pages/animate.css" rel="stylesheet" media="screen">
 	<link href="/css/pages/ionicons.css" rel="stylesheet" media="screen">
 
@@ -213,7 +213,19 @@
 				<div id="maps" class="row">
 					<div class="col-md-12">
 						<h2>Indoor Maps of {{ $building->name }}</h2>
-						<iframe src="{{ \URL::to("/") }}/search/buildings/{{ $building->id }}?header=no&sidebar=no" width="100%" height="500"></iframe>
+						<div class="iframe-wrapper">
+							<iframe id="ifm-map" name="ifm_map" src="{{ \URL::to("/") }}/search/buildings/{{ $building->id }}?header=no&sidebar=no" width="100%" height="500"></iframe>
+							<div class="iframe-error">
+								<div class="iframe-error-wrapper">
+									<div class="iframe-error-content">
+							          <h4>You are using an outdated browser and will encounter some problems with our website. Please consider upgrading.</h4>
+							          <a href="http://outdatedbrowser.com/" class="btn btn-lg">Upgrade Now</a>
+							          <br/>
+							          <img src="/img/pages/logo.png?version=1.4.0" />
+							        </div>
+								</div>
+							</div>
+						</div>
 					</div>
 				</div>
 				<br/>
@@ -279,6 +291,13 @@
 	<script src="{{ asset('/plugins/jquery-autocomplete/dist/jquery.autocomplete.min.js') }}"></script>
 
 	<script type="text/javascript">
+		window.ifm_map.onerror=function(){
+	       $('.iframe-error').show();
+	       return true
+	    }
+
+	    window.ifm_map.location.reload();
+
 		// general variables
 		myWindow = $(window)
 		windowHeight = myWindow.height()
@@ -301,7 +320,6 @@
 		headerWidth = header.outerWidth()
 
 		$(document).ready(function() {
-
 			// header animation svg
 			// var svgHeader = $('#svg-header')
 

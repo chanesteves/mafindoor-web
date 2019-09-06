@@ -14193,3 +14193,43 @@ body {
 .privacy ul li {
   list-style: none;
 }
+
+/******************/
+/**** Browser *****/
+/******************/
+
+.browser-error {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: #3679b0;
+  z-index: 1000000;
+  display: none;
+}
+
+.browser-error-wrapper {
+  position: relative;
+  height: 100%;
+}
+
+.browser-error-content {
+  position: absolute;
+  top: 40%;
+  color: #FFF;
+  text-align: center;
+  width: 100%;
+}
+
+.browser-error-content .btn {
+  border-radius: 20px;
+  padding: 15px 30px;
+  background-color: #FFF;
+  color: #3679b0 !important;
+  font-weight: bold;
+}
+
+.browser-error-content img {
+  margin-top: 40px;
+}

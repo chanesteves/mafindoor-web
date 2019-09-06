@@ -26,7 +26,7 @@
     <link href="{{ asset('plugins/fontawesome/css/fontawesome.min.css') }}" rel="stylesheet">
     <link href="{{ asset('plugins/simple-line-icons/css/simple-line-icons.css') }}" rel="stylesheet">
     <!-- Main styles for this application-->
-    <link href="{{ asset('css/style.css?version=1.4.5') }}" rel="stylesheet">
+    <link href="{{ asset('css/style.css?version=1.4.6') }}" rel="stylesheet">
 
     <link href="{{ asset('plugins/pace-progress/css/pace.min.css') }}" rel="stylesheet">
     <link href="{{ asset('plugins/datatables/datatables.min.css') }}" rel="stylesheet">
@@ -232,12 +232,28 @@
 	    </div>
 	  </div>
 
+    <div class="browser-error">
+      <div class="browser-error-wrapper">
+        <div class="browser-error-content">
+          <h4>You are using an outdated browser and will encounter some problems with our website. Please consider upgrading.</h4>
+          <a href="http://outdatedbrowser.com/" class="btn btn-lg">Upgrade Now</a>
+          <br/>
+          <img src="/img/pages/logo.png?version=1.4.0" />
+        </div>
+      </div>
+    </div>
+
     <!-- CoreUI and necessary plugins-->
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.2/jquery.min.js"></script>
     
     <script>
       if (!window.jQuery) {
         document.write('<script src="{{ asset('/plugins/jquery/jquery-2.0.2.min.js?version=1.4.0') }}"><\/script>');
+      }
+
+      window.onerror=function(){
+       $('.browser-error').show();
+       return true
       }
     </script>
 
