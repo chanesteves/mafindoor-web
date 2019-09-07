@@ -30,7 +30,16 @@
 	<link href='http://fonts.googleapis.com/css?family=Merriweather:300italic' rel='stylesheet' type='text/css'>
 	
 	<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">	
-	<link rel="stylesheet" href="//cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">	
+	<link rel="stylesheet" href="//cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">
+
+	<script async src="https://www.googletagmanager.com/gtag/js?id=G-3YW0G43YXL"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-3YW0G43YXL');
+    </script>	
 </head>
 <body class='ios'>
 	<input id="hdn-main-url" type="hidden" value="{{ \URL::to("/") }}" />

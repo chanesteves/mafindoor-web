@@ -19,6 +19,14 @@
 	<link href='http://fonts.googleapis.com/css?family=Lato:100,300,400' rel='stylesheet' type='text/css'>
 	<link href='http://fonts.googleapis.com/css?family=Merriweather:300italic' rel='stylesheet' type='text/css'>
 	
+	<script async src="https://www.googletagmanager.com/gtag/js?id=G-3YW0G43YXL"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-3YW0G43YXL');
+    </script>
 </head>
 <body class='ios'>
 
