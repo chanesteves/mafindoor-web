@@ -9,6 +9,7 @@ use Session;
 use App\User;
 use App\Building;
 use App\Floor;
+use App\Activity;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
@@ -140,7 +141,23 @@ class FloorsController extends Controller
 	}
 
 	public function ajaxShow($id) {
+		$user = Auth::user();
+
 		$floor = Floor::with('building', 'building.floors', 'building.floors.annotations', 'building.floors.annotations.floor', 'building.floors.annotations.floor.building', 'building.floors.annotations.sub_category', 'building.floors.annotations.sub_category.category', 'annotations', 'annotations.sub_category', 'annotations.sub_category.category')->find($id);
+
+		$building = $floor->building;
+
+		if ($building) {
+			$activity = new Activity;
+
+			if ($user)
+				$activity->user_id = $user->id;
+			$activity->object_id = $building->id;
+			$activity->object_type = get_class($building);
+			$activity->request_path = \Request::getRequestUri();
+			$activity->request_type = 'search';
+			$activity->save();
+		}
 
 		return array('status' => 'OK', 'floor' => $floor);
 	}
