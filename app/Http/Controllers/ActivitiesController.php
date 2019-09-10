@@ -33,6 +33,12 @@ class ActivitiesController extends Controller
 		$activity->object_type = $request->object_type;
 		$activity->request_path = \Request::getRequestUri();
 		$activity->request_type = $request->request_type;
+
+		if (strpos(\Request::getRequestUri(), 'api/') !== false)
+			$activity->request_via = 'mobile';
+		else
+			$activity->request_via = 'web';
+
 		$activity->save();		
 
 		$log_building = null;
@@ -67,6 +73,12 @@ class ActivitiesController extends Controller
 			$sub_activity->object_type = get_class($log_building);
 			$sub_activity->request_path = \Request::getRequestUri();
 			$sub_activity->request_type = $request->request_type;
+
+			if (strpos(\Request::getRequestUri(), 'api/') !== false)
+				$sub_activity->request_via = 'mobile';
+			else
+				$sub_activity->request_via = 'web';
+
 			$sub_activity->save();
 		}
 
@@ -79,6 +91,12 @@ class ActivitiesController extends Controller
 			$sub_activity->object_type = get_class($log_category);
 			$sub_activity->request_path = \Request::getRequestUri();
 			$sub_activity->request_type = $request->request_type;
+
+			if (strpos(\Request::getRequestUri(), 'api/') !== false)
+				$sub_activity->request_via = 'mobile';
+			else
+				$sub_activity->request_via = 'web';
+
 			$sub_activity->save();
 		}
 
@@ -91,6 +109,12 @@ class ActivitiesController extends Controller
 			$sub_activity->object_type = get_class($log_sub_category);
 			$sub_activity->request_path = \Request::getRequestUri();
 			$sub_activity->request_type = $request->request_type;
+
+			if (strpos(\Request::getRequestUri(), 'api/') !== false)
+				$sub_activity->request_via = 'mobile';
+			else
+				$sub_activity->request_via = 'web';
+			
 			$sub_activity->save();
 		}
 

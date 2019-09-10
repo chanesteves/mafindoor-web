@@ -41,6 +41,12 @@ class UserSubCategorySearchesController extends Controller
             $activity->object_type = get_class($sub_category);
             $activity->request_path = \Request::getRequestUri();
             $activity->request_type = 'search';
+
+            if (strpos(\Request::getRequestUri(), 'api/') !== false)
+                $activity->request_via = 'mobile';
+            else
+                $activity->request_via = 'web';
+
             $activity->save();
 
             $category = $sub_category->category;
@@ -54,6 +60,12 @@ class UserSubCategorySearchesController extends Controller
                 $activity->object_type = get_class($category);
                 $activity->request_path = \Request::getRequestUri();
                 $activity->request_type = 'search';
+
+                if (strpos(\Request::getRequestUri(), 'api/') !== false)
+                    $activity->request_via = 'mobile';
+                else
+                    $activity->request_via = 'web';
+            
                 $activity->save();
             }
         }

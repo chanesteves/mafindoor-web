@@ -54,6 +54,12 @@ class CategoriesController extends Controller
 		$activity->object_type = get_class($category);
 		$activity->request_path = \Request::getRequestUri();
 		$activity->request_type = 'search';
+
+		if (strpos(\Request::getRequestUri(), 'api/') !== false)
+			$activity->request_via = 'mobile';
+		else
+			$activity->request_via = 'web';
+		
 		$activity->save();
 
 		return array('status' => 'OK', 'category' => $category);

@@ -98,6 +98,12 @@ class PagesController extends Controller
 			$activity->object_type = get_class($search_building);
 			$activity->request_path = \Request::getRequestUri();
 			$activity->request_type = 'search';
+
+			if (strpos(\Request::getRequestUri(), 'api/') !== false)
+				$activity->request_via = 'mobile';
+			else
+				$activity->request_via = 'web';
+
 			$activity->save();
 		}
 
@@ -135,6 +141,12 @@ class PagesController extends Controller
 			$activity->object_type = get_class($search_annotation);
 			$activity->request_path = \Request::getRequestUri();
 			$activity->request_type = 'search';
+
+			if (strpos(\Request::getRequestUri(), 'api/') !== false)
+				$activity->request_via = 'mobile';
+			else
+				$activity->request_via = 'web';
+
 			$activity->save();
 		}
 
@@ -152,6 +164,12 @@ class PagesController extends Controller
 			$activity->object_type = get_class($log_sub_category);
 			$activity->request_path = \Request::getRequestUri();
 			$activity->request_type = 'search';
+
+			if (strpos(\Request::getRequestUri(), 'api/') !== false)
+				$activity->request_via = 'mobile';
+			else
+				$activity->request_via = 'web';
+
 			$activity->save();
 
 			$log_category = $log_sub_category->category;
@@ -165,6 +183,12 @@ class PagesController extends Controller
 				$activity->object_type = get_class($log_category);
 				$activity->request_path = \Request::getRequestUri();
 				$activity->request_type = 'search';
+
+				if (strpos(\Request::getRequestUri(), 'api/') !== false)
+					$activity->request_via = 'mobile';
+				else
+					$activity->request_via = 'web';
+			
 				$activity->save();
 			}
 		}
