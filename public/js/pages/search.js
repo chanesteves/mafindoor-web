@@ -60,7 +60,7 @@ Search.prototype.bindSearch = function () {
 						if (building.floors.length > 0)
 							$('.building-list').append('<div class="row">'
 														+ '<div class="col-md-12">'
-															+ '<a href="/search/buildings/' + building.slug + '?lng=' + current_longitude + '&lat=' + current_latitude + '" data-floor-id="' + building.floors[0].id + '" data-map-url="' + building.floors[0].map_url + '" data-min-zoom="' + building.floors[0].min_zoom + '" data-max-zoom="' + building.floors[0].max_zoom + '" data-zoom="' + building.floors[0].zoom + '" data-longitude="' + building.floors[0].longitude + '" data-latitude="' + building.floors[0].latitude + '" class="btn btn-block btn-secondary btn-lg building-link">'
+															+ '<a href="/search/buildings/' + building.slug + '?lng=' + current_longitude + '&lat=' + current_latitude + '" data-id="' + building.id + '" data-floor-id="' + building.floors[0].id + '" data-map-url="' + building.floors[0].map_url + '" data-min-zoom="' + building.floors[0].min_zoom + '" data-max-zoom="' + building.floors[0].max_zoom + '" data-zoom="' + building.floors[0].zoom + '" data-longitude="' + building.floors[0].longitude + '" data-latitude="' + building.floors[0].latitude + '" class="btn btn-block btn-secondary btn-lg building-link">'
 																+ '<div class="row">'
 																	+ '<div class="col-xs-3">'
 																		+ '<img src="' + (building.logo && building.logo != '' ? building.logo : '/images/buildings/shop.png') + '" class="building-logo">'
@@ -82,6 +82,7 @@ Search.prototype.bindSearch = function () {
 	$('.building-link').unbind().on('click', function (e) {
 		e.preventDefault();
 
+		var id = $(this).attr('data-id');
 		var floor_id = $(this).attr('data-floor-id');
 		var longitude = $(this).attr('data-longitude');
 		var latitude = $(this).attr('data-latitude');
@@ -104,6 +105,16 @@ Search.prototype.bindSearch = function () {
 			$('.building-link').find('i').removeClass('icon-location-pin').addClass('icon-arrow-right-circle');
 			search.bindMap(that);
 			$('.building-link[data-floor-id=' + floor_id + ']').addClass('active').find('i').removeClass('icon-arrow-right-circle').addClass('icon-location-pin');
+		});
+
+		var building_activity_obj = {
+			object_id : id,
+			object_type : 'App\\Building',
+			request_type : 'search'
+		};
+
+		activity.store(building_activity_obj, function (data) {
+			console.log(data);
 		});
 	});
 }
@@ -444,7 +455,7 @@ Search.prototype.searchAnnotation = function (value) {
 			if (logo.trim() == '')
 				logo = '/images/buildings/shop.png';
 
-			$('#pnl-results').append('<hr/><a class="result-link annotation" href="/search/buildings/' + item.floor.building.slug + '/floors/' + item.floor.slug + '/annotations/' + item.slug + '" data-floor-id="' + item.floor_id + '" data-map-url="' + item.floor.map_url + '" data-min-zoom="' + item.min_zoom + '" data-max-zoom="' + item.max_zoom + '" data-zoom="' + ((item.min_zoom + item.max_zoom) / 2) + '" data-longitude="' + item.longitude + '" data-latitude="' + item.latitude + '" data-mode="ANNOTATION" data-annotation-id="' + item.id + '" data-annotation-name="' + item.name + '" data-annotation-map-name="' + item.map_name + '" data-annotation-logo="' + (item.logo && item.logo != '' ? item.logo : (item.sub_category.icon && item.sub_category.icon != '' ? item.sub_category.icon : (item.sub_category.category.icon && item.sub_category.category.icon != '' ? item.sub_category.category.icon : ''))) + '" >'
+			$('#pnl-results').append('<hr/><a class="result-link annotation" href="/search/buildings/' + item.floor.building.slug + '/floors/' + item.floor.slug + '/annotations/' + item.slug + '" data-building-id="' + (item.floor && item.floor.building ? item.floor.building.id : '') + '" data-floor-id="' + item.floor_id + '" data-map-url="' + item.floor.map_url + '" data-min-zoom="' + item.min_zoom + '" data-max-zoom="' + item.max_zoom + '" data-zoom="' + ((item.min_zoom + item.max_zoom) / 2) + '" data-longitude="' + item.longitude + '" data-latitude="' + item.latitude + '" data-mode="ANNOTATION" data-annotation-id="' + item.id + '" data-annotation-name="' + item.name + '" data-annotation-map-name="' + item.map_name + '" data-annotation-logo="' + (item.logo && item.logo != '' ? item.logo : (item.sub_category.icon && item.sub_category.icon != '' ? item.sub_category.icon : (item.sub_category.category.icon && item.sub_category.category.icon != '' ? item.sub_category.category.icon : ''))) + '" >'
 										+ '<div class="result-item">'
 											+ '<div class="row">'
 												+ '<div class="col-xs-2">'
@@ -462,6 +473,9 @@ Search.prototype.searchAnnotation = function (value) {
 		$('.result-link.annotation').unbind().on('click', function (e) {
 			e.preventDefault();
 
+			var annotation_id = $(this).attr('data-annotation-id');
+			var floor_id = $(this).attr('data-floor-id');
+			var building_id = $(this).attr('data-building-id');
 			var longitude = $(this).attr('data-longitude');
 			var latitude = $(this).attr('data-latitude');
 			var zoom = $(this).attr('data-zoom');
@@ -478,6 +492,16 @@ Search.prototype.searchAnnotation = function (value) {
 			  }
 			}).once('moveend', function () {
 				search.bindMap(that);
+			});
+
+			var annotation_activity_obj = {
+				object_id : annotation_id,
+				object_type : 'App\\Annotation',
+				request_type : 'search'
+			};
+
+			activity.store(annotation_activity_obj, function (data) {
+				console.log(data);
 			});
 		});
 	}
@@ -501,7 +525,7 @@ Search.prototype.searchAnnotationBySubCategory = function (sub_category_id, name
 		if (logo.trim() == '')
 			logo = '/images/buildings/shop.png';
 
-		$('#pnl-results').append('<hr/><a class="result-link annotation" href="/search/buildings/' + item.floor.building.slug + '/floors/' + item.floor.slug + '/annotations/' + item.slug + '" data-floor-id="' + item.floor_id + '" data-map-url="' + item.floor.map_url + '" data-min-zoom="' + item.min_zoom + '" data-max-zoom="' + item.max_zoom + '" data-zoom="' + ((item.min_zoom + item.max_zoom) / 2) + '" data-longitude="' + item.longitude + '" data-latitude="' + item.latitude + '" data-mode="ANNOTATION" data-annotation-id="' + item.id + '" data-annotation-name="' + item.name + '" data-annotation-map-name="' + item.map_name + '" data-annotation-logo="' + (item.logo && item.logo != '' ? item.logo : (item.sub_category.icon && item.sub_category.icon != '' ? item.sub_category.icon : (item.sub_category.category.icon && item.sub_category.category.icon != '' ? item.sub_category.category.icon : ''))) + '" >'
+		$('#pnl-results').append('<hr/><a class="result-link annotation" href="/search/buildings/' + item.floor.building.slug + '/floors/' + item.floor.slug + '/annotations/' + item.slug + '" data-building-id="' + (item.floor && item.floor.building ? item.floor.building.id : '') + '" data-floor-id="' + item.floor_id + '" data-map-url="' + item.floor.map_url + '" data-min-zoom="' + item.min_zoom + '" data-max-zoom="' + item.max_zoom + '" data-zoom="' + ((item.min_zoom + item.max_zoom) / 2) + '" data-longitude="' + item.longitude + '" data-latitude="' + item.latitude + '" data-mode="ANNOTATION" data-annotation-id="' + item.id + '" data-annotation-name="' + item.name + '" data-annotation-map-name="' + item.map_name + '" data-annotation-logo="' + (item.logo && item.logo != '' ? item.logo : (item.sub_category.icon && item.sub_category.icon != '' ? item.sub_category.icon : (item.sub_category.category.icon && item.sub_category.category.icon != '' ? item.sub_category.category.icon : ''))) + '" >'
 									+ '<div class="result-item">'
 										+ '<div class="row">'
 											+ '<div class="col-xs-2">'
@@ -519,6 +543,9 @@ Search.prototype.searchAnnotationBySubCategory = function (sub_category_id, name
 		$('.result-link.annotation').unbind().on('click', function (e) {
 			e.preventDefault();
 
+			var annotation_id = $(this).attr('data-annotation-id');
+			var floor_id = $(this).attr('data-floor-id');
+			var building_id = $(this).attr('data-building-id');
 			var longitude = $(this).attr('data-longitude');
 			var latitude = $(this).attr('data-latitude');
 			var zoom = $(this).attr('data-zoom');
@@ -536,7 +563,27 @@ Search.prototype.searchAnnotationBySubCategory = function (sub_category_id, name
 			}).once('moveend', function () {
 				search.bindMap(that);
 			});
+
+			var annotation_activity_obj = {
+				object_id : annotation_id,
+				object_type : 'App\\Annotation',
+				request_type : 'search'
+			};
+
+			activity.store(annotation_activity_obj, function (data) {
+				console.log(data);
+			});
 		});
+	});
+
+	var sub_category_activity_obj = {
+		object_id : sub_category_id,
+		object_type : 'App\\SubCategory',
+		request_type : 'search'
+	};
+
+	activity.store(sub_category_activity_obj, function (data) {
+		console.log(data);
 	});
 }
 
@@ -667,7 +714,7 @@ Search.prototype.showResult = function (control, data, longitude, latitude) {
 
 	nears.forEach(function (near) {
 		if (near.id != annotation_id) {
-			$('#pnl-results').append('<div class="near-container"><hr/><a class="result-link annotation" href="/search/buildings/' + (current_building ? current_building.slug : '') + '/floors/' + (current_floor ? current_floor.slug : '') + '/annotations/' + near.id + '" data-floor-id="' + near.floor_id + '" data-map-url="' + near.floor.map_url + '" data-min-zoom="' + near.min_zoom + '" data-max-zoom="' + near.max_zoom + '" data-zoom="' + ((near.min_zoom + near.max_zoom) / 2) + '" data-longitude="' + near.longitude + '" data-latitude="' + near.latitude + '" data-mode="ANNOTATION" data-annotation-id="' + near.id + '" data-annotation-name="' + near.name + '" data-annotation-map-name="' + near.map_name + '" data-annotation-logo="' + (near.logo && near.logo != '' ? near.logo : (near.sub_category.icon && near.sub_category.icon != '' ? near.sub_category.icon : (near.sub_category.category.icon && near.sub_category.category.icon != '' ? near.sub_category.category.icon : ''))) + '" >'
+			$('#pnl-results').append('<div class="near-container"><hr/><a class="result-link annotation" href="/search/buildings/' + (current_building ? current_building.slug : '') + '/floors/' + (current_floor ? current_floor.slug : '') + '/annotations/' + near.id + '" data-building-id="' + (near.floor && near.floor.building ? near.floor.building.id : '') + '" data-floor-id="' + near.floor_id + '" data-map-url="' + near.floor.map_url + '" data-min-zoom="' + near.min_zoom + '" data-max-zoom="' + near.max_zoom + '" data-zoom="' + ((near.min_zoom + near.max_zoom) / 2) + '" data-longitude="' + near.longitude + '" data-latitude="' + near.latitude + '" data-mode="ANNOTATION" data-annotation-id="' + near.id + '" data-annotation-name="' + near.name + '" data-annotation-map-name="' + near.map_name + '" data-annotation-logo="' + (near.logo && near.logo != '' ? near.logo : (near.sub_category.icon && near.sub_category.icon != '' ? near.sub_category.icon : (near.sub_category.category.icon && near.sub_category.category.icon != '' ? near.sub_category.category.icon : ''))) + '" >'
 									+ '<div class="result-item">'
 										+ '<div class="row">'
 											+ '<div class="col-xs-2">'
@@ -686,6 +733,9 @@ Search.prototype.showResult = function (control, data, longitude, latitude) {
 	$('.result-link.annotation').unbind().on('click', function (e) {
 		e.preventDefault();
 
+		var annotation_id = $(this).attr('data-annotation-id');
+		var floor_id = $(this).attr('data-floor-id');
+		var building_id = $(this).attr('data-building-id');
 		var longitude = $(this).attr('data-longitude');
 		var latitude = $(this).attr('data-latitude');
 		var zoom = $(this).attr('data-zoom');
@@ -702,6 +752,16 @@ Search.prototype.showResult = function (control, data, longitude, latitude) {
 		  }
 		}).once('moveend', function () {
 			search.bindMap(that);
+		});
+
+		var annotation_activity_obj = {
+			object_id : annotation_id,
+			object_type : 'App\\Annotation',
+			request_type : 'search'
+		};
+
+		activity.store(annotation_activity_obj, function (data) {
+			console.log(data);
 		});
 	});
 }

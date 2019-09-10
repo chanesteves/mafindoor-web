@@ -33,6 +33,8 @@ Route::match(['post', 'get', 'options'], 'users/{user}/ajaxUnlockBuilding', 'Use
 Route::match(['post', 'get', 'options'], 'people/{person}/ajaxUploadImage', 'PeopleController@ajaxUploadImage')->middleware('auth.api','cors');
 Route::match(['post', 'get', 'options'], 'people/{person}/ajaxUpdate', 'PeopleController@ajaxUpdate')->middleware('auth.api','cors');
 
+Route::match(['post', 'get', 'options'], 'activities/ajaxStore', 'ActivitiesController@ajaxStore')->middleware('auth.api','cors');
+
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });

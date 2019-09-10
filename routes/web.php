@@ -64,6 +64,7 @@ Route::post('menus/{menu}/ajaxShow', 'MenusController@ajaxShow');
 Route::post('menus/{menu}/ajaxUpdate', 'MenusController@ajaxUpdate');
 Route::post('menus/{menu}/ajaxDestroy', 'MenusController@ajaxDestroy');
 Route::post('images/{image}/ajaxDestroy', 'ImagesController@ajaxDestroy');
+Route::post('activities/ajaxStore', 'ActivitiesController@ajaxStore');
 
 Route::get('buildings/exportBuildings', 'BuildingsController@exportBuildings');
 Route::get('floors/exportFloors', 'FloorsController@exportFloors');

@@ -52,7 +52,7 @@
 	        		@if ($building->floors->count() > 0)
 		        		<div class="row">
 		        			<div class="col-md-12">
-					        	<a href="/search/buildings/{{ $building->slug }}" data-floor-id="{{ $building->floors->first()->id }}" data-map-url="{{ $building->floors->first()->map_url }}" data-longitude="{{ $building->floors->first()->longitude }}" data-latitude="{{ $building->floors->first()->latitude }}" data-min-zoom="{{ $building->floors->first()->min_zoom }}" data-max-zoom="{{ $building->floors->first()->max_zoom }}" data-zoom="{{ $building->floors->first()->zoom }}" class="btn btn-block btn-secondary btn-lg building-link">
+					        	<a href="/search/buildings/{{ $building->slug }}" data-id="{{ $building->id }}" data-floor-id="{{ $building->floors->first()->id }}" data-map-url="{{ $building->floors->first()->map_url }}" data-longitude="{{ $building->floors->first()->longitude }}" data-latitude="{{ $building->floors->first()->latitude }}" data-min-zoom="{{ $building->floors->first()->min_zoom }}" data-max-zoom="{{ $building->floors->first()->max_zoom }}" data-zoom="{{ $building->floors->first()->zoom }}" class="btn btn-block btn-secondary btn-lg building-link">
 					        		<div class="row">
 					        			<div class="col-xs-3">
 					        				@if ($building->logo)
