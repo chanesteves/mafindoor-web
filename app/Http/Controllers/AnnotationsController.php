@@ -11,6 +11,7 @@ use App\Building;
 use App\Floor;
 use App\Annotation;
 use App\SubCategory;
+use App\Activity;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
@@ -123,7 +124,50 @@ class AnnotationsController extends Controller
 	}
 
 	public function ajaxShow($id) {
+		$user = Auth::user();
+
 		$annotation = Annotation::find($id);
+
+		if (!$annotation)
+			return array('status' => 'ERROR', 'error' => 'Annotation not found.');
+
+		$activity = new Activity;
+
+		if ($user)
+			$activity->user_id = $user->id;
+		$activity->object_id = $annotation->id;
+		$activity->object_type = get_class($annotation);
+		$activity->request_path = \Request::getRequestUri();
+		$activity->request_type = 'search';
+		$activity->save();
+
+		$sub_category = $annotation->sub_category;
+
+		if ($sub_category) {
+			$activity = new Activity;
+
+			if ($user)
+				$activity->user_id = $user->id;
+			$activity->object_id = $sub_category->id;
+			$activity->object_type = get_class($sub_category);
+			$activity->request_path = \Request::getRequestUri();
+			$activity->request_type = 'search';
+			$activity->save();
+		}
+
+		$category = $sub_category->category;
+
+		if ($category) {
+			$activity = new Activity;
+
+			if ($user)
+				$activity->user_id = $user->id;
+			$activity->object_id = $category->id;
+			$activity->object_type = get_class($category);
+			$activity->request_path = \Request::getRequestUri();
+			$activity->request_type = 'search';
+			$activity->save();
+		}
 
 		return array('status' => 'OK', 'annotation' => $annotation);
 	}

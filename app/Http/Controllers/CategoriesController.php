@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Auth;
 
 use App\Category;
+use App\Activity;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
@@ -38,7 +39,22 @@ class CategoriesController extends Controller
 	}
 
 	public function ajaxShow($id) {
+		$user = Auth::user();
+
 		$category = Category::find($id);
+
+		if (!$category)
+			return array('status' => 'ERROR', 'error' => 'Category not found.');
+
+		$activity = new Activity;
+
+		if ($user)
+			$activity->user_id = $user->id;
+		$activity->object_id = $category->id;
+		$activity->object_type = get_class($category);
+		$activity->request_path = \Request::getRequestUri();
+		$activity->request_type = 'search';
+		$activity->save();
 
 		return array('status' => 'OK', 'category' => $category);
 	}

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Auth;
 
 use App\SubCategory;
+use App\Activity;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
@@ -75,7 +76,36 @@ class SubCategoriesController extends Controller
 	}
 
 	public function ajaxShow($id) {
+		$user = Auth::user();
+
 		$sub_category = SubCategory::find($id);
+
+		if (!$sub_category)
+			return array('status' => 'ERROR', 'error' => 'Sub-category not found.');
+
+		$activity = new Activity;
+
+		if ($user)
+			$activity->user_id = $user->id;
+		$activity->object_id = $sub_category->id;
+		$activity->object_type = get_class($sub_category);
+		$activity->request_path = \Request::getRequestUri();
+		$activity->request_type = 'search';
+		$activity->save();
+
+		$category = $sub_category->category;
+
+		if ($category) {
+			$activity = new Activity;
+
+			if ($user)
+				$activity->user_id = $user->id;
+			$activity->object_id = $category->id;
+			$activity->object_type = get_class($category);
+			$activity->request_path = \Request::getRequestUri();
+			$activity->request_type = 'search';
+			$activity->save();
+		}
 
 		return array('status' => 'OK', 'sub_category' => $sub_category);
 	}

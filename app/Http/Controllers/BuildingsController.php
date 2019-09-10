@@ -12,6 +12,7 @@ use App\User;
 use App\Building;
 use App\Annotation;
 use App\Image;
+use App\Activity;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
@@ -28,7 +29,22 @@ class BuildingsController extends Controller
 	 */
 	public static function show(Request $request, $id)
 	{
+		$user = Auth::user();
+
 		$building = Building::find($id);
+
+		if (!$building)
+			return redirect('/');
+
+		$activity = new Activity;
+
+		if ($user)
+			$activity->user_id = $user->id;
+		$activity->object_id = $building->id;
+		$activity->object_type = get_class($building);
+		$activity->request_path = \Request::getRequestUri();
+		$activity->request_type = 'view';
+		$activity->save();
 
 		return View::make('buildings.show')->with(array(
 														'page' => 'Show Building', 
@@ -132,7 +148,19 @@ class BuildingsController extends Controller
 	}
 
 	public function ajaxShow($id) {
+		$user = Auth::user();
+
 		$building = Building::with('images', 'floors', 'floors.annotations', 'floors.annotations.sub_category', 'floors.annotations.sub_category.user_searches', 'floors.annotations.sub_category.category', 'floors.annotations.floor')->find($id);
+
+		$activity = new Activity;
+
+		if ($user)
+			$activity->user_id = $user->id;
+		$activity->object_id = $building->id;
+		$activity->object_type = get_class($building);
+		$activity->request_path = \Request::getRequestUri();
+		$activity->request_type = 'search';
+		$activity->save();
 
 		return array('status' => 'OK', 'building' => $building);
 	}

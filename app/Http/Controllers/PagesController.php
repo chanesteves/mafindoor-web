@@ -21,6 +21,7 @@ use App\SubCategory;
 use App\User;
 use App\Role;
 use App\Menu;
+use App\Activity;
 
 class PagesController extends Controller
 {
@@ -88,6 +89,18 @@ class PagesController extends Controller
 		if ($request->building && $request->building != '')
 			$search_building = Building::whereRaw('CONVERT(id, CHAR(255))="' . $request->building . '"')->orWhere('slug', $request->building)->first();
 		
+		if ($search_building) {
+			$activity = new Activity;
+
+			if ($user)
+				$activity->user_id = $user->id;
+			$activity->object_id = $search_building->id;
+			$activity->object_type = get_class($search_building);
+			$activity->request_path = \Request::getRequestUri();
+			$activity->request_type = 'search';
+			$activity->save();
+		}
+
 		$search_floor = null;
 		
 		if ($search_building)
@@ -111,6 +124,49 @@ class PagesController extends Controller
 			$search_annotation->near = Annotation::where('floor_id', $search_floor->id)
 												->where('id', '!=', $search_annotation->id)
 												->orderByRaw($distance)->limit(3)->get();
+		}
+
+		if ($search_annotation) {
+			$activity = new Activity;
+
+			if ($user)
+				$activity->user_id = $user->id;
+			$activity->object_id = $search_annotation->id;
+			$activity->object_type = get_class($search_annotation);
+			$activity->request_path = \Request::getRequestUri();
+			$activity->request_type = 'search';
+			$activity->save();
+		}
+
+		$log_sub_category = $search_sub_category;
+
+		if (!$log_sub_category && $search_annotation)
+			$log_sub_category = $search_annotation->sub_category;
+
+		if ($log_sub_category) {
+			$activity = new Activity;
+
+			if ($user)
+				$activity->user_id = $user->id;
+			$activity->object_id = $log_sub_category->id;
+			$activity->object_type = get_class($log_sub_category);
+			$activity->request_path = \Request::getRequestUri();
+			$activity->request_type = 'search';
+			$activity->save();
+
+			$log_category = $log_sub_category->category;
+
+			if ($log_category) {
+				$activity = new Activity;
+
+				if ($user)
+					$activity->user_id = $user->id;
+				$activity->object_id = $log_category->id;
+				$activity->object_type = get_class($log_category);
+				$activity->request_path = \Request::getRequestUri();
+				$activity->request_type = 'search';
+				$activity->save();
+			}
 		}
 
 		return View::make('search')->with(array(
