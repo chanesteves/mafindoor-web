@@ -83,6 +83,8 @@ Route::get('search/buildings/{building?}/floors/{floor?}', 'PagesController@sear
 Route::get('search/buildings/{building?}/floors/{floor?}/annotations/{annotation?}', 'PagesController@search');
 Route::get('search/buildings/{building?}/floors/{floor?}/subCategories/{sub_category?}', 'PagesController@search');
 
+Route::get('dashboard', 'PagesController@dashboard');
+
 // directories
 Route::get('venues', 'PagesController@venues');
 Route::get('floors', 'PagesController@floors');

@@ -23,6 +23,8 @@ use App\Role;
 use App\Menu;
 use App\Activity;
 
+use Carbon\Carbon;
+
 class PagesController extends Controller
 {
     /**
@@ -45,10 +47,101 @@ class PagesController extends Controller
 	}
 
 	public function privacy(Request $request) {
-		
-
 		return View::make('privacy')->with(array(
 													'page' => 'Privacy'
+												));
+	}
+
+	public function dashboard(Request $request) {
+		$counts['users'] = User::count();
+		$counts['venues'] = Building::where('status', 'Live')->count();
+		$counts['searches_this_month'] = Activity::where('request_type', 'search')->where('created_at', '>=', Carbon::now()->startOfMonth()->toDateString())->count();
+
+		$searches_by_venue = Activity::selectRaw("buildings.name AS label, request_via AS type, COUNT(*) as total")
+										->join('buildings', function ($q) {
+											$q->on('activities.object_id', 'buildings.id');
+											$q->where('activities.object_type', 'App\\Building');
+										})
+										->groupBy('label')
+										->groupBy('type')
+										->orderBy('total', 'desc')
+										->limit(10)
+										->get();
+
+		$searches_by_platform = Activity::selectRaw("request_via AS label, COUNT(*) AS data")
+										->groupBy('label')
+										->get();
+
+		$most_searched_places = Activity::selectRaw("annotations.name AS place, annotations.logo as image, annotations.floor_id, annotations.sub_category_id, annotations.sub_category_id, COUNT(*) AS searches")
+										->join('annotations', function ($q) {
+											$q->on('activities.object_id', 'annotations.id');
+											$q->where('activities.object_type', 'App\\Annotation');
+										})
+										->groupBy('place')
+										->groupBy('logo')
+										->groupBy('floor_id')
+										->groupBy('sub_category_id')
+										->orderBy('searches', 'desc')
+										->limit(8)
+										->get();
+
+		foreach ($most_searched_places as $most_searched_place) {
+			$most_searched_place->floor = Floor::find($most_searched_place->floor_id);
+			$most_searched_place->floor->building = $most_searched_place->floor ? $most_searched_place->floor->building : null;
+
+			$most_searched_place->sub_category = SubCategory::find($most_searched_place->sub_category_id);
+			$most_searched_place->sub_category->category = $most_searched_place->sub_category ? $most_searched_place->sub_category->category : null;
+
+			$image = $most_searched_place->image;
+
+			if (!$image || trim($image) == '')
+				$image = $most_searched_place->sub_category ? $most_searched_place->sub_category->icon : '';
+
+			if (!$image || trim($image) == '')
+				$image = $most_searched_place->sub_category && $most_searched_place->sub_category->category ? $most_searched_place->sub_category->category->icon : '';
+
+			if (!$image || trim($image) == '')
+				$image = '/img/avatars/initials/' . substr($most_searched_place->name, 0, 1) . '.png';
+
+			$most_searched_place->image = $image;
+		}
+
+		$most_active_users = User::selectRaw("CONCAT(people.first_name, ' ', people.last_name) AS name, people.image, COUNT(*) AS activities")
+										->leftJoin('activities', function ($q) {
+											$q->on('activities.user_id', 'users.id');
+										})
+										->join('people', function ($q) {
+											$q->on('people.id', 'users.id');
+										})
+										->groupBy('name')
+										->groupBy('image')
+										->orderBy('activities', 'desc')
+										->limit(5)
+										->get();
+
+		foreach ($most_active_users as $most_active_user) {
+			$image = $most_active_user->image;
+
+			if (!$image || trim($image) == '')
+				$image = '/img/avatars/initials/' . substr($most_active_user->name, 0, 1) . '.png';
+
+			$most_active_user->image = $image;
+		}
+
+		$recent_traffic = Activity::selectRaw("DATE(created_at) AS dt, COUNT(*) AS traffic")
+										->groupBy('dt')
+										->orderBy('dt', 'desc')
+										->limit(30)
+										->get();
+
+		return View::make('dashboard')->with(array(
+													'page' => 'Dashboard',
+													'counts' => $counts,
+													'searches_by_venue' => $searches_by_venue,
+													'searches_by_platform' => $searches_by_platform,
+													'most_searched_places' => $most_searched_places,
+													'most_active_users' => $most_active_users,
+													'recent_traffic' => $recent_traffic
 												));
 	}
 

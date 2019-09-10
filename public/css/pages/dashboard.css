@@ -1,0 +1,80 @@
+.card-body .btn i {
+	font-size: 55px;
+    margin-top: 10px;
+}
+
+.morris-hover.morris-default-style {
+    border-radius: 10px;
+    padding: 6px;
+    color: #666;
+    background: rgba(255,255,255,.8);
+    border: solid 2px rgba(230,230,230,.8);
+    font-family: sans-serif;
+    font-size: 12px;
+    text-align: center
+}
+
+.morris-hover.morris-default-style .morris-hover-row-label {
+    font-weight: 700;
+    margin: .25em 0
+}
+
+.morris-hover.morris-default-style .morris-hover-point {
+    white-space: nowrap;
+    margin: .1em 0
+}
+
+.morris-hover {
+    position: absolute;
+    z-index: 1001
+}
+
+.chart {
+    height: 220px;
+    margin: 20px 5px 10px 10px
+}
+
+.most-searched {
+	margin-top: 23px;
+}
+
+.most-searched .place-img,
+.most-active .user-img {
+	float: left;
+}
+
+.most-searched .place-name,
+.most-active .user-name {
+	float: left;
+	margin-left: 20px;
+	margin-top: 5px;
+}
+
+.most-active .user-name {
+	margin-top: 3px;
+}
+
+.most-searched .place-name .place-description {
+	color: #73818f;
+	font-style: italic;
+}
+
+.most-searched .place-searches {
+	font-size: 32px;
+	text-align: center;
+}
+
+.most-active .user-activities {
+	font-size: 18px;
+	text-align: center;	
+}
+
+#recent-traffic .xAxis .tickLabel {
+	transform: rotate(-45deg);
+    -ms-transform:rotate(-45deg); /* IE 9 */
+    -moz-transform:rotate(-45deg); /* Firefox */
+    -webkit-transform:rotate(-45deg); /* Safari and Chrome */
+    -o-transform:rotate(-45deg); /* Opera */
+    margin-top: 10px;
+    margin-left: -20px;
+}
