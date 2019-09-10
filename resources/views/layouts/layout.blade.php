@@ -25,8 +25,10 @@
     <link href="{{ asset('plugins/flag-icon-css/css/flag-icon.min.css') }}" rel="stylesheet">
     <link href="{{ asset('plugins/fontawesome/css/fontawesome.min.css') }}" rel="stylesheet">
     <link href="{{ asset('plugins/simple-line-icons/css/simple-line-icons.css') }}" rel="stylesheet">
+    <link href="{{ asset('plugins/datatables/datatables.min.css') }}" rel="stylesheet">
+
     <!-- Main styles for this application-->
-    <link href="{{ asset('css/style.css?version=1.4.6') }}" rel="stylesheet">
+    <link href="{{ asset('css/style.css?version=1.4.7') }}" rel="stylesheet">
 
     <link href="{{ asset('plugins/pace-progress/css/pace.min.css') }}" rel="stylesheet">    
 
@@ -38,25 +40,18 @@
     @elseif (isset($page) && $page == 'Dashboard')
       <link href="{{ asset('css/pages/dashboard.css') }}" rel="stylesheet">
     @elseif (isset($page) && $page == 'Venues')
-      <link href="{{ asset('plugins/datatables/datatables.min.css') }}" rel="stylesheet">
       <link href="{{ asset('plugins/croppie/croppie.css') }}" rel="stylesheet">
       <link href="{{ asset('plugins/dropzone/dist/dropzone.css') }}" rel="stylesheet">
     @elseif (isset($page) && $page == 'Floors')
-      <link href="{{ asset('plugins/datatables/datatables.min.css') }}" rel="stylesheet">
       <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.49.0/mapbox-gl.css' rel='stylesheet' />
 
       <link href="{{ asset('css/pages/directories/floors.css') }}" rel="stylesheet">
     @elseif (isset($page) && $page == 'Annotations')
-      <link href="{{ asset('plugins/datatables/datatables.min.css') }}" rel="stylesheet">
       <link href="{{ asset('plugins/croppie/croppie.css') }}" rel="stylesheet">           
     @elseif (isset($page) && $page == 'Categories')
-      <link href="{{ asset('plugins/datatables/datatables.min.css') }}" rel="stylesheet">
       <link href="{{ asset('plugins/croppie/croppie.css') }}" rel="stylesheet">
     @elseif (isset($page) && $page == 'Users')
-      <link href="{{ asset('plugins/datatables/datatables.min.css') }}" rel="stylesheet">
       <link href="{{ asset('css/pages/permissions/users.css') }}" rel="stylesheet">
-    @elseif (isset($page) && $page == 'Privileges')
-      <link href="{{ asset('plugins/datatables/datatables.min.css') }}" rel="stylesheet">
     @endif
 
     <link href="{{ asset('css/override.css?version=1.4.6') }}" rel="stylesheet">
@@ -271,7 +266,8 @@
     <script src="{{ asset('plugins/pace-progress/pace.min.js') }}"></script>
     <script src="{{ asset('plugins/perfect-scrollbar/dist/perfect-scrollbar.min.js') }}"></script>
     <script src="{{ asset('plugins/coreui/dist/js/coreui.min.js') }}"></script>    
-    <script src="{{ asset('plugins/jquery-validation/dist/jquery.validate.js') }}"></script>
+    <script src="{{ asset('plugins/datatables/datatables.min.js') }}"></script>
+    <script src="{{ asset('plugins/jquery-validation/dist/jquery.validate.js') }}"></script>    
 
     <!-- Flot Chart Plugin: Flot Engine, Flot Resizer, Flot Tooltip -->
     <script src="{{ asset('plugins/flot/jquery.flot.cust.js') }}"></script>
@@ -298,8 +294,7 @@
       <script src="{{ asset('js/pages/search.js?version=1.4.35') }}"></script>  
     @elseif (isset($page) && $page == 'Dashboard')
       <script src="{{ asset('js/pages/dashboard.js?version=1.4.8') }}"></script>     
-    @elseif (isset($page) && $page == 'Venues')
-      <script src="{{ asset('plugins/datatables/datatables.min.js') }}"></script>
+    @elseif (isset($page) && $page == 'Venues')      
       <script src="http://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyAY0WNFta5H_dKTZ_f260R39PhMDvu8ETQ"></script>
       <script src="{{ asset('plugins/geocomplete/jquery.geocomplete.js') }}"></script>
 
@@ -311,20 +306,17 @@
       <script src="{{ asset('js/classes/image.js?version=1.4.0') }}"></script>
     	<script src="{{ asset('js/pages/directories/venues.js?version=1.4.8') }}"></script>      
     @elseif (isset($page) && $page == 'Floors')
-      <script src="{{ asset('plugins/datatables/datatables.min.js') }}"></script>
       <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.49.0/mapbox-gl.js'></script>
       <script src="{{ asset('js/classes/floor.js?version=1.4.1') }}"></script>
       <script src="{{ asset('js/pages/directories/floors.js?version=1.4.3') }}"></script>
     @elseif (isset($page) && $page == 'Annotations')
-      <script src="{{ asset('plugins/datatables/datatables.min.js') }}"></script>
       <script src="{{ asset('plugins/bootstrap-fileinput/js/plugins/canvas-to-blob.js') }}"></script>
       <script src="{{ asset('plugins/croppie/croppie.js') }}"></script>      
 
       <script src="{{ asset('js/classes/annotation.js?version=1.4.4') }}"></script>
       <script src="{{ asset('js/pages/directories/annotations.js?version=1.4.11') }}"></script>
     @elseif (isset($page) && $page == 'Categories')
-      <script src="{{ asset('plugins/datatables/datatables.min.js') }}"></script>
-      <script src="{{ asset('js/controls/tab.js?version=1.4.0') }}"></script>
+      <script src="{{ asset('js/controls/tab.js?version=1.4.1') }}"></script>
       <script src="{{ asset('plugins/bootstrap-fileinput/js/plugins/canvas-to-blob.js') }}"></script>
       <script src="{{ asset('plugins/croppie/croppie.js') }}"></script>
 
@@ -332,13 +324,11 @@
       <script src="{{ asset('js/classes/sub_category.js?version=1.4.0') }}"></script>
       <script src="{{ asset('js/pages/maintenance/categories.js?version=1.4.1') }}"></script>
     @elseif (isset($page) && $page == 'Users')
-      <script src="{{ asset('plugins/datatables/datatables.min.js') }}"></script>
       <script src="{{ asset('js/classes/user.js?version=1.4.1') }}"></script>
       <script src="{{ asset('js/pages/permissions/users.js?version=1.4.1') }}"></script>
     @elseif (isset($page) && $page == 'Privileges')
-      <script src="{{ asset('plugins/datatables/datatables.min.js') }}"></script>
       <script src="{{ asset('/plugins/jquery-nestable/jquery.nestable.js')}}"></script>      
-      <script src="{{ asset('js/controls/tab.js?version=1.4.0') }}"></script>
+      <script src="{{ asset('js/controls/tab.js?version=1.4.1') }}"></script>
       <script src="{{ asset('js/classes/role.js?version=1.4.1') }}"></script>
       <script src="{{ asset('js/classes/menu.js?version=1.4.0') }}"></script>
       <script src="{{ asset('js/pages/permissions/privileges.js?version=1.4.2') }}"></script>

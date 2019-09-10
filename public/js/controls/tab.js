@@ -44,8 +44,8 @@ Tab.prototype.init = function () {
 
     var href = $(this).attr('href').substring($(this).attr('href').lastIndexOf('#') + 1);
 
-    $('.nav-tabs a[href=#' + href + ']').parent().parent().find('> li').removeClass('active');
-    $('.nav-tabs a[href=#' + href + ']').parent().addClass('active');
+    $(".nav-tabs a[href='#" + href + "']").parent().parent().find('> li').removeClass('active');
+    $(".nav-tabs a[href='#" + href + "']").parent().addClass('active');
   });
 }
 

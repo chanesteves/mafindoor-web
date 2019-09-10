@@ -18,7 +18,7 @@
     <link href="{{ asset('plugins/fontawesome/css/fontawesome.min.css') }}" rel="stylesheet">
     <link href="{{ asset('plugins/simple-line-icons/css/simple-line-icons.css') }}" rel="stylesheet">
     <!-- Main styles for this application-->
-    <link href="{{ asset('css/style.css?version=1.4.6') }}" rel="stylesheet">
+    <link href="{{ asset('css/style.css?version=1.4.7') }}" rel="stylesheet">
 
     <link href="{{ asset('plugins/pace-progress/css/pace.min.css') }}" rel="stylesheet">
 

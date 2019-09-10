@@ -14233,3 +14233,9 @@ body {
 .browser-error-content img {
   margin-top: 40px;
 }
+
+.card-header-action {
+  padding: 0.5rem 1rem !important;
+    font-size: 1.09375rem !important;
+    color: #FFF !important;
+}
