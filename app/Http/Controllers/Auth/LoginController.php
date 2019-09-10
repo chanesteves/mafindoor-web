@@ -44,7 +44,7 @@ class LoginController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/venues';
+    protected $redirectTo = '/dashboard';
 
     /**
      * Create a new controller instance.
@@ -161,7 +161,7 @@ class LoginController extends Controller
 
     public static function redirectPath()
     {
-        return '/venues';
+        return '/dashboard';
     }
 
     public function redirectToFacebook()
