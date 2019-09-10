@@ -41,6 +41,7 @@
 .most-searched .place-img,
 .most-active .user-img {
 	float: left;
+    border-radius: 50%;
 }
 
 .most-searched .place-name,

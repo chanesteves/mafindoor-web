@@ -69,6 +69,8 @@ class PagesController extends Controller
 										->get();
 
 		$searches_by_platform = Activity::selectRaw("request_via AS label, COUNT(*) AS data")
+										->whereNotNull('request_via')
+										->where('request_via', '!=', '')
 										->groupBy('label')
 										->get();
 

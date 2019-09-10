@@ -38,7 +38,7 @@
 
       <link href="{{ asset('css/pages/search.css?version=1.4.18') }}" rel="stylesheet">
     @elseif (isset($page) && $page == 'Dashboard')
-      <link href="{{ asset('css/pages/dashboard.css') }}" rel="stylesheet">
+      <link href="{{ asset('css/pages/dashboard.css?version=1.4.0') }}" rel="stylesheet">
     @elseif (isset($page) && $page == 'Venues')
       <link href="{{ asset('plugins/croppie/croppie.css') }}" rel="stylesheet">
       <link href="{{ asset('plugins/dropzone/dist/dropzone.css') }}" rel="stylesheet">
