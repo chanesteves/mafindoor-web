@@ -40,15 +40,26 @@
 
 .most-searched .place-img,
 .most-active .user-img {
-	float: left;
+    text-align: center;
+}
+
+.most-searched .place-img img,
+.most-active .user-img img {	
     border-radius: 50%;
 }
 
 .most-searched .place-name,
 .most-active .user-name {
-	float: left;
 	margin-left: 20px;
 	margin-top: 5px;
+}
+
+@media (max-width: 768px) {
+    .most-searched .place-name,
+    .most-active .user-name {
+        text-align: center;
+        margin-left: 0px;
+    }
 }
 
 .most-active .user-name {

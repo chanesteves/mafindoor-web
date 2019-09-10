@@ -99,9 +99,11 @@
                                 @foreach($most_active_users as $most_active_user)
                                     <tr>
                                         <td>
-                                            <img class="user-img" src="{{ $most_active_user->image }}" width="25" />
-                                            <div class="user-name">
-                                                <div class="user-title">{{ $most_active_user->name }}</div>
+                                            <div class="row">
+                                                <div class="user-img col-md-3"><img src="{{ $most_active_user->image }}" width="25" height="25" /></div>
+                                                <div class="user-name col-md-8">
+                                                    <div class="user-title">{{ $most_active_user->name }}</div>
+                                                </div>
                                             </div>
                                         </td>
                                         <td>
@@ -137,10 +139,12 @@
                                 @foreach($most_searched_places as $most_searched_place)
                                     <tr>
                                         <td>
-                                            <img class="place-img" src="{{ $most_searched_place->image }}" width="50" />
-                                            <div class="place-name">
-                                                <div class="place-title"><strong>{{ $most_searched_place->place }}</strong></div>
-                                                <div class="place-description"><small>{{ $most_searched_place->floor && $most_searched_place->floor->building ? $most_searched_place->floor->building->name : '' }}, {{ $most_searched_place->floor ? $most_searched_place->floor->name : '' }}</small></div>
+                                            <div class="row">
+                                                <div class="place-img col-md-3"><img src="{{ $most_searched_place->image }}" width="50" /></div>
+                                                <div class="place-name col-md-8">
+                                                    <div class="place-title"><strong>{{ $most_searched_place->place }}</strong></div>
+                                                    <div class="place-description"><small>{{ $most_searched_place->floor && $most_searched_place->floor->building ? $most_searched_place->floor->building->name : '' }}, {{ $most_searched_place->floor ? $most_searched_place->floor->name : '' }}</small></div>
+                                                </div>
                                             </div>
                                         </td>
                                         <td>
