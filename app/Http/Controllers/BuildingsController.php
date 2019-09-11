@@ -159,8 +159,8 @@ class BuildingsController extends Controller
 	public function ajaxShow(Request $request, $id) {
 		$user = null;
 
-    	if ($request->user_id)
-    		$user = User::find($request->user_id);
+    	if ($request->api_token && $request->api_token != '')
+    		$user = User::where('api_token', $request->api_token)->first();
 
 		if (!$user)
 			$user = Auth::user();

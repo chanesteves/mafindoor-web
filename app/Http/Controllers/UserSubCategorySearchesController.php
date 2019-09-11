@@ -17,8 +17,8 @@ class UserSubCategorySearchesController extends Controller
     public function ajaxStore (Request $request) {
     	$user = null;
 
-    	if ($request->user_id)
-    		$user = User::find($request->user_id);
+    	if ($request->api_token && $request->api_token != '')
+    		$user = User::where('api_token', $request->api_token)->first();
     	
     	$user_sub_category_search = new UserSubCategorySearch;
 
