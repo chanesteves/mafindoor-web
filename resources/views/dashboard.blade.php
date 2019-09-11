@@ -52,6 +52,10 @@
             <div class="card">
                 <div class="card-header">
                   Searches By Venue
+
+                    <div class="card-header-actions">
+                        <a href="/venues">View Details &nbsp;&nbsp; <i class="fa fa-arrow-right"></i></a>
+                    </div>
                 </div>
                 <div class="card-body">
                     @if ($searches_by_venue && $searches_by_venue->count() > 0)
@@ -85,6 +89,10 @@
             <div class="card">
                 <div class="card-header">
                   Most Active Users
+
+                    <div class="card-header-actions">
+                        <a href="/users">View Details &nbsp;&nbsp; <i class="fa fa-arrow-right"></i></a>
+                    </div>
                 </div>
                 <div class="card-body">
                     @if ($most_active_users && $most_active_users->count() > 0)
@@ -125,6 +133,10 @@
             <div class="card">
                 <div class="card-header">
                   Most Searched Places
+
+                    <div class="card-header-actions">
+                        <a href="/annotations">View Details &nbsp;&nbsp; <i class="fa fa-arrow-right"></i></a>
+                    </div>
                 </div>
                 <div class="card-body">
                     @if ($most_searched_places && $most_searched_places->count() > 0)
