@@ -50,4 +50,9 @@ class Building extends Model
     {
         return $this->belongsToMany('App\Image', 'building_images', 'building_id', 'image_id')->withTimestamps();
     }
+
+    public function searches()
+    {
+        return $this->hasMany('App\Activity', 'object_id', 'id')->where('object_type', 'App\\Building')->where('request_type', 'search');
+    }
 }

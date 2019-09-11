@@ -23,7 +23,7 @@
       <table id="datatable_tabletools_venues" class="table table-bordered">
         <thead>
           <th>Name</th>
-          <th>Creator</th>
+          <th>Searches</th>
           <th class="text-center">Status</th>
           <th></th>
         </thead>
@@ -35,10 +35,8 @@
                 &nbsp;
                 {{ $building->name }}
               </td>
-              <td>
-                @if ($building->creator && $building->creator->person)
-                  {{ $building->creator->person->first_name }} {{ $building->creator->person->last_name }}
-                @endif
+              <td class="text-center">
+                {{ $building->searches->count() }}
               </td>
               <td class="text-center">
                 @if ($building->status == 'pending')

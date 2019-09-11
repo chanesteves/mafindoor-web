@@ -11,6 +11,10 @@ Categories.prototype.bindCategories = function () {
 		$('#datatable_tabletools_categories').DataTable({ "paging":   false });
 	}
 
+    if ($('#datatable_tabletools_sub_categories').length > 0) {
+        $('#datatable_tabletools_sub_categories').DataTable({ "paging":   false });
+    }
+
 	var $add_category_validator = $("#frm-add-category").validate({
 		rules: {
 			'name': { required: true }			

@@ -28,6 +28,7 @@
           <table id="datatable_tabletools_categories" class="table table-bordered">
             <thead>
               <th>Name</th>
+              <th>Searches</th>
               <th></th>
             </thead>
             <tbody>
@@ -39,6 +40,9 @@
                       &nbsp;
                     @endif
                     {{ $cat->name }}
+                  </td>
+                  <td class="text-center">
+                    {{ $cat->searches->count() }}
                   </td>
                   <td class="text-center">
                     <div class="btn-group">
@@ -88,9 +92,10 @@
           </div>
         </div>
         <div class="card-body">
-          <table id="datatable_tabletools_categories" class="table table-bordered">
+          <table id="datatable_tabletools_sub_categories" class="table table-bordered">
             <thead>
               <th>Name</th>
+              <th>Searches</th>
               <th></th>
             </thead>
             <tbody>
@@ -102,6 +107,9 @@
                       &nbsp;
                     @endif
                     {{ $sub_category->name }}
+                  </td>
+                  <td class="text-center">
+                    {{ $sub_category->searches->count() }}
                   </td>
                   <td class="text-center">
                     <div class="btn-group">

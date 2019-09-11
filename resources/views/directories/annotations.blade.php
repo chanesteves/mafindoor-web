@@ -46,6 +46,7 @@
           <th>Name</th>
           <th>Coordinate</th>
           <th>Category</th>
+          <th>Searches</th>
           <th></th>
         </thead>
         <tbody>
@@ -58,6 +59,9 @@
               </td>
               <td>[{{ $annotation->longitude }}, {{ $annotation->latitude }}]</td>
               <td>{{ $annotation->sub_category ? $annotation->sub_category->name : '' }}</td>
+              <td class="text-center">
+                {{ $annotation->searches->count() }}
+              </td>
               <td class="text-center">
                 <div class="btn-group">
                   <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">

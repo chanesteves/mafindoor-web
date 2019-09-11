@@ -27,4 +27,9 @@ class Category extends Model
     {
         return $this->hasMany('App\SubCategory', 'category_id', 'id');
     }
+
+    public function searches()
+    {
+        return $this->hasMany('App\Activity', 'object_id', 'id')->where('object_type', 'App\\Category')->where('request_type', 'search');
+    }
 }

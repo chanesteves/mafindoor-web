@@ -19,6 +19,7 @@
           <th>Name</th>
           <th>Member Since</th>
           <th>Last Login</th>
+          <th>Activities</th>
           <th class="text-center">Status</th>
           <th></th>
         </thead>
@@ -43,6 +44,9 @@
               </td>
               <td>
                 {{ Carbon\Carbon::parse($user->last_logged_at)->diffForHumans() }}
+              </td>
+              <td class="text-center">
+                <a href="javascript:void(0)" data-target="#modal-show-activities-user" class="user-show-activities btn btn-primary"  data-toggle="modal" data-id="{{ $user->id }}">{{ $user->activities->count() }}</a>
               </td>
               <td class="text-center">
                 @if ($user->email_verification_sent_at && !$user->email_verified_at )
@@ -293,6 +297,27 @@
             <button class="btn btn-primary" type="submit">Save</button>
           </div>
         </form>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="modal-show-activities-user" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog modal-primary modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">User Activities</h4>
+          <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">×</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="row">
+            <div class="col-12">
+              <div id="pnl-activities">
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>

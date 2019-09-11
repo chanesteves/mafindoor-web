@@ -8,6 +8,7 @@ use App\User;
 use App\Person;
 use App\UserBuilding;
 use App\UserRole;
+use App\Activity;
 
 use Illuminate\Http\Request;
 
@@ -160,5 +161,17 @@ class UsersController extends Controller
         $user_building->save();
 
         return array('status' => 'OK');
+    }
+
+    public function ajaxShowActivities ($id){
+        $user = User::find($id);
+
+        $activities = Activity::where('user_id', $user->id)->orderBy('created_at', 'desc')->get();
+
+        foreach ($activities as $activity) {
+            $activity->date = $activity->created_at->diffForHumans();
+        }
+
+        return array('status' => 'OK', 'activities' => $activities);
     }
 }

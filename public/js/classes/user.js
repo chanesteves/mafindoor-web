@@ -97,3 +97,20 @@ User.prototype.show = function (id, callback) {
 		}
 	});
 }
+
+User.prototype.showActivities = function (id, callback) {
+	CSRF = $("meta[name='csrf-token']").attr('content');
+
+	$.ajax({
+		url: '/users/' + id + '/ajaxShowActivities',
+		type: 'POST',
+		dataType: "json",
+		data: {_token: CSRF},
+		success: function(data){
+			if (data.status == 'OK')
+				callback(data);
+		}, error:function (xhr, error, ajaxOptions, thrownError){
+			console.log(xhr.responseText);
+		}
+	});
+}

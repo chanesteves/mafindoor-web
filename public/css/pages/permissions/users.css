@@ -1,3 +1,38 @@
 .user-photo {
 	margin-right: 10px;
 }
+
+.activity-date {
+	background-color: #222;
+    border-top: 1px solid #363636;
+    color: #FFF;
+    padding: 5px 20px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.activity-details-wrapper {
+	padding: 0px 20px;
+}
+
+.activity-details {
+	border-bottom: 1px solid #eee;
+}
+
+.activity-details > div {	
+    padding: 5px 20px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.activity-details > div small {
+	color: #999;
+}
+
+#pnl-activities {
+	max-height: 400px;
+    overflow-y: auto;
+
+}

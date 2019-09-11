@@ -56,4 +56,9 @@ class User extends Authenticatable
     {
         return $this->person->email;
     }
+
+    public function activities()
+    {
+        return $this->hasMany('App\Activity', 'user_id', 'id');
+    }
 }

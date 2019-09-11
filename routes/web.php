@@ -55,6 +55,7 @@ Route::post('users/ajaxStore', 'UsersController@ajaxStore');
 Route::post('users/{user}/ajaxShow', 'UsersController@ajaxShow');
 Route::post('users/{user}/ajaxUpdate', 'UsersController@ajaxUpdate');
 Route::post('users/{user}/ajaxDestroy', 'UsersController@ajaxDestroy');
+Route::post('users/{user}/ajaxShowActivities', 'UsersController@ajaxShowActivities');
 Route::post('roles/ajaxStore', 'RolesController@ajaxStore');
 Route::post('roles/{role}/ajaxShow', 'RolesController@ajaxShow');
 Route::post('roles/{role}/ajaxUpdate', 'RolesController@ajaxUpdate');

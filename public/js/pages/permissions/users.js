@@ -380,6 +380,29 @@ Users.prototype.bindUsers = function () {
         }
             
     });
+
+	$('.user-show-activities').unbind('click').on('click', function () {
+		var id = $(this).data('id');
+
+		$('#pnl-activities').empty();
+
+		var dates = [];
+		user.showActivities(id, function (data) {
+			if (data.status == 'OK') {
+				data.activities.forEach(function (activity) {
+					if (dates.indexOf(activity.date) < 0) {
+						$('#pnl-activities').append('<div class="activity-date">' + activity.date + '</div>');
+						dates.push(activity.date);
+					}
+
+					$('#pnl-activities').append('<div class="activity-details-wrapper"><div class="row activity-details"><div class="col-xs-1"><small>' + activity.request_via + '</small></div><div class="col-xs-11">' + activity.request_path + '</div></div></div>');
+				});				
+
+				if (data.activities.length == 0)
+					$('#pnl-activities').append('<div><center><strong><h3>No activities here</h3></strong></center></div>');
+			}
+		});
+	});
 }
 
 Users.prototype.reloadPageContent = function (data, message, callback) {

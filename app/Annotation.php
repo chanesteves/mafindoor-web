@@ -54,4 +54,9 @@ class Annotation extends Model
 
         return $str;
     }
+
+    public function searches()
+    {
+        return $this->hasMany('App\Activity', 'object_id', 'id')->where('object_type', 'App\\Annotation')->where('request_type', 'search');
+    }
 }

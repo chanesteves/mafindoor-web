@@ -51,7 +51,7 @@
     @elseif (isset($page) && $page == 'Categories')
       <link href="{{ asset('plugins/croppie/croppie.css') }}" rel="stylesheet">
     @elseif (isset($page) && $page == 'Users')
-      <link href="{{ asset('css/pages/permissions/users.css') }}" rel="stylesheet">
+      <link href="{{ asset('css/pages/permissions/users.css?version=1.4.0') }}" rel="stylesheet">
     @endif
 
     <link href="{{ asset('css/override.css?version=1.4.6') }}" rel="stylesheet">
@@ -322,10 +322,10 @@
 
       <script src="{{ asset('js/classes/category.js?version=1.4.1') }}"></script>
       <script src="{{ asset('js/classes/sub_category.js?version=1.4.0') }}"></script>
-      <script src="{{ asset('js/pages/maintenance/categories.js?version=1.4.1') }}"></script>
+      <script src="{{ asset('js/pages/maintenance/categories.js?version=1.4.2') }}"></script>
     @elseif (isset($page) && $page == 'Users')
-      <script src="{{ asset('js/classes/user.js?version=1.4.1') }}"></script>
-      <script src="{{ asset('js/pages/permissions/users.js?version=1.4.1') }}"></script>
+      <script src="{{ asset('js/classes/user.js?version=1.4.2') }}"></script>
+      <script src="{{ asset('js/pages/permissions/users.js?version=1.4.2') }}"></script>
     @elseif (isset($page) && $page == 'Privileges')
       <script src="{{ asset('/plugins/jquery-nestable/jquery.nestable.js')}}"></script>      
       <script src="{{ asset('js/controls/tab.js?version=1.4.1') }}"></script>
