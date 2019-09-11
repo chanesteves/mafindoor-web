@@ -29,7 +29,7 @@ class BuildingsController extends Controller
 	 */
 	public static function show(Request $request, $id)
 	{
-		$user = User::find($request->user_id);
+		$user = User::find($request->user_id);;
 
 		if (!$user)
 			$user = Auth::user();
@@ -160,7 +160,7 @@ class BuildingsController extends Controller
 		$user = null;
 
     	if ($request->user_id)
-    		$user = User::find($request->user_id)
+    		$user = User::find($request->user_id);
 
 		if (!$user)
 			$user = Auth::user();

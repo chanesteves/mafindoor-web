@@ -80,7 +80,7 @@ class SubCategoriesController extends Controller
 		$user = null;
 
     	if ($request->user_id)
-    		$user = User::find($request->user_id)
+    		$user = User::find($request->user_id);
 
 		if (!$user)
 			$user = Auth::user();
