@@ -13,7 +13,6 @@ use App\Building;
 use App\Annotation;
 use App\Image;
 use App\Activity;
-use App\User;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;

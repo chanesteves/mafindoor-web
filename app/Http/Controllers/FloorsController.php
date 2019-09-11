@@ -10,7 +10,6 @@ use App\User;
 use App\Building;
 use App\Floor;
 use App\Activity;
-use App\User;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
