@@ -293,7 +293,7 @@
 
       <script src="{{ asset('js/pages/search.js?version=1.4.35') }}"></script>  
     @elseif (isset($page) && $page == 'Dashboard')
-      <script src="{{ asset('js/pages/dashboard.js?version=1.4.8') }}"></script>     
+      <script src="{{ asset('js/pages/dashboard.js?version=1.4.9') }}"></script>     
     @elseif (isset($page) && $page == 'Venues')      
       <script src="http://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyAY0WNFta5H_dKTZ_f260R39PhMDvu8ETQ"></script>
       <script src="{{ asset('plugins/geocomplete/jquery.geocomplete.js') }}"></script>

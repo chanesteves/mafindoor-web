@@ -151,7 +151,7 @@ Dashboard.prototype.bindDashboard = function () {
 	    grid: {
 	        hoverable: true,
 	        borderWidth: 2,
-	        borderColor: "#efefef"
+	        borderColor: "#187da0"
 	    },
 	    tooltip : true,
 		tooltipOpts : {
@@ -159,7 +159,7 @@ Dashboard.prototype.bindDashboard = function () {
 			dateFormat : "%y-%0m-%0d",
 			defaultTheme : false
 		},
-	    colors: ["#efefef"]
+	    colors: ["#187da0"]
 	});
 }
 
