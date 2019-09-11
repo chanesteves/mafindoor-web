@@ -143,8 +143,8 @@ class FloorsController extends Controller
 	public function ajaxShow(Request $request, $id) {
 		$user = null;
 
-    	if ($request->api_key && $request->api_key != '')
-    		$user = User::where('api_key', $request->api_key)->first();
+    	if ($request->user_id)
+    		$user = User::find($request->user_id)
 
 		if (!$user)
 			$user = Auth::user();
