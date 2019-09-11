@@ -6,6 +6,7 @@ use Auth;
 
 use App\SubCategory;
 use App\Activity;
+use App\User;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
@@ -76,7 +77,13 @@ class SubCategoriesController extends Controller
 	}
 
 	public function ajaxShow($id) {
-		$user = Auth::user();
+		$user = null;
+
+    	if ($request->api_key && $request->api_key != '')
+    		$user = User::where('api_key', $request->api_key)->first();
+
+		if (!$user)
+			$user = Auth::user();
 
 		$sub_category = SubCategory::find($id);
 

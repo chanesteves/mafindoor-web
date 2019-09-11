@@ -13,6 +13,7 @@ use App\Building;
 use App\Annotation;
 use App\Image;
 use App\Activity;
+use App\User;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
@@ -29,7 +30,10 @@ class BuildingsController extends Controller
 	 */
 	public static function show(Request $request, $id)
 	{
-		$user = Auth::user();
+		$user = User::find($request->user_id);
+
+		if (!$user)
+			$user = Auth::user();
 
 		$building = Building::find($id);
 
@@ -153,8 +157,14 @@ class BuildingsController extends Controller
 		return array('status' => 'OK', 'result' => $building);
 	}
 
-	public function ajaxShow($id) {
-		$user = Auth::user();
+	public function ajaxShow(Request $request, $id) {
+		$user = null;
+
+    	if ($request->api_key && $request->api_key != '')
+    		$user = User::where('api_key', $request->api_key)->first();
+
+		if (!$user)
+			$user = Auth::user();
 
 		$building = Building::with('images', 'floors', 'floors.annotations', 'floors.annotations.sub_category', 'floors.annotations.sub_category.user_searches', 'floors.annotations.sub_category.category', 'floors.annotations.floor')->find($id);
 

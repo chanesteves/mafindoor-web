@@ -6,6 +6,7 @@ use Auth;
 
 use App\Category;
 use App\Activity;
+use App\User;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
@@ -38,8 +39,14 @@ class CategoriesController extends Controller
 		return array('status' => 'OK', 'result' => $category);
 	}
 
-	public function ajaxShow($id) {
-		$user = Auth::user();
+	public function ajaxShow(Request $request, $id) {
+		$user = null;
+
+    	if ($request->api_key && $request->api_key != '')
+    		$user = User::where('api_key', $request->api_key)->first();
+
+		if (!$user)
+			$user = Auth::user();
 
 		$category = Category::find($id);
 

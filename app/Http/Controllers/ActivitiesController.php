@@ -9,6 +9,7 @@ use App\Annotation;
 use App\Building;
 use App\Category;
 use App\SubCategory;
+use App\User;
 use App\Activity;
 
 use App\Http\Requests;
@@ -19,7 +20,13 @@ use Illuminate\Http\Request;
 class ActivitiesController extends Controller
 {
 	public function ajaxStore(Request $request) {
-		$user = Auth::user();
+		$user = null;
+
+    	if ($request->api_key && $request->api_key != '')
+    		$user = User::where('api_key', $request->api_key)->first();
+
+		if (!$user)
+			$user = Auth::user();
 
 		$this->validate($request, [
 			'request_type' => 'required'

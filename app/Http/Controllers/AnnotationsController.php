@@ -12,6 +12,7 @@ use App\Floor;
 use App\Annotation;
 use App\SubCategory;
 use App\Activity;
+use App\User;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
@@ -123,8 +124,14 @@ class AnnotationsController extends Controller
 		return array('status' => 'OK', 'result' => $annotation);
 	}
 
-	public function ajaxShow($id) {
-		$user = Auth::user();
+	public function ajaxShow(Request $request, $id) {
+		$user = null;
+
+    	if ($request->api_key && $request->api_key != '')
+    		$user = User::where('api_key', $request->api_key)->first();
+
+		if (!$user)
+			$user = Auth::user();
 
 		$annotation = Annotation::find($id);
 

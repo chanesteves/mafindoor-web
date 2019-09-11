@@ -10,6 +10,7 @@ use App\User;
 use App\Building;
 use App\Floor;
 use App\Activity;
+use App\User;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
@@ -140,8 +141,14 @@ class FloorsController extends Controller
 		return array('status' => 'OK', 'result' => $floor);
 	}
 
-	public function ajaxShow($id) {
-		$user = Auth::user();
+	public function ajaxShow(Request $request, $id) {
+		$user = null;
+
+    	if ($request->api_key && $request->api_key != '')
+    		$user = User::where('api_key', $request->api_key)->first();
+
+		if (!$user)
+			$user = Auth::user();
 
 		$floor = Floor::with('building', 'building.floors', 'building.floors.annotations', 'building.floors.annotations.floor', 'building.floors.annotations.floor.building', 'building.floors.annotations.sub_category', 'building.floors.annotations.sub_category.category', 'annotations', 'annotations.sub_category', 'annotations.sub_category.category')->find($id);
 
