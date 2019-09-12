@@ -20,6 +20,10 @@ use Illuminate\Http\Request;
 class ActivitiesController extends Controller
 {
 	public function ajaxStore(Request $request) {
+		$this->validate($request, [
+			'request_type' => 'required'
+		]);
+		
 		$user = null;
 
     	if ($request->api_token && $request->api_token != '')
@@ -27,10 +31,6 @@ class ActivitiesController extends Controller
 
 		if (!$user)
 			$user = Auth::user();
-
-		$this->validate($request, [
-			'request_type' => 'required'
-		]);
 
 		$activity = new Activity;
 
