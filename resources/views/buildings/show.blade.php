@@ -8,7 +8,7 @@
   	<meta property="og:url" content="{{ \URL::to("/") }}/buildings/{{ $building->id }}-{{ $building->slug }}">
   	<meta property="fb:app_id" content="329159957633823">
 
-	<title>{{ config('app.name', 'Mafindoor') }}</title>
+	<title>{{ config('app.name', 'Mafindoor') }} - {{ $building->name }}</title>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	
