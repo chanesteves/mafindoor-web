@@ -194,7 +194,7 @@ class AnnotationsController extends Controller
 			$activity->save();
 		}
 
-		$building = $annotation->floor ? $annotation->floor->building;
+		$building = $annotation->floor ? $annotation->floor->building : null;
 
 		if ($building) {
 			$activity = new Activity;
