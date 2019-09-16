@@ -59,4 +59,9 @@ class Annotation extends Model
     {
         return $this->hasMany('App\Activity', 'object_id', 'id')->where('object_type', 'App\\Annotation')->where('request_type', 'search');
     }
+
+    public function entries()
+    {
+        return $this->hasMany('App\Entry', 'annotation_id', 'id');
+    }
 }

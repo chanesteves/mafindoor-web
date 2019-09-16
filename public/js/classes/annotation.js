@@ -99,3 +99,25 @@ Annotation.prototype.show = function (id, callback) {
 		}
 	});
 }
+
+Annotation.prototype.updateEntries = function (param, callback) {
+	CSRF = $("meta[name='csrf-token']").attr('content');
+
+	data = { 
+				_token: CSRF,
+				'entries' : param.entries
+			};
+
+	$.ajax({
+		url: '/annotations/' + param.id + '/ajaxUpdateEntries',
+		type: 'POST',
+		dataType: "json",
+		data: data,
+		success: function(data){
+			if (callback)
+				callback(data);
+		}, error:function (xhr, error, ajaxOptions, thrownError){
+			console.log(xhr.responseText);
+		}
+	});
+}

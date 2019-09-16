@@ -12,6 +12,7 @@ use App\Floor;
 use App\Annotation;
 use App\SubCategory;
 use App\Activity;
+use App\Entry;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
@@ -132,7 +133,7 @@ class AnnotationsController extends Controller
 		if (!$user)
 			$user = Auth::user();
 
-		$annotation = Annotation::find($id);
+		$annotation = Annotation::with('entries')->find($id);
 
 		if (!$annotation)
 			return array('status' => 'ERROR', 'error' => 'Annotation not found.');
@@ -408,5 +409,40 @@ class AnnotationsController extends Controller
 		else {
 			return array('status' => 'ERROR', 'error' => 'Error encountered while uploading file.');
 		}
+	}
+
+	public function ajaxUpdateEntries(Request $request, $id)
+	{
+		$this->validate($request, [
+			'entries' => 'required'
+		]);
+
+		$annotation = Annotation::find($id);
+
+		if (!$annotation)
+			return array('status' => 'ERROR', 'error' => 'Annotation not found.');
+
+		$entry_ids = [];
+
+		foreach ($request->entries as $e) {
+			$entry = null;
+
+			if (array_key_exists('id', $e))
+				$entry = Entry::find($e['id']);
+
+			if (!$entry)
+				$entry = new Entry;
+
+			$entry->latitude = $e['latitude'];
+			$entry->longitude = $e['longitude'];
+			$entry->annotation_id = $annotation->id;
+			$entry->save();
+
+			$entry_ids[] = $entry->id;
+		}
+
+		Entry::where('annotation_id', $annotation->id)->whereNotIn('id', $entry_ids)->delete();
+
+		return array('status' => 'OK', 'result' => $annotation);
 	}
 }

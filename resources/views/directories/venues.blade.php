@@ -5,7 +5,7 @@
   
   <div class="card">
     <div class="card-header">
-      Venues
+      <span>Venues</span>
 
       <div class="card-header-actions">
         <button data-target="#modal-add-venue" data-toggle="modal" class="card-header-action btn btn-success btn-sm">

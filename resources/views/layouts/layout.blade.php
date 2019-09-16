@@ -28,7 +28,7 @@
     <link href="{{ asset('plugins/datatables/datatables.min.css') }}" rel="stylesheet">
 
     <!-- Main styles for this application-->
-    <link href="{{ asset('css/style.css?version=1.4.7') }}" rel="stylesheet">
+    <link href="{{ asset('css/style.css?version=1.4.8') }}" rel="stylesheet">
 
     <link href="{{ asset('plugins/pace-progress/css/pace.min.css') }}" rel="stylesheet">    
 

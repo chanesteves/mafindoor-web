@@ -551,6 +551,91 @@ Annotations.prototype.bindAnnotations = function () {
 		$('#hdn-upload-annotation-images-id').val(id);
 		$('#frm-gallery').attr('action', '/annotations/' + id + '/ajaxUploadImages');
 	});
+
+	$('.annotation-manage-entries').unbind('click').on('click', function () {
+		var id = $(this).data('id');
+
+		$('#hdn-manage-entries-annotation-id').val(id);
+
+		$('#frm-manage-entries-annotation tr.visible').remove();
+
+		annotation.show(id, function (data) {
+			if (data.status == 'OK') {
+				checkEntryPointsEmptyRow();				
+				data.annotation.entries.forEach(function (entry) {
+					var row = $('#frm-manage-entries-annotation .extra-row.visible');
+
+					$(row).attr('data-id', entry.id);
+					$(row).find('.latitude').val(entry.latitude).trigger('change');
+					$(row).find('.longitude').val(entry.longitude).trigger('change');
+				});
+			}
+		});
+	});
+
+	function bindEntryPoints () {
+		$('#frm-manage-entries-annotation .latitude, #frm-manage-entries-annotation .longitude').unbind('change').on('change', function () {
+			var lat = $(this).val();
+
+			if (lat.trim() != '') {
+				$(this).closest('tr').removeClass('extra-row');
+				checkEntryPointsEmptyRow();
+			}
+		});
+
+		$('#frm-manage-entries-annotation .btn-danger').unbind('click').on('click', function () {
+			$(this).closest('tr').remove();
+			checkEntryPointsEmptyRow();
+		});
+	}
+
+	function checkEntryPointsEmptyRow () {
+		if ($('#frm-manage-entries-annotation .extra-row.visible').length == 0) {
+			var row = $('#frm-manage-entries-annotation .extra-row.hidden').clone();
+
+			$(row).removeClass('hidden').addClass('visible');
+			$('#frm-manage-entries-annotation tbody').append(row);
+
+			bindEntryPoints();
+		}
+	}
+
+	$('#frm-manage-entries-annotation tr.visible').remove();
+	checkEntryPointsEmptyRow();
+	bindEntryPoints();
+
+	$('#frm-manage-entries-annotation').unbind('submit').on('submit', function (event) {
+		event.preventDefault();
+
+		var id = $('#hdn-manage-entries-annotation-id').val();
+		var entries = [];
+
+		$('#frm-manage-entries-annotation tr.visible').each(function () {
+			var entry_id = $(this).attr('data-id');
+			var lat = $(this).find('.latitude').val();
+			var lng = $(this).find('.longitude').val();			
+
+			if (lat.trim() != '' && lng.trim() != '')
+				entries.push({ 'id' : entry_id, 'latitude' : lat, 'longitude' : lng });
+		});
+
+		var annotation_obj = {
+			'id' : id,
+			'entries' : entries
+		}
+
+		$('#modal-manage-entries-annotation').modal('hide');
+		modal.show('info', 'fa-refresh fa-spin', 'Saving...', 'Please wait while we are updating the entries.', null);
+
+		annotation.updateEntries(annotation_obj, function (data) {				
+			if (data.status == 'OK')
+				modal.set('success', 'fa-check-circle', 'Success', 'Annotation entries successfully updated.', { ok : function () {
+					window.location.reload();
+				}});
+			else
+				modal.set('danger', 'fa-times-circle', 'Oops', data.error, { ok : true });
+		});
+	});
 }
 
 $(document).ready(function(){

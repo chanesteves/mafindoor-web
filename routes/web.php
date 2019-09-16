@@ -40,6 +40,7 @@ Route::post('annotations/{annotations}/ajaxDestroy', 'AnnotationsController@ajax
 Route::post('annotations/{annotations}/ajaxShow', 'AnnotationsController@ajaxShow');
 Route::post('annotations/{annotations}/ajaxUploadLogo', 'AnnotationsController@ajaxUploadLogo');
 Route::post('annotations/ajaxImportAnnotations', 'AnnotationsController@ajaxImportAnnotations');
+Route::post('annotations/{annotation}/ajaxUpdateEntries', 'AnnotationsController@ajaxUpdateEntries');
 Route::post('categories/ajaxStore', 'CategoriesController@ajaxStore');
 Route::post('categories/{category}/ajaxShow', 'CategoriesController@ajaxShow');
 Route::post('categories/{category}/ajaxUpdate', 'CategoriesController@ajaxUpdate');

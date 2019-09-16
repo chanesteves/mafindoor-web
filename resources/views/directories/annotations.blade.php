@@ -27,7 +27,7 @@
   <br/>
   <div class="card">
     <div class="card-header">
-      Annotations
+      <span>Annotations</span>
       <div class="card-header-actions">
         <button id="btn-add-annotation" data-target="#modal-add-annotation" data-toggle="modal" class="card-header-action btn btn-success btn-sm">
           <i class='fa fa-plus'></i> Add Annotation
@@ -72,6 +72,7 @@
                     <a href="javascript:void(0)" data-target="#modal-edit-annotation" class="dropdown-item annotation-edit"  data-toggle="modal" data-id="{{ $annotation->id }}" data-placement="top" data-original-title="Edit"><i class="fa fa-pencil"></i> Edit</a>
                     <a href="javascript:void(0)" class="dropdown-item annotation-remove" data-id="{{ $annotation->id }}" data-placement="top" data-original-title="Remove"><i class="fa fa-trash-o"></i> Remove</a>
                     <a href="javascript:void(0)" data-target="#modal-upload-annotation-logo" class="dropdown-item annotation-upload-logo" data-toggle="modal" data-id="{{ $annotation->id }}" data-placement="top" data-original-title="Upload Logo"><i class="fa fa-upload"></i> Upload Logo</a>                    
+                    <a href="javascript:void(0)" data-target="#modal-manage-entries-annotation" class="dropdown-item annotation-manage-entries" data-toggle="modal" data-id="{{ $annotation->id }}" data-placement="top" data-original-title="Manage Entry Points"><i class="fa fa-arrow-right"></i> Manage Entry Points</a>                    
                   </div>
                 </div>
               </td>
@@ -284,6 +285,71 @@
           <div class="modal-footer">
             <button class="btn btn-secondary" type="button" data-dismiss="modal">Close</button>
             <button id="btn-upload-annotation-logo" class="btn btn-primary" type="submit">Save</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="modal-manage-entries-annotation" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog modal-primary" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">Manage Entry Points</h4>
+          <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">×</span>
+          </button>
+        </div>
+        <form id="frm-manage-entries-annotation" method="POST" action="">
+          <input type="hidden" id="hdn-manage-entries-annotation-id" value="" />
+          <div class="modal-body">
+          <div class="alert alert-info"><i class="fa fa-info-circle"></i> Please manage the entries for this spot.</div>
+          <div class="row">
+            <div class="col-md-12">
+              <table  class="table table-bordered">
+                <thead>
+                  <th>Latitude</th>
+                  <th>Longitude</th>
+                  <td></td>
+                </thead>
+                <tbody>
+                  <tr class="extra-row hidden">
+                    <td class="no-padding">
+                      <div class="form-group">
+                        <input class="form-control latitude" type="number" step="0.0000001" />
+                      </div>
+                    </td>
+                    <td  class="no-padding">
+                      <div class="form-group">
+                        <input class="form-control longitude" type="number" step="0.0000001" />
+                      </div>
+                    </td>
+                    <td  class="no-padding text-center">
+                      <a class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a>
+                    </td>
+                  </tr>
+                  <tr class="extra-row visible">
+                    <td  class="no-padding">
+                      <div class="form-group">
+                        <input class="form-control latitude" type="number" step="0.0000001" />
+                      </div>
+                    </td>
+                    <td  class="no-padding">
+                      <div class="form-group">
+                        <input class="form-control longitude" type="number" step="0.0000001" />
+                      </div>
+                    </td>
+                    <td  class="no-padding text-center">
+                      <a class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button class="btn btn-secondary" type="button" data-dismiss="modal">Close</button>
+            <button id="btn-manage-entries-annotation" class="btn btn-primary" type="submit">Save</button>
           </div>
         </form>
       </div>

@@ -229,6 +229,25 @@ table {
   border-collapse: collapse;
 }
 
+table td .form-group,
+table td.no-padding {
+  padding: 0;
+  margin: 0;
+}
+
+table td .form-control {
+  border-radius: 0px;
+  border: none;
+}
+
+table td .btn {
+  margin: 2px;
+}
+
+table tr.hidden {
+  display: none;
+}
+
 caption {
   padding-top: 0.75rem;
   padding-bottom: 0.75rem;
@@ -4447,6 +4466,11 @@ input[type="button"].btn-block {
 
 .card-header + .list-group .list-group-item:first-child {
   border-top: 0;
+}
+
+.card-header > span {
+  font-size: 24px;
+  font-weight: bold;
 }
 
 .card-footer {
