@@ -17,8 +17,9 @@ class CreateTurnsTable extends Migration
             $table->increments('id');
             $table->double('latitude')->default(0);
             $table->double('longitude')->default(0);
-            $table->enum('turn', ['left', 'right'])->nullable();
+            $table->enum('direction', ['left', 'right'])->nullable();
             $table->integer('route_id');
+            $table->integer('step')->default(1);
             $table->timestamps();
             $table->softDeletes();
         });

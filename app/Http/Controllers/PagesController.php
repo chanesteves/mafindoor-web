@@ -22,6 +22,7 @@ use App\User;
 use App\Role;
 use App\Menu;
 use App\Activity;
+use App\Route;
 
 use Carbon\Carbon;
 
@@ -369,6 +370,41 @@ class PagesController extends Controller
 															'floors' => $floors,
 															'annotations' => $annotations,
 															'categories' => $categories
+														));
+	}
+
+	public function routes(Request $request) {
+		$buildings = Building::all();
+		$building = null;
+
+		if ($request->building_id)
+			$building = Building::find($request->building_id);
+
+		if (!$building)
+			$building = Building::first();
+
+		$floors = Floor::all();
+		$floor = null;
+
+		if ($request->floor_id)
+			$floor = Floor::find($request->floor_id);
+
+		if (!$floor) {
+			if ($building)
+				$floor = Floor::where('building_id', $building->id)->first();
+			else
+				$floor = Floor::first();
+		}
+
+		$routes = Route::where('floor_id', $floor->id)->get();
+
+		return View::make('directories.routes')->with(array(
+															'page' => 'Routes',
+															'building' => $building,
+															'floor' => $floor,
+															'buildings' => $buildings,
+															'floors' => $floors,
+															'routes' => $routes
 														));
 	}
 

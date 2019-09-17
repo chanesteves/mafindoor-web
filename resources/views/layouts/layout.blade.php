@@ -28,7 +28,7 @@
     <link href="{{ asset('plugins/datatables/datatables.min.css') }}" rel="stylesheet">
 
     <!-- Main styles for this application-->
-    <link href="{{ asset('css/style.css?version=1.4.8') }}" rel="stylesheet">
+    <link href="{{ asset('css/style.css?version=1.4.9') }}" rel="stylesheet">
 
     <link href="{{ asset('plugins/pace-progress/css/pace.min.css') }}" rel="stylesheet">    
 
@@ -133,6 +133,11 @@
                   <li class="nav-item">
                     <a class="nav-link" href="/annotations">
                       Annotations
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="/routes">
+                      Routes
                     </a>
                   </li>
                 </ul>
@@ -315,6 +320,9 @@
 
       <script src="{{ asset('js/classes/annotation.js?version=1.4.4') }}"></script>
       <script src="{{ asset('js/pages/directories/annotations.js?version=1.4.11') }}"></script>
+    @elseif (isset($page) && $page == 'Routes')
+      <script src="{{ asset('js/classes/route.js?version=1.4.4') }}"></script>
+      <script src="{{ asset('js/pages/directories/routes.js?version=1.4.11') }}"></script>
     @elseif (isset($page) && $page == 'Categories')
       <script src="{{ asset('js/controls/tab.js?version=1.4.1') }}"></script>
       <script src="{{ asset('plugins/bootstrap-fileinput/js/plugins/canvas-to-blob.js') }}"></script>

@@ -235,6 +235,13 @@ table td.no-padding {
   margin: 0;
 }
 
+table td.no-padding span {
+  text-align: center;
+  display: block;
+  line-height: 38px;
+  vertical-align: middle;
+}
+
 table td .form-control {
   border-radius: 0px;
   border: none;

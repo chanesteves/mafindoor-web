@@ -41,6 +41,10 @@ Route::post('annotations/{annotations}/ajaxShow', 'AnnotationsController@ajaxSho
 Route::post('annotations/{annotations}/ajaxUploadLogo', 'AnnotationsController@ajaxUploadLogo');
 Route::post('annotations/ajaxImportAnnotations', 'AnnotationsController@ajaxImportAnnotations');
 Route::post('annotations/{annotation}/ajaxUpdateEntries', 'AnnotationsController@ajaxUpdateEntries');
+Route::post('routes/ajaxStore', 'RoutesController@ajaxStore');
+Route::post('routes/{routes}/ajaxShow', 'RoutesController@ajaxShow');
+Route::post('routes/{routes}/ajaxUpdate', 'RoutesController@ajaxUpdate');
+Route::post('routes/{routes}/ajaxDestroy', 'RoutesController@ajaxDestroy');
 Route::post('categories/ajaxStore', 'CategoriesController@ajaxStore');
 Route::post('categories/{category}/ajaxShow', 'CategoriesController@ajaxShow');
 Route::post('categories/{category}/ajaxUpdate', 'CategoriesController@ajaxUpdate');
@@ -91,6 +95,7 @@ Route::get('dashboard', 'PagesController@dashboard');
 Route::get('venues', 'PagesController@venues');
 Route::get('floors', 'PagesController@floors');
 Route::get('annotations', 'PagesController@annotations');
+Route::get('routes', 'PagesController@routes');
 
 // maintenance
 Route::get('categories', 'PagesController@categories');

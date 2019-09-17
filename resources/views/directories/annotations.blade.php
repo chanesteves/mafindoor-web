@@ -57,7 +57,7 @@
                 &nbsp;
                 {{ $annotation->name }}
               </td>
-              <td>[{{ $annotation->longitude }}, {{ $annotation->latitude }}]</td>
+              <td>[{{ $annotation->latitude}}, {{ $annotation->longitude }}]</td>
               <td>{{ $annotation->sub_category ? $annotation->sub_category->name : '' }}</td>
               <td class="text-center">
                 {{ $annotation->searches->count() }}
@@ -316,12 +316,12 @@
                   <tr class="extra-row hidden">
                     <td class="no-padding">
                       <div class="form-group">
-                        <input class="form-control latitude" type="number" step="0.0000001" />
+                        <input class="form-control latitude" type="number" step="0.0000001" required />
                       </div>
                     </td>
                     <td  class="no-padding">
                       <div class="form-group">
-                        <input class="form-control longitude" type="number" step="0.0000001" />
+                        <input class="form-control longitude" type="number" step="0.0000001" required />
                       </div>
                     </td>
                     <td  class="no-padding text-center">
@@ -331,12 +331,12 @@
                   <tr class="extra-row visible">
                     <td  class="no-padding">
                       <div class="form-group">
-                        <input class="form-control latitude" type="number" step="0.0000001" />
+                        <input class="form-control latitude" type="number" step="0.0000001" required />
                       </div>
                     </td>
                     <td  class="no-padding">
                       <div class="form-group">
-                        <input class="form-control longitude" type="number" step="0.0000001" />
+                        <input class="form-control longitude" type="number" step="0.0000001" required />
                       </div>
                     </td>
                     <td  class="no-padding text-center">

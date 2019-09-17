@@ -19,6 +19,7 @@ class CreateRoutesTable extends Migration
             $table->double('origin_lng')->default(0);
             $table->double('destination_lat')->default(0);
             $table->double('destination_lng')->default(0);
+            $table->integer('floor_id');
             $table->timestamps();
             $table->softDeletes();
         });
