@@ -47,7 +47,10 @@
 
       <link href="{{ asset('css/pages/directories/floors.css') }}" rel="stylesheet">
     @elseif (isset($page) && $page == 'Annotations')
+      <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.49.0/mapbox-gl.css' rel='stylesheet' />
       <link href="{{ asset('plugins/croppie/croppie.css') }}" rel="stylesheet">           
+
+      <link href="{{ asset('css/pages/directories/annotations.css') }}" rel="stylesheet">
     @elseif (isset($page) && $page == 'Categories')
       <link href="{{ asset('plugins/croppie/croppie.css') }}" rel="stylesheet">
     @elseif (isset($page) && $page == 'Users')
@@ -223,23 +226,23 @@
     </footer>
 
     <div class="modal fade" id="modal-main" data-keyboard="false" data-backdrop="static" tabindex="-1" role="dialog" aria-hidden="true" aria-labelledby="myModalLabel">
-	    <div class="modal-dialog modal-info" role="document">
-	      <div class="modal-content">
-	        <div class="modal-header">
-	          <h4 class="modal-title"></h4>
-	        </div>
-	          <div class="modal-body">
-	            <div class="row">
-	              <div class="col-md-12">
-	              	<br/>
-	              	<div id="lbl-main"></div>
-	              	<br/>
-	              </div>
-	            </div>
-	          </div>
-	      </div>
-	    </div>
-	  </div>
+      <div class="modal-dialog modal-info" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title"></h4>
+          </div>
+            <div class="modal-body">
+              <div class="row">
+                <div class="col-md-12">
+                  <br/>
+                  <div id="lbl-main"></div>
+                  <br/>
+                </div>
+              </div>
+            </div>
+        </div>
+      </div>
+    </div>
 
     <div class="browser-error">
       <div class="browser-error-wrapper">
@@ -307,19 +310,20 @@
       <script src="{{ asset('plugins/croppie/croppie.js') }}"></script>
       <script src="{{ asset('plugins/dropzone/dist/dropzone.js') }}"></script>
 
-    	<script src="{{ asset('js/classes/building.js?version=1.4.3') }}"></script>
+      <script src="{{ asset('js/classes/building.js?version=1.4.3') }}"></script>
       <script src="{{ asset('js/classes/image.js?version=1.4.0') }}"></script>
-    	<script src="{{ asset('js/pages/directories/venues.js?version=1.4.8') }}"></script>      
+      <script src="{{ asset('js/pages/directories/venues.js?version=1.4.8') }}"></script>      
     @elseif (isset($page) && $page == 'Floors')
       <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.49.0/mapbox-gl.js'></script>
       <script src="{{ asset('js/classes/floor.js?version=1.4.1') }}"></script>
       <script src="{{ asset('js/pages/directories/floors.js?version=1.4.3') }}"></script>
     @elseif (isset($page) && $page == 'Annotations')
+      <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.49.0/mapbox-gl.js'></script>
       <script src="{{ asset('plugins/bootstrap-fileinput/js/plugins/canvas-to-blob.js') }}"></script>
       <script src="{{ asset('plugins/croppie/croppie.js') }}"></script>      
 
       <script src="{{ asset('js/classes/annotation.js?version=1.4.4') }}"></script>
-      <script src="{{ asset('js/pages/directories/annotations.js?version=1.4.11') }}"></script>
+      <script src="{{ asset('js/pages/directories/annotations.js?version=1.4.12') }}"></script>
     @elseif (isset($page) && $page == 'Routes')
       <script src="{{ asset('js/classes/route.js?version=1.4.4') }}"></script>
       <script src="{{ asset('js/pages/directories/routes.js?version=1.4.11') }}"></script>

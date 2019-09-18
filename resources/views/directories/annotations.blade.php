@@ -303,25 +303,33 @@
         <form id="frm-manage-entries-annotation" method="POST" action="">
           <input type="hidden" id="hdn-manage-entries-annotation-id" value="" />
           <div class="modal-body">
-          <div class="alert alert-info"><i class="fa fa-info-circle"></i> Please manage the entries for this spot.</div>
+          <div class="alert alert-info"><i class="fa fa-info-circle"></i> Please click on the map to add entries for this spot.</div>
+          <div class="row">
+            <div class="col-md-12">
+              <div id="pnl-map" class="map"><div class="marker">+</div></div>
+            </div>
+          </div>
+          <br/>
           <div class="row">
             <div class="col-md-12">
               <table  class="table table-bordered">
                 <thead>
+                  <th>ID</th>
                   <th>Latitude</th>
                   <th>Longitude</th>
                   <td></td>
                 </thead>
                 <tbody>
                   <tr class="extra-row hidden">
+                    <td class="no-padding"><span class="label">0</span></td>
                     <td class="no-padding">
                       <div class="form-group">
-                        <input class="form-control latitude" type="number" step="0.0000001" required />
+                        <input class="form-control latitude" type="number" step="0.0000001" />
                       </div>
                     </td>
                     <td  class="no-padding">
                       <div class="form-group">
-                        <input class="form-control longitude" type="number" step="0.0000001" required />
+                        <input class="form-control longitude" type="number" step="0.0000001" />
                       </div>
                     </td>
                     <td  class="no-padding text-center">
@@ -331,12 +339,12 @@
                   <tr class="extra-row visible">
                     <td  class="no-padding">
                       <div class="form-group">
-                        <input class="form-control latitude" type="number" step="0.0000001" required />
+                        <input class="form-control latitude" type="number" step="0.0000001" />
                       </div>
                     </td>
                     <td  class="no-padding">
                       <div class="form-group">
-                        <input class="form-control longitude" type="number" step="0.0000001" required />
+                        <input class="form-control longitude" type="number" step="0.0000001" />
                       </div>
                     </td>
                     <td  class="no-padding text-center">

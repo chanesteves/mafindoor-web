@@ -1,10 +1,29 @@
 var annotations = new Annotations();
 
+var map;
+var geojson = {
+	"type": "FeatureCollection",
+	"features": [{
+		"type": "Feature",
+		"geometry": {
+			"type": "Point",
+			"coordinates": [0, 0]
+		},
+		"properties": {
+			"title": ""
+		}
+	}]
+};
+var pointCount = 0;
+
 function Annotations(){
     
 }
 
 Annotations.prototype.bindAnnotations = function () {
+
+	mapboxgl.accessToken = 'pk.eyJ1IjoiY2hhbmVzdGV2ZXMiLCJhIjoiY2ptc2Zjc3NrMDFhczNxbXJwZ2RqajVnbyJ9.Xuv8n5uFzywa-ZRcppeAKA';
+
 	if ($('#datatable_tabletools_annotations').length > 0) {
 		$('#datatable_tabletools_annotations').DataTable({"paging":   false});
 	}
@@ -561,13 +580,33 @@ Annotations.prototype.bindAnnotations = function () {
 
 		annotation.show(id, function (data) {
 			if (data.status == 'OK') {
-				checkEntryPointsEmptyRow();				
-				data.annotation.entries.forEach(function (entry) {
-					var row = $('#frm-manage-entries-annotation .extra-row.visible');
+				checkEntryPointsEmptyRow();	
 
-					$(row).attr('data-id', entry.id);
-					$(row).find('.latitude').val(entry.latitude).trigger('change');
-					$(row).find('.longitude').val(entry.longitude).trigger('change');
+				map = new mapboxgl.Map({
+					container: 'pnl-map',
+					style: data.annotation.floor.map_url,
+					center: [data.annotation.longitude, data.annotation.latitude],
+					zoom: (data.annotation.floor.max_zoom + data.annotation.floor.min_zoom) / 2
+				});
+
+				map.on('load', function (e) {
+					map.on('click', function(e) {
+					    var latitude = e.lngLat.lat.toFixed(6);
+					    var longitude = e.lngLat.lng.toFixed(6);
+
+					    var row = $('#frm-manage-entries-annotation .extra-row.visible');
+
+						$(row).find('.latitude').val(latitude).trigger('change');
+						$(row).find('.longitude').val(longitude).trigger('change');
+					});
+
+					data.annotation.entries.forEach(function (entry) {
+						var row = $('#frm-manage-entries-annotation .extra-row.visible');
+
+						$(row).attr('data-id', entry.id);
+						$(row).find('.latitude').val(entry.latitude).trigger('change');
+						$(row).find('.longitude').val(entry.longitude).trigger('change');
+					});
 				});
 			}
 		});
@@ -575,16 +614,62 @@ Annotations.prototype.bindAnnotations = function () {
 
 	function bindEntryPoints () {
 		$('#frm-manage-entries-annotation .latitude, #frm-manage-entries-annotation .longitude').unbind('change').on('change', function () {
-			var lat = $(this).val();
+			var val = $(this).val();
 
-			if (lat.trim() != '') {
+			if (val.trim() != '') {
 				$(this).closest('tr').removeClass('extra-row');
 				checkEntryPointsEmptyRow();
+
+				var latitude = $(this).closest('tr').find('.latitude').val();
+				var longitude = $(this).closest('tr').find('.longitude').val();
+
+				if (latitude.trim() != '' && longitude.trim() != '') {
+					pointCount++;
+
+					$(this).closest('tr').find('.label').text(pointCount);
+					geojson.features[0].geometry.coordinates = [longitude, latitude];
+					geojson.features[0].properties.title = pointCount.toString();					
+					
+					map.addLayer({
+						"id": "circle" + pointCount.toString(),
+						"type": "circle",
+						"source": {
+							"type": "geojson",
+							"data": geojson
+						},
+					    "paint": {
+					        "circle-radius": 10,
+					        "circle-color": "#5b94c6"
+					    }
+					});
+
+					map.addLayer({
+						"id": "symbol" + pointCount.toString(),
+						"type": "symbol",
+						"source": {
+							"type": "geojson",
+							"data": geojson
+						},
+						"paint": {
+					        "text-color": "#FFF"							
+					    },
+					    "layout": {				
+					    	"text-size": 8,			
+							"text-field": "{title}"
+						}
+					});
+
+					$(this).closest('tr').attr('data-point-id', pointCount.toString());
+				}
 			}
 		});
 
 		$('#frm-manage-entries-annotation .btn-danger').unbind('click').on('click', function () {
+			var point_id = $(this).closest('tr').attr('data-point-id');
+
 			$(this).closest('tr').remove();
+			map.removeLayer("circle" + point_id);
+			map.removeLayer("symbol" + point_id);
 			checkEntryPointsEmptyRow();
 		});
 	}

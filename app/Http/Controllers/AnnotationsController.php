@@ -133,7 +133,7 @@ class AnnotationsController extends Controller
 		if (!$user)
 			$user = Auth::user();
 
-		$annotation = Annotation::with('entries')->find($id);
+		$annotation = Annotation::with('floor', 'entries')->find($id);
 
 		if (!$annotation)
 			return array('status' => 'ERROR', 'error' => 'Annotation not found.');
