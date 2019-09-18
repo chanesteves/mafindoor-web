@@ -138,11 +138,11 @@
                       Annotations
                     </a>
                   </li>
-                  <li class="nav-item">
+                  <!-- <li class="nav-item">
                     <a class="nav-link" href="/routes">
                       Routes
                     </a>
-                  </li>
+                  </li> -->
                 </ul>
               </li>
               <li class="nav-item nav-dropdown">
