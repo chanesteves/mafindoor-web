@@ -18,7 +18,7 @@ class CreatePointsTable extends Migration
             $table->double('latitude')->default(0);
             $table->double('longitude')->default(0);
             $table->integer('floor_id');
-            $table->enumb('type', ['door', 'intersection'])->default('door');
+            $table->enum('type', ['door', 'intersection'])->default('door');
             $table->timestamps();
         });
     }
