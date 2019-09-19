@@ -23,7 +23,7 @@
       <div class="col-sm-6 col-md-4">
         <div class="card">
           <div class="card-body">
-            <div id="pnl-map-{{ $floor->id }}" class="map" data-url="{{ $floor->map_url }}" data-longitude="{{ $floor->longitude }}" data-latitude="{{ $floor->latitude }}" data-zoom="{{ $floor->zoom }}"></div>
+            <div id="pnl-map-{{ $floor->id }}" class="floor-map" data-url="{{ $floor->map_url }}" data-longitude="{{ $floor->longitude }}" data-latitude="{{ $floor->latitude }}" data-zoom="{{ $floor->zoom }}"></div>
             <div class="map-cover">
               @if ($floor->status == 'pending')
                 <span class="badge badge-warning">PENDING</span>
@@ -36,11 +36,14 @@
             </div>
             <div class="actions">
               <div class="row">
-                <div class="col-6 text-center">
+                <div class="col-4 text-center">
                   <a href="javascript:void(0);" class="floor-edit" data-id="{{ $floor->id }}" data-target="#modal-edit-floor" data-toggle="modal"><i class="fa fa-pencil"></i> Edit</a>
                 </div>
-                <div class="col-6 text-center">
+                <div class="col-4 text-center">
                   <a href="javascript:void(0);" class="floor-remove" data-id="{{ $floor->id }}"><i class="fa fa-trash"></i> Delete</a>
+                </div>
+                <div class="col-4 text-center">
+                  <a href="javascript:void(0);" class="floor-manage-points" data-id="{{ $floor->id }}" data-target="#modal-manage-points-floor" data-toggle="modal"><i class="fa fa-circle"></i> Points</a>
                 </div>
               </div>
             </div>
@@ -269,6 +272,79 @@
           <button class="btn btn-secondary" type="button" data-dismiss="modal">Close</button>
           <button id="btn-upload-floor-logo" class="btn btn-primary" type="submit">Save</button>
         </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="modal-manage-points-floor" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog modal-primary" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">Manage Points</h4>
+          <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">×</span>
+          </button>
+        </div>
+        <form id="frm-manage-points-floor" method="POST" action="">
+          <input type="hidden" id="hdn-manage-points-floor-id" value="" />
+          <div class="modal-body">
+          <div class="alert alert-info"><i class="fa fa-info-circle"></i> Please click on the map to add points for this spot.</div>
+          <div class="row">
+            <div class="col-md-12">
+              <div id="pnl-map" class="map"><div class="marker">+</div></div>
+            </div>
+          </div>
+          <br/>
+          <div class="row">
+            <div class="col-md-12">
+              <table  class="table table-bordered">
+                <thead>
+                  <th>ID</th>
+                  <th>Latitude</th>
+                  <th>Longitude</th>
+                  <td></td>
+                </thead>
+                <tbody>
+                  <tr class="extra-row hidden">
+                    <td class="no-padding"><span class="label">0</span></td>
+                    <td class="no-padding">
+                      <div class="form-group">
+                        <input class="form-control latitude" type="number" step="0.0000001" />
+                      </div>
+                    </td>
+                    <td  class="no-padding">
+                      <div class="form-group">
+                        <input class="form-control longitude" type="number" step="0.0000001" />
+                      </div>
+                    </td>
+                    <td  class="no-padding text-center">
+                      <a class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a>
+                    </td>
+                  </tr>
+                  <tr class="extra-row visible">
+                    <td  class="no-padding">
+                      <div class="form-group">
+                        <input class="form-control latitude" type="number" step="0.0000001" />
+                      </div>
+                    </td>
+                    <td  class="no-padding">
+                      <div class="form-group">
+                        <input class="form-control longitude" type="number" step="0.0000001" />
+                      </div>
+                    </td>
+                    <td  class="no-padding text-center">
+                      <a class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button class="btn btn-secondary" type="button" data-dismiss="modal">Close</button>
+            <button id="btn-manage-points-floor" class="btn btn-primary" type="submit">Save</button>
+          </div>
+        </form>
       </div>
     </div>
   </div>

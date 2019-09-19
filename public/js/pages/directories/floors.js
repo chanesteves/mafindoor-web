@@ -1,5 +1,21 @@
 var floors = new Floors();
 
+var map;
+var geojson = {
+	"type": "FeatureCollection",
+	"features": [{
+		"type": "Feature",
+		"geometry": {
+			"type": "Point",
+			"coordinates": [0, 0]
+		},
+		"properties": {
+			"title": ""
+		}
+	}]
+};
+var pointCount = 0;
+
 function Floors(){
     
 }
@@ -7,7 +23,7 @@ function Floors(){
 Floors.prototype.bindFloors = function () {
 	mapboxgl.accessToken = 'pk.eyJ1IjoiY2hhbmVzdGV2ZXMiLCJhIjoiY2ptc2Zjc3NrMDFhczNxbXJwZ2RqajVnbyJ9.Xuv8n5uFzywa-ZRcppeAKA';
 	
-	$('.map').each(function () {
+	$('.floor-map').each(function () {
 		var id = $(this).attr('id');
 		var url = $(this).data('url');
 		var longitude = $(this).data('longitude');
@@ -364,6 +380,157 @@ Floors.prototype.bindFloors = function () {
             request.send(form_data);
 		}
 	});
+
+	$('.floor-manage-points').unbind('click').on('click', function () {
+	    var id = $(this).data('id');
+
+	    $('#hdn-manage-points-floor-id').val(id);
+
+	    $('#frm-manage-points-floor tr.visible').remove();
+
+	    floor.show(id, function (data) {
+	      if (data.status == 'OK') {
+	        checkPointsEmptyRow(); 
+
+	        map = new mapboxgl.Map({
+	          container: 'pnl-map',
+	          style: data.floor.map_url,
+	          center: [data.floor.longitude, data.floor.latitude],
+	          zoom: (data.floor.max_zoom + data.floor.min_zoom) / 2
+	        });
+
+	        map.on('load', function (e) {
+	          map.on('click', function(e) {
+	              var latitude = e.lngLat.lat.toFixed(6);
+	              var longitude = e.lngLat.lng.toFixed(6);
+
+	              var row = $('#frm-manage-points-floor .extra-row.visible');
+
+	            $(row).find('.latitude').val(latitude).trigger('change');
+	            $(row).find('.longitude').val(longitude).trigger('change');
+	          });
+
+	          data.floor.points.forEach(function (point) {
+	            var row = $('#frm-manage-points-floor .extra-row.visible');
+
+	            $(row).attr('data-id', point.id);
+	            $(row).find('.latitude').val(point.latitude).trigger('change');
+	            $(row).find('.longitude').val(point.longitude).trigger('change');
+	          });
+	        });
+	      }
+	    });
+	});
+
+	function bindPoints () {
+	    $('#frm-manage-points-floor .latitude, #frm-manage-points-floor .longitude').unbind('change').on('change', function () {
+	      var val = $(this).val();
+
+	      if (val.trim() != '') {
+	        $(this).closest('tr').removeClass('extra-row');
+	        checkPointsEmptyRow();
+
+	        var latitude = $(this).closest('tr').find('.latitude').val();
+	        var longitude = $(this).closest('tr').find('.longitude').val();
+
+	        if (latitude.trim() != '' && longitude.trim() != '') {
+	          pointCount++;
+
+	          $(this).closest('tr').find('.label').text(pointCount);
+	          geojson.features[0].geometry.coordinates = [longitude, latitude];
+	          geojson.features[0].properties.title = pointCount.toString();         
+	          
+	          map.addLayer({
+	            "id": "circle" + pointCount.toString(),
+	            "type": "circle",
+	            "source": {
+	              "type": "geojson",
+	              "data": geojson
+	            },
+	              "paint": {
+	                  "circle-radius": 10,
+	                  "circle-color": "#5b94c6"
+	              }
+	          });
+
+	          map.addLayer({
+	            "id": "symbol" + pointCount.toString(),
+	            "type": "symbol",
+	            "source": {
+	              "type": "geojson",
+	              "data": geojson
+	            },
+	            "paint": {
+	                  "text-color": "#FFF"              
+	              },
+	              "layout": {       
+	                "text-size": 8,     
+	              "text-field": "{title}"
+	            }
+	          });
+
+	          $(this).closest('tr').attr('data-point-id', pointCount.toString());
+	        }
+	      }
+	    });
+
+	    $('#frm-manage-points-floor .btn-danger').unbind('click').on('click', function () {
+	      var point_id = $(this).closest('tr').attr('data-point-id');
+
+	      $(this).closest('tr').remove();
+	      map.removeLayer("circle" + point_id);
+	      map.removeLayer("symbol" + point_id);
+	      checkPointsEmptyRow();
+	    });
+	}
+
+	function checkPointsEmptyRow () {
+	    if ($('#frm-manage-points-floor .extra-row.visible').length == 0) {
+	      var row = $('#frm-manage-points-floor .extra-row.hidden').clone();
+
+	      $(row).removeClass('hidden').addClass('visible');
+	      $('#frm-manage-points-floor tbody').append(row);
+
+	      bindPoints();
+	    }
+	}
+
+	  $('#frm-manage-points-floor tr.visible').remove();
+	  checkPointsEmptyRow();
+	  bindPoints();
+
+	  $('#frm-manage-points-floor').unbind('submit').on('submit', function (event) {
+	    event.preventDefault();
+
+	    var id = $('#hdn-manage-points-floor-id').val();
+	    var points = [];
+
+	    $('#frm-manage-points-floor tr.visible').each(function () {
+	      var point_id = $(this).attr('data-id');
+	      var lat = $(this).find('.latitude').val();
+	      var lng = $(this).find('.longitude').val();     
+
+	      if (lat.trim() != '' && lng.trim() != '')
+	        points.push({ 'id' : point_id, 'latitude' : lat, 'longitude' : lng });
+	    });
+
+	    var floor_obj = {
+	      'id' : id,
+	      'points' : points
+	    }
+
+	    $('#modal-manage-points-floor').modal('hide');
+	    modal.show('info', 'fa-refresh fa-spin', 'Saving...', 'Please wait while we are updating the points.', null);
+
+	    floor.updatePoints(floor_obj, function (data) {        
+	      if (data.status == 'OK')
+	        modal.set('success', 'fa-check-circle', 'Success', 'Floor points successfully updated.', { ok : function () {
+	          window.location.reload();
+	        }});
+	      else
+	        modal.set('danger', 'fa-times-circle', 'Oops', data.error, { ok : true });
+	    });
+	  });
 }
 
 Floors.prototype.reloadPageContent = function (data, message, callback) {

@@ -601,11 +601,13 @@ Annotations.prototype.bindAnnotations = function () {
 					});
 
 					data.annotation.entries.forEach(function (entry) {
-						var row = $('#frm-manage-entries-annotation .extra-row.visible');
+						if (entry.point) {
+							var row = $('#frm-manage-entries-annotation .extra-row.visible');
 
-						$(row).attr('data-id', entry.id);
-						$(row).find('.latitude').val(entry.latitude).trigger('change');
-						$(row).find('.longitude').val(entry.longitude).trigger('change');
+							$(row).attr('data-id', entry.id);
+							$(row).find('.latitude').val(entry.point.latitude).trigger('change');
+							$(row).find('.longitude').val(entry.point.longitude).trigger('change');
+						}
 					});
 				});
 			}

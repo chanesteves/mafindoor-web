@@ -32,4 +32,9 @@ class Floor extends Model
     {
         return $this->hasMany('App\Annotation', 'floor_id', 'id');
     }
+
+    public function points()
+    {
+        return $this->hasMany('App\Point', 'floor_id', 'id');
+    }
 }
