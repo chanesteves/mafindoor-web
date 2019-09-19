@@ -13,6 +13,7 @@ use App\Annotation;
 use App\SubCategory;
 use App\Activity;
 use App\Entry;
+use App\Point;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
@@ -133,7 +134,7 @@ class AnnotationsController extends Controller
 		if (!$user)
 			$user = Auth::user();
 
-		$annotation = Annotation::with('floor', 'entries')->find($id);
+		$annotation = Annotation::with('floor', 'entries', 'entries.point')->find($id);
 
 		if (!$annotation)
 			return array('status' => 'ERROR', 'error' => 'Annotation not found.');
@@ -433,8 +434,18 @@ class AnnotationsController extends Controller
 			if (!$entry)
 				$entry = new Entry;
 
-			$entry->latitude = $e['latitude'];
-			$entry->longitude = $e['longitude'];
+			$point = $entry->point;
+
+			if (!$point)
+				$point = new Point;
+
+			$point->latitude = $e['latitude'];
+			$point->longitude = $e['longitude'];
+			$point->floor_id = $annotation->floor_id;
+			$point->type = 'door';
+			$point->save();
+			
+			$entry->point_id = $point->id;
 			$entry->annotation_id = $annotation->id;
 			$entry->save();
 

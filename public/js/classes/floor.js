@@ -103,3 +103,25 @@ Floor.prototype.show = function (id, callback) {
 		}
 	});
 }
+
+Floor.prototype.updatePoints = function (param, callback) {
+	CSRF = $("meta[name='csrf-token']").attr('content');
+
+	data = { 
+				_token: CSRF,
+				'points' : param.points
+			};
+
+	$.ajax({
+		url: '/floors/' + param.id + '/ajaxUpdatePoints',
+		type: 'POST',
+		dataType: "json",
+		data: data,
+		success: function(data){
+			if (callback)
+				callback(data);
+		}, error:function (xhr, error, ajaxOptions, thrownError){
+			console.log(xhr.responseText);
+		}
+	});
+}

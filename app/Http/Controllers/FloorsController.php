@@ -10,6 +10,7 @@ use App\User;
 use App\Building;
 use App\Floor;
 use App\Activity;
+use App\Point;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
@@ -149,7 +150,7 @@ class FloorsController extends Controller
 		if (!$user)
 			$user = Auth::user();
 
-		$floor = Floor::with('building', 'building.floors', 'building.floors.annotations', 'building.floors.annotations.floor', 'building.floors.annotations.floor.building', 'building.floors.annotations.sub_category', 'building.floors.annotations.sub_category.category', 'annotations', 'annotations.sub_category', 'annotations.sub_category.category')->find($id);
+		$floor = Floor::with('building', 'building.floors', 'building.floors.annotations', 'building.floors.annotations.floor', 'building.floors.annotations.floor.building', 'building.floors.annotations.sub_category', 'building.floors.annotations.sub_category.category', 'annotations', 'annotations.sub_category', 'annotations.sub_category.category', 'points')->find($id);
 
 		$building = $floor->building;
 
@@ -360,5 +361,42 @@ class FloorsController extends Controller
 		else {
 			return array('status' => 'ERROR', 'error' => 'Error encountered while uploading file.');
 		}
+	}
+
+	public function ajaxUpdatePoints(Request $request, $id)
+	{
+	    $this->validate($request, [
+	      'points' => 'required'
+	    ]);
+
+	    $floor = Floor::find($id);
+
+	    if (!$floor)
+	      return array('status' => 'ERROR', 'error' => 'Floor not found.');
+
+	    $point_ids = [];
+
+	    foreach ($request->points as $e) {
+	      $point = null;
+
+	      if (array_key_exists('id', $e))
+	        $point = Point::find($e['id']);
+
+	      if (!$point) {
+	        $point = new Point;
+	        $point->type = 'intersection';
+	      }
+
+	      $point->latitude = $e['latitude'];
+	      $point->longitude = $e['longitude'];
+	      $point->floor_id = $floor->id;
+	      $point->save();
+
+	      $point_ids[] = $point->id;
+	    }
+
+	    Point::where('floor_id', $floor->id)->whereNotIn('id', $point_ids)->delete();
+
+	    return array('status' => 'OK', 'result' => $floor);
 	}
 }

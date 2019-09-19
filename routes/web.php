@@ -34,6 +34,7 @@ Route::post('floors/{floor}/ajaxUpdate', 'FloorsController@ajaxUpdate');
 Route::post('floors/{floor}/ajaxDestroy', 'FloorsController@ajaxDestroy');
 Route::post('floors/{floor}/ajaxShow', 'FloorsController@ajaxShow');
 Route::post('floors/ajaxImportFloors', 'FloorsController@ajaxImportFloors');
+Route::post('floors/{floor}/ajaxUpdatePoints', 'FloorsController@ajaxUpdatePoints');
 Route::post('annotations/ajaxStore', 'AnnotationsController@ajaxStore');
 Route::post('annotations/{annotation}/ajaxUpdate', 'AnnotationsController@ajaxUpdate');
 Route::post('annotations/{annotations}/ajaxDestroy', 'AnnotationsController@ajaxDestroy');
