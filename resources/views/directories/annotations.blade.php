@@ -292,7 +292,7 @@
   </div>
 
   <div class="modal fade" id="modal-manage-entries-annotation" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-    <div class="modal-dialog modal-primary" role="document">
+    <div class="modal-dialog modal-primary modal-lg" role="document">
       <div class="modal-content">
         <div class="modal-header">
           <h4 class="modal-title">Manage Entry Points</h4>

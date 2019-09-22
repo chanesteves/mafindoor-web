@@ -13,6 +13,7 @@ use App\Building;
 use App\Annotation;
 use App\Image;
 use App\Activity;
+use App\Adjascent;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
@@ -527,5 +528,60 @@ class BuildingsController extends Controller
 		$building->save();
 
 		return array('status' => 'OK', 'building' => $building);
+	}
+
+	public function ajaxUpdateAdjascents(Request $request, $id)
+	{
+	    $this->validate($request, [
+	      'adjascents' => 'required'
+	    ]);
+
+	    $building = Building::find($id);
+
+	    if (!$building)
+	      return array('status' => 'ERROR', 'error' => 'Building not found.');
+
+	    $adjascent_ids = [];
+
+	    foreach ($request->adjascents as $a) {
+	      $adjascent = null;
+
+	      if (array_key_exists('id', $a))
+	        $adjascent = Adjascent::find($a['id']);
+
+	    if (!$adjascent)
+	    	 $adjascent = Adjascent::where('origin_id', $a['origin'])->where('destination_id', $a['destination'])->first();
+
+	      if (!$adjascent)
+	        $adjascent = new Adjascent;
+
+	      $adjascent->origin_id = $a['origin'];
+	      $adjascent->destination_id = $a['destination'];
+	      $adjascent->building_id = $building->id;
+	      $adjascent->save();
+
+	      $adjascent_ids[] = $adjascent->id;
+
+	      if ($a['two_way']) {
+	      	$reverse_adjascent = null;
+
+	      	if (!$reverse_adjascent)
+	    	 	$reverse_adjascent = Adjascent::where('origin_id', $a['destination'])->where('destination_id', $a['origin'])->first();
+
+		      if (!$reverse_adjascent)
+		        $reverse_adjascent = new Adjascent;
+
+		      $reverse_adjascent->origin_id = $a['destination'];
+		      $reverse_adjascent->destination_id = $a['origin'];
+		      $reverse_adjascent->building_id = $building->id;
+		      $reverse_adjascent->save();
+
+		      $adjascent_ids[] = $reverse_adjascent->id;
+	      }
+	    }
+
+	    Adjascent::where('building_id', $building->id)->whereNotIn('id', $adjascent_ids)->delete();
+
+	    return array('status' => 'OK', 'result' => $building);
 	}
 }
