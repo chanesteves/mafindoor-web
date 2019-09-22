@@ -55,4 +55,9 @@ class Building extends Model
     {
         return $this->hasMany('App\Activity', 'object_id', 'id')->where('object_type', 'App\\Building')->where('request_type', 'search');
     }
+
+    public function adjascents()
+    {
+        return $this->hasMany('App\Adjascent', 'building_id', 'id');
+    }
 }

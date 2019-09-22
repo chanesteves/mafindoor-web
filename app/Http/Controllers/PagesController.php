@@ -373,6 +373,29 @@ class PagesController extends Controller
 														));
 	}
 
+	public function pathways(Request $request) {
+		$buildings = Building::all();
+		$building = null;
+
+		if ($request->building_id)
+			$building = Building::find($request->building_id);
+
+		if (!$building)
+			$building = Building::first();
+
+		$floors = collect();
+
+		if ($building)
+			$floors = Floor::where('building_id', $building->id)->get();
+
+		return View::make('directories.pathways')->with(array(
+															'page' => 'Pathways',
+															'building' => $building,
+															'buildings' => $buildings,
+															'floors' => $floors
+														));
+	}
+
 	public function routes(Request $request) {
 		$buildings = Building::all();
 		$building = null;

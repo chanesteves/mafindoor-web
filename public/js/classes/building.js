@@ -156,3 +156,25 @@ Building.prototype.storeImage = function (param, callback) {
 		}
 	});
 }
+
+Building.prototype.updateAdjascents = function (param, callback) {
+	CSRF = $("meta[name='csrf-token']").attr('content');
+
+	data = { 
+				_token: CSRF,
+				'adjascents' : param.adjascents
+			};
+
+	$.ajax({
+		url: '/buildings/' + param.id + '/ajaxUpdateAdjascents',
+		type: 'POST',
+		dataType: "json",
+		data: data,
+		success: function(data){
+			if (callback)
+				callback(data);
+		}, error:function (xhr, error, ajaxOptions, thrownError){
+			console.log(xhr.responseText);
+		}
+	});
+}

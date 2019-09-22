@@ -277,7 +277,7 @@
   </div>
 
   <div class="modal fade" id="modal-manage-points-floor" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-    <div class="modal-dialog modal-primary" role="document">
+    <div class="modal-dialog modal-primary modal-lg" role="document">
       <div class="modal-content">
         <div class="modal-header">
           <h4 class="modal-title">Manage Points</h4>
@@ -288,56 +288,57 @@
         <form id="frm-manage-points-floor" method="POST" action="">
           <input type="hidden" id="hdn-manage-points-floor-id" value="" />
           <div class="modal-body">
-          <div class="alert alert-info"><i class="fa fa-info-circle"></i> Please click on the map to add points for this spot.</div>
-          <div class="row">
-            <div class="col-md-12">
-              <div id="pnl-map" class="map"><div class="marker">+</div></div>
+            <div class="alert alert-info"><i class="fa fa-info-circle"></i> Please click on the map to add points for this floor.</div>
+            <div class="row">
+              <div class="col-md-12">
+                <div id="pnl-map" class="map"><div class="marker">+</div></div>
+              </div>
             </div>
-          </div>
-          <br/>
-          <div class="row">
-            <div class="col-md-12">
-              <table  class="table table-bordered">
-                <thead>
-                  <th>ID</th>
-                  <th>Latitude</th>
-                  <th>Longitude</th>
-                  <td></td>
-                </thead>
-                <tbody>
-                  <tr class="extra-row hidden">
-                    <td class="no-padding"><span class="label">0</span></td>
-                    <td class="no-padding">
-                      <div class="form-group">
-                        <input class="form-control latitude" type="number" step="0.0000001" />
-                      </div>
-                    </td>
-                    <td  class="no-padding">
-                      <div class="form-group">
-                        <input class="form-control longitude" type="number" step="0.0000001" />
-                      </div>
-                    </td>
-                    <td  class="no-padding text-center">
-                      <a class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a>
-                    </td>
-                  </tr>
-                  <tr class="extra-row visible">
-                    <td  class="no-padding">
-                      <div class="form-group">
-                        <input class="form-control latitude" type="number" step="0.0000001" />
-                      </div>
-                    </td>
-                    <td  class="no-padding">
-                      <div class="form-group">
-                        <input class="form-control longitude" type="number" step="0.0000001" />
-                      </div>
-                    </td>
-                    <td  class="no-padding text-center">
-                      <a class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
+            <br/>
+            <div class="row">
+              <div class="col-md-12">
+                <table  class="table table-bordered">
+                  <thead>
+                    <th>ID</th>
+                    <th>Latitude</th>
+                    <th>Longitude</th>
+                    <td></td>
+                  </thead>
+                  <tbody>
+                    <tr class="extra-row hidden">
+                      <td class="no-padding"><span class="label">0</span></td>
+                      <td class="no-padding">
+                        <div class="form-group">
+                          <input class="form-control latitude" type="number" step="0.0000001" />
+                        </div>
+                      </td>
+                      <td  class="no-padding">
+                        <div class="form-group">
+                          <input class="form-control longitude" type="number" step="0.0000001" />
+                        </div>
+                      </td>
+                      <td  class="no-padding text-center">
+                        <a class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a>
+                      </td>
+                    </tr>
+                    <tr class="extra-row visible">
+                      <td  class="no-padding">
+                        <div class="form-group">
+                          <input class="form-control latitude" type="number" step="0.0000001" />
+                        </div>
+                      </td>
+                      <td  class="no-padding">
+                        <div class="form-group">
+                          <input class="form-control longitude" type="number" step="0.0000001" />
+                        </div>
+                      </td>
+                      <td  class="no-padding text-center">
+                        <a class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
             </div>
           </div>
           <div class="modal-footer">

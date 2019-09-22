@@ -150,7 +150,7 @@ class FloorsController extends Controller
 		if (!$user)
 			$user = Auth::user();
 
-		$floor = Floor::with('building', 'building.floors', 'building.floors.annotations', 'building.floors.annotations.floor', 'building.floors.annotations.floor.building', 'building.floors.annotations.sub_category', 'building.floors.annotations.sub_category.category', 'annotations', 'annotations.sub_category', 'annotations.sub_category.category', 'points')->find($id);
+		$floor = Floor::with('building', 'building.floors', 'building.floors.annotations', 'building.floors.annotations.floor', 'building.floors.annotations.floor.building', 'building.floors.annotations.sub_category', 'building.floors.annotations.sub_category.category', 'building.adjascents', 'building.adjascents.origin', 'building.adjascents.destination', 'annotations', 'annotations.sub_category', 'annotations.sub_category.category', 'points')->find($id);
 
 		$building = $floor->building;
 

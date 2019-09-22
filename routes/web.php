@@ -29,6 +29,7 @@ Route::post('buildings/{building}/ajaxUploadImages', 'BuildingsController@ajaxUp
 Route::post('buildings/{building}/ajaxUploadImage', 'BuildingsController@ajaxUploadImage');
 Route::post('buildings/{building}/ajaxStoreImages', 'BuildingsController@ajaxStoreImages');
 Route::post('buildings/{building}/ajaxStoreImage', 'BuildingsController@ajaxStoreImage');
+Route::post('buildings/{building}/ajaxUpdateAdjascents', 'BuildingsController@ajaxUpdateAdjascents');
 Route::post('floors/ajaxStore', 'FloorsController@ajaxStore');
 Route::post('floors/{floor}/ajaxUpdate', 'FloorsController@ajaxUpdate');
 Route::post('floors/{floor}/ajaxDestroy', 'FloorsController@ajaxDestroy');
@@ -96,7 +97,7 @@ Route::get('dashboard', 'PagesController@dashboard');
 Route::get('venues', 'PagesController@venues');
 Route::get('floors', 'PagesController@floors');
 Route::get('annotations', 'PagesController@annotations');
-Route::get('routes', 'PagesController@routes');
+Route::get('pathways', 'PagesController@pathways');
 
 // maintenance
 Route::get('categories', 'PagesController@categories');

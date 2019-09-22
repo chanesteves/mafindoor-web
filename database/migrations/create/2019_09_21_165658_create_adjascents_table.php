@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreatePointsTable extends Migration
+class CreateAdjascentsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,11 @@ class CreatePointsTable extends Migration
      */
     public function up()
     {
-        Schema::create('points', function (Blueprint $table) {
+        Schema::create('adjascents', function (Blueprint $table) {
             $table->increments('id');
-            $table->double('latitude')->default(0);
-            $table->double('longitude')->default(0);
-            $table->integer('floor_id');
-            $table->enum('type', ['door', 'intersection'])->default('door');
+            $table->integer('origin_id');
+            $table->integer('destination_id');
+            $table->integer('building_id');
             $table->timestamps();
             $table->softDeletes();
         });
@@ -31,6 +30,6 @@ class CreatePointsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('points');
+        Schema::dropIfExists('adjascents');
     }
 }
