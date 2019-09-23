@@ -633,13 +633,13 @@ class BuildingsController extends Controller
 	      	$adjascent = Adjascent::find($a->id);
 
 		    if (!$adjascent)
-		    	 $adjascent = Adjascent::where('origin_id', $a->origin)->where('destination_id', $$a->destination)->first();
+		    	 $adjascent = Adjascent::where('origin_id', $a->origin)->where('destination_id', $a->destination)->first();
 
 		      if (!$adjascent)
 		        $adjascent = new Adjascent;
 
 		      $adjascent->origin_id = $a->origin;
-		      $adjascent->destination_id = $$a->destination;
+		      $adjascent->destination_id = $a->destination;
 		      $adjascent->distance = $distance;
 		      $adjascent->building_id = $building->id;	      
 		      $adjascent->save();
@@ -650,12 +650,12 @@ class BuildingsController extends Controller
 		      	$reverse_adjascent = null;
 
 		      	if (!$reverse_adjascent)
-		    	 	$reverse_adjascent = Adjascent::where('origin_id', $$a->destination)->where('destination_id', $a->origin)->first();
+		    	 	$reverse_adjascent = Adjascent::where('origin_id', $a->destination)->where('destination_id', $a->origin)->first();
 
 			      if (!$reverse_adjascent)
 			        $reverse_adjascent = new Adjascent;
 
-			      $reverse_adjascent->origin_id = $$a->destination;
+			      $reverse_adjascent->origin_id = $a->destination;
 			      $reverse_adjascent->destination_id = $a->origin;
 			      $reverse_adjascent->distance = $distance;
 			      $reverse_adjascent->building_id = $building->id;
