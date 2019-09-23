@@ -619,8 +619,9 @@ class BuildingsController extends Controller
 	      return array('status' => 'ERROR', 'error' => 'Building not found.');
 
 	    $adjascent_ids = [];
+	    $adjascents = json_decode($request->adjascents);
 
-	    foreach ($request->adjascents as $a) {
+	    foreach ($adjascents as $a) {
 	    	$origin = Point::find($a['origin']);
 	    	$destination = Point::find($a['destination']);
 
