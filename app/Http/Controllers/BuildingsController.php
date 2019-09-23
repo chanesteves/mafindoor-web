@@ -142,7 +142,7 @@ class BuildingsController extends Controller
 		if (!$destination_entry)
 			return array('status' => 'ERROR', 'error' => 'Destination has no entry point.');
 		
-		return array('status' => 'OK', 'result' => $building, 'adjascents' => $adjascents);
+		return $this->getRoute($id, $origin_entry->point, $destination_entry->point);
 	}
 
 	public function getRoute ($id, $from, $to) {
@@ -669,7 +669,7 @@ class BuildingsController extends Controller
 
 	    Adjascent::where('building_id', $building->id)->whereNotIn('id', $adjascent_ids)->delete();
 
-	    return array('status' => 'OK', 'result' => $building);
+	    return array('status' => 'OK', 'result' => $building, 'adjascents' => $adjascents);
 	}
 
 	public function ajaxShowRoutes (Request $request, $id) {
