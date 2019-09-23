@@ -669,7 +669,7 @@ class BuildingsController extends Controller
 
 	    Adjascent::where('building_id', $building->id)->whereNotIn('id', $adjascent_ids)->delete();
 
-	    return array('status' => 'OK', 'result' => $building, 'adjascents' => $adjascents);
+	    return array('status' => 'OK', 'result' => $building, 'adjascents' => $request->adjascents);
 	}
 
 	public function ajaxShowRoutes (Request $request, $id) {
