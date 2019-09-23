@@ -30,6 +30,7 @@ Route::post('buildings/{building}/ajaxUploadImage', 'BuildingsController@ajaxUpl
 Route::post('buildings/{building}/ajaxStoreImages', 'BuildingsController@ajaxStoreImages');
 Route::post('buildings/{building}/ajaxStoreImage', 'BuildingsController@ajaxStoreImage');
 Route::post('buildings/{building}/ajaxUpdateAdjascents', 'BuildingsController@ajaxUpdateAdjascents');
+Route::post('buildings/{buliding}/ajaxShowRoutes', 'BuildingsController@ajaxShowRoutes');
 Route::post('floors/ajaxStore', 'FloorsController@ajaxStore');
 Route::post('floors/{floor}/ajaxUpdate', 'FloorsController@ajaxUpdate');
 Route::post('floors/{floor}/ajaxDestroy', 'FloorsController@ajaxDestroy');
@@ -75,6 +76,7 @@ Route::post('images/{image}/ajaxDestroy', 'ImagesController@ajaxDestroy');
 Route::post('activities/ajaxStore', 'ActivitiesController@ajaxStore');
 
 Route::get('buildings/exportBuildings', 'BuildingsController@exportBuildings');
+Route::get('buildings/{buliding}/showRoutes', 'BuildingsController@showRoutes');
 Route::get('floors/exportFloors', 'FloorsController@exportFloors');
 Route::get('annotations/exportAnnotations', 'AnnotationsController@exportAnnotations');
 
