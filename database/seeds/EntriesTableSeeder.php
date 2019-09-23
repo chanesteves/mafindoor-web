@@ -16,7 +16,7 @@ class EntriesTableSeeder extends Seeder
      */
     public function run()
     {
-        $sub_cat_names = ['ATM', 'Cashier', 'Elevator', 'Escalator', 'Fire Exit', 'Package Counter', 'PWD', 'Stairs'];
+        $sub_cat_names = ['ATM', 'Cashier', 'Elevator', 'Escalator', 'Fire Exit', 'Package Counter', 'PWD', 'Stairs', 'Customer Service'];
         $sub_categor_ids = SubCategory::whereIn('name', $sub_cat_names)->pluck('id')->toArray();
 
         $annotations = Annotation::whereIn('sub_category_id', $sub_categor_ids)->get();
