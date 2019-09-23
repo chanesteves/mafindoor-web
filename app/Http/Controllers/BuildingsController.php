@@ -630,7 +630,7 @@ class BuildingsController extends Controller
 
 	    	$distance = sqrt(($origin->longitude * $destination->longitude) + ($origin->latitude * $destination->latitude));
 
-	      	$adjascent = Adjascent::find($a['id']);
+	      	$adjascent = Adjascent::find($a->id);
 
 		    if (!$adjascent)
 		    	 $adjascent = Adjascent::where('origin_id', $a->origin)->where('destination_id', $$a->destination)->first();
