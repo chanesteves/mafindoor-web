@@ -142,7 +142,7 @@ class BuildingsController extends Controller
 		if (!$destination_entry)
 			return array('status' => 'ERROR', 'error' => 'Destination has no entry point.');
 		
-		return $this->getRoute($id, $origin_entry->point, $destination_entry->point);
+		return array('status' => 'OK', 'result' => $building, 'adjascents' => $adjascents);
 	}
 
 	public function getRoute ($id, $from, $to) {
