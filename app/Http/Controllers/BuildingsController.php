@@ -13,7 +13,15 @@ use App\Building;
 use App\Annotation;
 use App\Image;
 use App\Activity;
+use App\Point;
 use App\Adjascent;
+use App\PathFinder;
+
+use App\AStar\Graph\Link;
+use App\AStar\Graph\Graph;
+use App\AStar\Graph\MNode;
+use App\AStar\Graph\MAStar;
+use App\AStar\Graph\SequencePrinter;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
@@ -113,6 +121,75 @@ class BuildingsController extends Controller
 				}
 		    });
 		})->download('xlsx');
+	}
+
+	public function showRoutes (Request $request, $id) {
+		$origin = Annotation::find($request->origin);
+		$destination = Annotation::find($request->destination);
+
+		if (!$origin)
+			return array('status' => 'ERROR', 'error' => 'Invalid origin.');
+
+		if (!$destination)
+			return array('status' => 'ERROR', 'error' => 'Invalid destination.');
+
+		$origin_entry = $origin->entries()->first();
+		$destination_entry = $destination->entries()->first();
+
+		if (!$origin_entry)
+			return array('status' => 'ERROR', 'error' => 'Origin has no entry point.');
+
+		if (!$destination_entry)
+			return array('status' => 'ERROR', 'error' => 'Destination has no entry point.');
+		
+		return $this->getRoute($id, $origin_entry->point, $destination_entry->point);
+	}
+
+	public function getRoute ($id, $from, $to) {
+		$building = Building::find($id);
+
+		if (!$building)
+			return array('status' => 'ERROR', 'error' => 'Building not found.');
+
+		$links = [];
+		foreach ($building->adjascents as $adjascent) {
+			$links[] = new Link(new MNode($adjascent->origin->longitude, $adjascent->origin->latitude), 
+								new MNode($adjascent->destination->longitude, $adjascent->destination->latitude), 
+								$adjascent->distance);
+		}
+
+		$graph = new Graph($links);
+
+		$start = new MNode($from->longitude, $from->latitude);
+		$goal = new MNode($to->longitude, $to->latitude);
+
+		$aStar = new MAStar($graph);
+		$solution = $aStar->run($start, $goal);
+
+		$printer = new SequencePrinter($graph, $solution);
+
+		$sequence = $printer->getSequence();
+
+		$floors = [];
+		$distance = 0;
+		$prevNode = null;
+		foreach ($sequence as $node) {
+			$point = Point::where('longitude', $node->getX())->where('latitude', $node->getY())->first();
+
+			if ($point) {
+				if (!isset($floors[$point->floor_id]))
+					$floors[$point->floor_id] = array("points" => []);
+
+				$floors[$point->floor_id]["points"][] = $point;
+			}
+
+			if ($prevNode)
+				$distance += sqrt(($prevNode->getX() + $node->getX()) + ($prevNode->getY() + $node->getY()));
+
+			$prevNode = $node;
+		}
+
+		return array( 'status' => 'OK', 'floors' => $floors, 'distance' => $distance);
 	}
 
     /*****************/
@@ -544,6 +621,14 @@ class BuildingsController extends Controller
 	    $adjascent_ids = [];
 
 	    foreach ($request->adjascents as $a) {
+	    	$origin = Point::find($a['origin']);
+	    	$destination = Point::find($a['destination']);
+
+	    	if (!$origin || !$destination)
+	    		return;
+
+	    	$distance = sqrt(($origin->longitude * $destination->longitude) + ($origin->latitude * $destination->latitude));
+
 	      $adjascent = null;
 
 	      if (array_key_exists('id', $a))
@@ -557,7 +642,8 @@ class BuildingsController extends Controller
 
 	      $adjascent->origin_id = $a['origin'];
 	      $adjascent->destination_id = $a['destination'];
-	      $adjascent->building_id = $building->id;
+	      $adjascent->distance = $distance;
+	      $adjascent->building_id = $building->id;	      
 	      $adjascent->save();
 
 	      $adjascent_ids[] = $adjascent->id;
@@ -573,6 +659,7 @@ class BuildingsController extends Controller
 
 		      $reverse_adjascent->origin_id = $a['destination'];
 		      $reverse_adjascent->destination_id = $a['origin'];
+		      $reverse_adjascent->distance = $distance;
 		      $reverse_adjascent->building_id = $building->id;
 		      $reverse_adjascent->save();
 
@@ -583,5 +670,27 @@ class BuildingsController extends Controller
 	    Adjascent::where('building_id', $building->id)->whereNotIn('id', $adjascent_ids)->delete();
 
 	    return array('status' => 'OK', 'result' => $building);
+	}
+
+	public function ajaxShowRoutes (Request $request, $id) {
+		$origin = Annotation::find($request->origin);
+		$destination = Annotation::find($request->destination);
+
+		if (!$origin)
+			return array('status' => 'ERROR', 'error' => 'Invalid origin.');
+
+		if (!$destination)
+			return array('status' => 'ERROR', 'error' => 'Invalid destination.');
+
+		$origin_entry = $origin->entries()->first();
+		$destination_entry = $destination->entries()->first();
+
+		if (!$origin_entry)
+			return array('status' => 'ERROR', 'error' => 'Origin has no entry point.');
+
+		if (!$destination_entry)
+			return array('status' => 'ERROR', 'error' => 'Destination has no entry point.');
+		
+		return $this->getRoute($id, $origin_entry->point, $destination_entry->point);
 	}
 }

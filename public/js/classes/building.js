@@ -178,3 +178,26 @@ Building.prototype.updateAdjascents = function (param, callback) {
 		}
 	});
 }
+
+Building.prototype.showRoute = function (param, callback) {
+	CSRF = $("meta[name='csrf-token']").attr('content');
+
+	data = { 
+				_token: CSRF,
+				'origin' : param.origin,
+				'destination' : param.destination
+			};
+
+	$.ajax({
+		url: '/buildings/' + param.id + '/ajaxShowRoutes',
+		type: 'POST',
+		dataType: "json",
+		data: data,
+		success: function(data){
+			if (callback)
+				callback(data);
+		}, error:function (xhr, error, ajaxOptions, thrownError){
+			console.log(xhr.responseText);
+		}
+	});
+}

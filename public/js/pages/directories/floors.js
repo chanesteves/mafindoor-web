@@ -15,6 +15,7 @@ var geojson = {
 	}]
 };
 var pointCount = 0;
+var point_ids = [];
 
 function Floors(){
     
@@ -432,9 +433,18 @@ Floors.prototype.bindFloors = function () {
 
 	        var latitude = $(this).closest('tr').find('.latitude').val();
 	        var longitude = $(this).closest('tr').find('.longitude').val();
+	        var point_id = $(this).closest('tr').attr('data-id');
 
 	        if (latitude.trim() != '' && longitude.trim() != '') {
-	          pointCount++;
+	        	if (point_id && point_id != '') 
+	          		pointCount = point_id;
+	          	else
+	          		while (point_ids.indexOf(pointCount) >= 0) {
+	          			pointCount++;
+	          		}
+
+	          	point_ids.push(pointCount);
+
 
 	          $(this).closest('tr').find('.label').text(pointCount);
 	          geojson.features[0].geometry.coordinates = [longitude, latitude];

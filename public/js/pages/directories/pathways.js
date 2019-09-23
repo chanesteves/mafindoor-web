@@ -1,6 +1,7 @@
 var pathways = new Pathways();
 
-var maps = [];
+var lineMaps = [],
+	routeMaps = [];
 var pointGeojson = {
 	"type": "FeatureCollection",
 	"features": [{
@@ -26,8 +27,9 @@ var lineGeojson = {
 		}
 	}]
 };
-var lineCount = 0;
-var origin, destination;
+var lineCount = 0, routeCount = 0;
+var routeOrigin, routeDestination;
+var adjascent_ids = [];
 
 function Pathways(){
     
@@ -36,7 +38,7 @@ function Pathways(){
 Pathways.prototype.bindPathways = function () {
 	mapboxgl.accessToken = 'pk.eyJ1IjoiY2hhbmVzdGV2ZXMiLCJhIjoiY2ptc2Zjc3NrMDFhczNxbXJwZ2RqajVnbyJ9.Xuv8n5uFzywa-ZRcppeAKA';
 	
-	$('.map').each(function () {
+	$('.lines-map').each(function () {
 		var id = $(this).attr('id');
 		var floor_id = $(this).data('id');
 		var url = $(this).data('url');
@@ -44,14 +46,14 @@ Pathways.prototype.bindPathways = function () {
 		var latitude = $(this).data('latitude');
 		var zoom = $(this).data('zoom');
 
-		maps[floor_id] = new mapboxgl.Map({
+		lineMaps[floor_id] = new mapboxgl.Map({
 			container: id,
 			style: url,
 			center: [longitude, latitude],
 			zoom: zoom
 		});
 
-		maps[floor_id].on('load', function (e) {
+		lineMaps[floor_id].on('load', function (e) {
 			floor.show(floor_id, function (data) {
 				if (data.status == 'OK') {
 					data.floor.points.forEach(function (point) {
@@ -59,7 +61,7 @@ Pathways.prototype.bindPathways = function () {
 				        pointGeojson.features[0].properties.title = point.id.toString();  
 				        pointGeojson.features[0].properties.floor_id = point.floor_id;
 				          
-				        maps[floor_id].addLayer({
+				        lineMaps[floor_id].addLayer({
 				            "id": "circle" + point.id.toString(),
 				            "type": "circle",
 				            "source": {
@@ -72,7 +74,7 @@ Pathways.prototype.bindPathways = function () {
 				              }
 				        });
 
-				        maps[floor_id].addLayer({
+				        lineMaps[floor_id].addLayer({
 				            "id": "symbol" + point.id.toString(),
 				            "type": "symbol",
 				            "source": {
@@ -88,7 +90,7 @@ Pathways.prototype.bindPathways = function () {
 				              }
 				        });
 
-				        maps[floor_id].on('click', "circle" + point.id.toString(), function (e) {
+				        lineMaps[floor_id].on('click', "circle" + point.id.toString(), function (e) {
 							var coordinates = e.features[0].geometry.coordinates.slice();
 							var title = e.features[0].properties.title;
 							var floor_id = e.features[0].properties.floor_id;
@@ -115,7 +117,8 @@ Pathways.prototype.bindPathways = function () {
 					data.floor.building.adjascents.forEach(function (adjascent) {
 						if (adjascent.origin && adjascent.destination
 							&& (adjascent.origin.floor_id == data.floor.id
-								|| adjascent.destination.floor_id == data.floor.id)) {
+								|| adjascent.destination.floor_id == data.floor.id)
+							&& adjascent_ids.indexOf(adjascent.id) < 0) {
 							var row = $('#tbl-pathways .extra-row.visible');
 
 							$(row).attr('data-id', adjascent.id);
@@ -123,14 +126,16 @@ Pathways.prototype.bindPathways = function () {
 				            $(row).find('.destination').val(adjascent.destination.id);
 				            $(row).find('.two-way').removeAttr('checked');
 
-							lineCount++;						
+				            $(row).find('.origin').closest('td').attr('data-floor-id', adjascent.origin.floor_id);
+				            $(row).find('.destination').closest('td').attr('data-floor-id', adjascent.destination.floor_id);
+					
 							$(row).removeClass('extra-row');		
 			        		checkPathwaysEmptyRow();			            
 
 				            lineGeojson.features[0].geometry.coordinates[0] = [adjascent.origin.longitude, adjascent.origin.latitude];
 			        		lineGeojson.features[0].geometry.coordinates[1] = [adjascent.destination.longitude, adjascent.destination.latitude];
 
-			        		maps[floor_id].addLayer({
+			        		lineMaps[floor_id].addLayer({
 								"id": "line" + adjascent.id.toString(),
 								"type": "line",
 									"source": {
@@ -149,6 +154,8 @@ Pathways.prototype.bindPathways = function () {
 							});
 
 							$(row).attr('data-line-id', adjascent.id.toString());
+
+							adjascent_ids.push(adjascent.id);
 						}
 					});
 
@@ -158,12 +165,17 @@ Pathways.prototype.bindPathways = function () {
 		});
 	});	
 
-	$('.nav-link').unbind('click').on('click', function () {
+	$('#nvs-lines-floors .nav-link').unbind('click').on('click', function () {
 		var f_id = $(this).data('id');
 
 		setTimeout(function () {
-			maps[f_id].resize ();
+			lineMaps[f_id].resize ();
 		}, 1000);			
+	});
+
+	$('#nvs-pathways .nav-link').unbind('click').on('click', function () {
+		$('#nvs-lines-floors .nav-link').eq(0).trigger('click');
+		$('#nvs-routes-floors .nav-link').eq(0).trigger('click');
 	});
 
 	function bindTable () {
@@ -178,8 +190,8 @@ Pathways.prototype.bindPathways = function () {
 	        	var d_floor_id = $(this).closest('tr').find('.destination').closest('td').attr('data-floor-id');
 
 	        	if (o.trim() != '' && d.trim() != '') {
-	        		var o_features = maps[o_floor_id].queryRenderedFeatures({layers: ['circle' + o]});
-		        	var d_features = maps[d_floor_id].queryRenderedFeatures({layers: ['circle' + d]});
+	        		var o_features = lineMaps[o_floor_id].queryRenderedFeatures({layers: ['circle' + o]});
+		        	var d_features = lineMaps[d_floor_id].queryRenderedFeatures({layers: ['circle' + d]});
 
 		        	var o_feature, d_feature;
 		        	var o_lng, o_lat, d_lng, d_lat;
@@ -197,8 +209,12 @@ Pathways.prototype.bindPathways = function () {
 	        		lineGeojson.features[0].geometry.coordinates[0] = o_feature.geometry.coordinates;
 	        		lineGeojson.features[0].geometry.coordinates[1] = d_feature.geometry.coordinates;
 
+	        		while(adjascent_ids.indexOf(lineCount) >= 0) {
+	        			lineCount++;
+	        		}
+
 	        		if (o_floor_id == d_floor_id) {
-		        		maps[o_floor_id].addLayer({
+		        		lineMaps[o_floor_id].addLayer({
 							"id": "line" + lineCount.toString(),
 							"type": "line",
 								"source": {
@@ -216,6 +232,8 @@ Pathways.prototype.bindPathways = function () {
 							}
 						});					
 		        	}
+
+		        	$(this).closest('tr').attr('data-line-id', lineCount.toString());
 	        	}
 		    }
 		});
@@ -230,7 +248,7 @@ Pathways.prototype.bindPathways = function () {
 	      	checkPathwaysEmptyRow();
 
 	      	if (o_floor_id == d_floor_id)
-	      		map[o_floor_id].removeLayer("line" + line_id);
+	      		lineMaps[o_floor_id].removeLayer("line" + line_id);
 	    });
 	}
 
@@ -241,7 +259,7 @@ Pathways.prototype.bindPathways = function () {
 	      $(row).removeClass('hidden').addClass('visible');
 	      $('#tbl-pathways tbody').append(row);
 
-	       $("#pnl-pathways").animate({ scrollTop: $("#pnl-pathways").height() }, 1000);
+	       $("#pnl-pathways").animate({ scrollTop: $("#tbl-pathways").height() }, 10);
 	      bindTable();
 	    }
 	}
@@ -281,6 +299,116 @@ Pathways.prototype.bindPathways = function () {
 	      else
 	        modal.set('danger', 'fa-times-circle', 'Oops', data.error, { ok : true });
 	    });
+	});
+
+	$('.routes-map').each(function () {
+		var id = $(this).attr('id');
+		var floor_id = $(this).data('id');
+		var url = $(this).data('url');
+		var longitude = $(this).data('longitude');
+		var latitude = $(this).data('latitude');
+		var zoom = $(this).data('zoom');
+
+		routeMaps[floor_id] = new mapboxgl.Map({
+			container: id,
+			style: url,
+			center: [longitude, latitude],
+			zoom: zoom
+		});
+
+		routeMaps[floor_id].on('load', function (e) {
+			floor.show(floor_id, function (data) {
+				if (data.status == 'OK') {
+					data.floor.annotations.forEach(function (annotation) {
+						pointGeojson.features[0].geometry.coordinates = [annotation.longitude, annotation.latitude];
+				        pointGeojson.features[0].properties.title = annotation.map_name;  
+
+						routeMaps[annotation.floor_id].addLayer({
+				            "id": "annotation" + annotation.id.toString(),
+				            "type": "symbol",
+				            "source": {
+				              "type": "geojson",
+				              "data": pointGeojson
+				            },
+				            "paint": {
+				                "text-color": "#000"              
+				              },
+				              "layout": {       
+				                "text-size": 12,     
+				              	"text-field": "{title}"
+				              }
+				        });
+
+				        routeMaps[annotation.floor_id].on('click', "annotation" + annotation.id.toString(), function (e) {
+							if (!routeOrigin)
+								routeOrigin = annotation;
+							else if (!routeDestination)
+								routeDestination = annotation;
+
+							if (routeOrigin && routeDestination) {
+								if (routeCount > 0)
+									routeMaps[annotation.floor_id].removeLayer("route" + routeCount);
+
+								var building_obj = {
+							      'id' : data.floor.building_id,
+							      'origin' : routeOrigin.id,
+							      'destination' : routeDestination.id,
+							    }
+
+							    modal.show('info', 'fa-refresh fa-spin', 'Retrieving...', 'Please wait while we are retrieving the route.', null);
+
+							    building.showRoute(building_obj, function (data) {        
+							      if (data.status == 'OK') {
+							      	modal.hide();
+
+							      	Object.keys(data.floors).forEach(function (e, i) {
+							      		var coords = [];
+								      	data.floors[e].points.forEach(function (point) {
+								      		coords.push([point.longitude, point.latitude]);
+								      	});
+
+								      	routeCount++;
+								      	lineGeojson.features[0].geometry.coordinates = coords;
+								      	routeMaps[e].addLayer({
+											"id": "route" + routeCount,
+											"type": "line",
+												"source": {
+												"type": "geojson",
+												"data": lineGeojson
+											},
+											"layout": {
+												"line-join": "round",
+												"line-cap": "round"
+											},
+											"paint": {
+												"line-color": "#5b94c6",
+												"line-width": 8,
+												"line-opacity": 0.8
+											}
+										});
+							      	});
+
+									routeOrigin = null;
+									routeDestination = null;
+							      }							        
+							      else {
+							        modal.set('danger', 'fa-times-circle', 'Oops', data.error, { ok : true });
+							      }
+							    });
+							}
+						});
+					});
+				}
+			});
+		});
+	});
+
+	$('#nvs-routes-floors .nav-link').unbind('click').on('click', function () {
+		var f_id = $(this).data('id');
+
+		setTimeout(function () {
+			routeMaps[f_id].resize ();
+		}, 1000);			
 	});
 }
 
