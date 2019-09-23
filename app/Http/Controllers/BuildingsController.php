@@ -622,55 +622,52 @@ class BuildingsController extends Controller
 	    $adjascents = json_decode($request->adjascents);
 
 	    foreach ($adjascents as $a) {
-	    	$origin = Point::find($a['origin']);
-	    	$destination = Point::find($a['destination']);
+	    	$origin = Point::find($a->origin);
+	    	$destination = Point::find($a->destination);
 
 	    	if (!$origin || !$destination)
 	    		return;
 
 	    	$distance = sqrt(($origin->longitude * $destination->longitude) + ($origin->latitude * $destination->latitude));
 
-	      $adjascent = null;
+	      	$adjascent = Adjascent::find($a['id']);
 
-	      if (array_key_exists('id', $a))
-	        $adjascent = Adjascent::find($a['id']);
+		    if (!$adjascent)
+		    	 $adjascent = Adjascent::where('origin_id', $a->origin)->where('destination_id', $$a->destination)->first();
 
-	    if (!$adjascent)
-	    	 $adjascent = Adjascent::where('origin_id', $a['origin'])->where('destination_id', $a['destination'])->first();
+		      if (!$adjascent)
+		        $adjascent = new Adjascent;
 
-	      if (!$adjascent)
-	        $adjascent = new Adjascent;
+		      $adjascent->origin_id = $a->origin;
+		      $adjascent->destination_id = $$a->destination;
+		      $adjascent->distance = $distance;
+		      $adjascent->building_id = $building->id;	      
+		      $adjascent->save();
 
-	      $adjascent->origin_id = $a['origin'];
-	      $adjascent->destination_id = $a['destination'];
-	      $adjascent->distance = $distance;
-	      $adjascent->building_id = $building->id;	      
-	      $adjascent->save();
+		      $adjascent_ids[] = $adjascent->id;
 
-	      $adjascent_ids[] = $adjascent->id;
+		      if ($a->two_way) {
+		      	$reverse_adjascent = null;
 
-	      if ($a['two_way']) {
-	      	$reverse_adjascent = null;
+		      	if (!$reverse_adjascent)
+		    	 	$reverse_adjascent = Adjascent::where('origin_id', $$a->destination)->where('destination_id', $a->origin)->first();
 
-	      	if (!$reverse_adjascent)
-	    	 	$reverse_adjascent = Adjascent::where('origin_id', $a['destination'])->where('destination_id', $a['origin'])->first();
+			      if (!$reverse_adjascent)
+			        $reverse_adjascent = new Adjascent;
 
-		      if (!$reverse_adjascent)
-		        $reverse_adjascent = new Adjascent;
+			      $reverse_adjascent->origin_id = $$a->destination;
+			      $reverse_adjascent->destination_id = $a->origin;
+			      $reverse_adjascent->distance = $distance;
+			      $reverse_adjascent->building_id = $building->id;
+			      $reverse_adjascent->save();
 
-		      $reverse_adjascent->origin_id = $a['destination'];
-		      $reverse_adjascent->destination_id = $a['origin'];
-		      $reverse_adjascent->distance = $distance;
-		      $reverse_adjascent->building_id = $building->id;
-		      $reverse_adjascent->save();
-
-		      $adjascent_ids[] = $reverse_adjascent->id;
-	      }
+			      $adjascent_ids[] = $reverse_adjascent->id;
+	      	  }
 	    }
 
 	    Adjascent::where('building_id', $building->id)->whereNotIn('id', $adjascent_ids)->delete();
 
-	    return array('status' => 'OK', 'result' => $building, 'adjascents' => $request->adjascents);
+	    return array('status' => 'OK', 'result' => $building, 'adjascents' => $adjascents);
 	}
 
 	public function ajaxShowRoutes (Request $request, $id) {
