@@ -153,9 +153,10 @@ class BuildingsController extends Controller
 
 		$links = [];
 		foreach ($building->adjascents as $adjascent) {
-			$links[] = new Link(new MNode($adjascent->origin->longitude, $adjascent->origin->latitude), 
-								new MNode($adjascent->destination->longitude, $adjascent->destination->latitude), 
-								$adjascent->distance);
+			if ($adjascent->origin && $adjascent->destination)
+				$links[] = new Link(new MNode($adjascent->origin->longitude, $adjascent->origin->latitude), 
+									new MNode($adjascent->destination->longitude, $adjascent->destination->latitude), 
+									$adjascent->distance);
 		}
 
 		$graph = new Graph($links);
