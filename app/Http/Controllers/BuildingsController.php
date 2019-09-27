@@ -629,7 +629,7 @@ class BuildingsController extends Controller
 	    	$distance = sqrt(pow($origin->longitude - $destination->longitude, 2) + pow($origin->latitude - $destination->latitude, 2));
 			
 	    	if ($origin->floor_id != $destination->floor_id)
-				$distance += 1000000;
+				$distance += 0.001;
 
 	    	$adjascent = null;
 

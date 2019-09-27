@@ -52,8 +52,8 @@ class MAStar extends AStar
 
         $euclideanDistance = sqrt($xFactor + $yFactor);
 
-        if ($euclideanDistance == 0)
-            $euclideanDistance = 1000000;
+        if ($euclideanDistance == 0 || $myStartNode->getF() != $myEndNode->getF())
+            $euclideanDistance += 0.001;
 
         return $euclideanDistance;
     }
