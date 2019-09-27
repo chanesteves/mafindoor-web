@@ -14,7 +14,7 @@
 
   <div class="tab-content">
     <div class="tab-pane active" id="lines" role="tabpanel">
-      <form id="frm-main-filter" method="GET" action="/floors">
+      <form id="frm-main-filter" method="GET" action="/pathways">
         <div class="row main-filter">    
           <div class="col-md-10 col-6">
             <select id="ddl-building-id" name="building_id" class="form-control input-lg">
