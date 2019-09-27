@@ -153,15 +153,19 @@ class BuildingsController extends Controller
 
 		$links = [];
 		foreach ($building->adjascents as $adjascent) {
-			$links[] = new Link(new MNode($adjascent->origin->longitude, $adjascent->origin->latitude), 
-								new MNode($adjascent->destination->longitude, $adjascent->destination->latitude), 
-								$adjascent->distance);
+			if ($adjascent->origin && $adjascent->destination) {
+				if (($from->floor_id == $to->floor_id && $adjascent->origin->floor_id == $adjascent->destination->floor_id)
+					|| $from->floor_id != $to->floor_id)
+				$links[] = new Link(new MNode($adjascent->origin->longitude, $adjascent->origin->latitude, $adjascent->origin->floor_id), 
+									new MNode($adjascent->destination->longitude, $adjascent->destination->latitude, $adjascent->destination->floor_id), 
+									$adjascent->distance);
+			}
 		}
 
 		$graph = new Graph($links);
 
-		$start = new MNode($from->longitude, $from->latitude);
-		$goal = new MNode($to->longitude, $to->latitude);
+		$start = new MNode($from->longitude, $from->latitude, $from->floor_id);
+		$goal = new MNode($to->longitude, $to->latitude, $to->floor_id);
 
 		$aStar = new MAStar($graph);
 		$solution = $aStar->run($start, $goal);
@@ -171,10 +175,9 @@ class BuildingsController extends Controller
 		$sequence = $printer->getSequence();
 
 		$floors = [];
-		$distance = 0;
-		$prevNode = null;
+		$distance = $printer->getTotalDistance();
 		foreach ($sequence as $node) {
-			$point = Point::where('longitude', $node->getX())->where('latitude', $node->getY())->first();
+			$point = Point::where(array('longitude' => $node->getX(), 'latitude' => $node->getY(), 'floor_id' => $node->getF()))->first();
 
 			if ($point) {
 				if (!isset($floors[$point->floor_id]))
@@ -182,11 +185,6 @@ class BuildingsController extends Controller
 
 				$floors[$point->floor_id]["points"][] = $point;
 			}
-
-			if ($prevNode)
-				$distance += sqrt(($prevNode->getX() + $node->getX()) + ($prevNode->getY() + $node->getY()));
-
-			$prevNode = $node;
 		}
 
 		return array( 'status' => 'OK', 'floors' => $floors, 'distance' => $distance);
@@ -619,57 +617,61 @@ class BuildingsController extends Controller
 	      return array('status' => 'ERROR', 'error' => 'Building not found.');
 
 	    $adjascent_ids = [];
+	    $adjascents = json_decode($request->adjascents);
 
-	    foreach ($request->adjascents as $a) {
-	    	$origin = Point::find($a['origin']);
-	    	$destination = Point::find($a['destination']);
+	    foreach ($adjascents as $a) {
+	    	$origin = Point::find($a->origin);
+	    	$destination = Point::find($a->destination);
 
 	    	if (!$origin || !$destination)
 	    		return;
 
-	    	$distance = sqrt(($origin->longitude * $destination->longitude) + ($origin->latitude * $destination->latitude));
+	    	$distance = sqrt(pow($origin->longitude - $destination->longitude, 2) + pow($origin->latitude - $destination->latitude, 2));
+			
+	    	if ($origin->floor_id != $destination->floor_id)
+				$distance += 1000000;
 
-	      $adjascent = null;
+	    	$adjascent = null;
 
-	      if (array_key_exists('id', $a))
-	        $adjascent = Adjascent::find($a['id']);
+	    	if (isset($a->id))
+	      		$adjascent = Adjascent::find($a->id);
 
-	    if (!$adjascent)
-	    	 $adjascent = Adjascent::where('origin_id', $a['origin'])->where('destination_id', $a['destination'])->first();
+		    if (!$adjascent)
+		    	 $adjascent = Adjascent::where('origin_id', $a->origin)->where('destination_id', $a->destination)->first();
 
-	      if (!$adjascent)
-	        $adjascent = new Adjascent;
+		      if (!$adjascent)
+		        $adjascent = new Adjascent;
 
-	      $adjascent->origin_id = $a['origin'];
-	      $adjascent->destination_id = $a['destination'];
-	      $adjascent->distance = $distance;
-	      $adjascent->building_id = $building->id;	      
-	      $adjascent->save();
+		      $adjascent->origin_id = $a->origin;
+		      $adjascent->destination_id = $a->destination;
+		      $adjascent->distance = $distance;
+		      $adjascent->building_id = $building->id;	      
+		      $adjascent->save();
 
-	      $adjascent_ids[] = $adjascent->id;
+		      $adjascent_ids[] = $adjascent->id;
 
-	      if ($a['two_way']) {
-	      	$reverse_adjascent = null;
+		      if ($a->two_way) {
+		      	$reverse_adjascent = null;
 
-	      	if (!$reverse_adjascent)
-	    	 	$reverse_adjascent = Adjascent::where('origin_id', $a['destination'])->where('destination_id', $a['origin'])->first();
+		      	if (!$reverse_adjascent)
+		    	 	$reverse_adjascent = Adjascent::where('origin_id', $a->destination)->where('destination_id', $a->origin)->first();
 
-		      if (!$reverse_adjascent)
-		        $reverse_adjascent = new Adjascent;
+			      if (!$reverse_adjascent)
+			        $reverse_adjascent = new Adjascent;
 
-		      $reverse_adjascent->origin_id = $a['destination'];
-		      $reverse_adjascent->destination_id = $a['origin'];
-		      $reverse_adjascent->distance = $distance;
-		      $reverse_adjascent->building_id = $building->id;
-		      $reverse_adjascent->save();
+			      $reverse_adjascent->origin_id = $a->destination;
+			      $reverse_adjascent->destination_id = $a->origin;
+			      $reverse_adjascent->distance = $distance;
+			      $reverse_adjascent->building_id = $building->id;
+			      $reverse_adjascent->save();
 
-		      $adjascent_ids[] = $reverse_adjascent->id;
-	      }
+			      $adjascent_ids[] = $reverse_adjascent->id;
+	      	  }
 	    }
 
 	    Adjascent::where('building_id', $building->id)->whereNotIn('id', $adjascent_ids)->delete();
 
-	    return array('status' => 'OK', 'result' => $building);
+	    return array('status' => 'OK', 'result' => $building, 'adjascents' => $adjascents);
 	}
 
 	public function ajaxShowRoutes (Request $request, $id) {

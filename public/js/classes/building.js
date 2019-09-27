@@ -162,7 +162,7 @@ Building.prototype.updateAdjascents = function (param, callback) {
 
 	data = { 
 				_token: CSRF,
-				'adjascents' : param.adjascents
+				'adjascents' : JSON.stringify(param.adjascents)
 			};
 
 	$.ajax({

@@ -307,7 +307,7 @@
     @if (isset($page) && $page == 'Search')
       <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.52.0/mapbox-gl.js'></script>
 
-      <script src="{{ asset('js/classes/building.js?version=1.4.5') }}"></script>
+      <script src="{{ asset('js/classes/building.js?version=1.4.6') }}"></script>
       <script src="{{ asset('js/classes/floor.js?version=1.4.2') }}"></script>
       <script src="{{ asset('js/classes/activity.js?version=1.4.0') }}"></script>
 
@@ -323,7 +323,7 @@
       <script src="{{ asset('plugins/croppie/croppie.js') }}"></script>
       <script src="{{ asset('plugins/dropzone/dist/dropzone.js') }}"></script>
 
-      <script src="{{ asset('js/classes/building.js?version=1.4.5') }}"></script>
+      <script src="{{ asset('js/classes/building.js?version=1.4.6') }}"></script>
       <script src="{{ asset('js/classes/image.js?version=1.4.0') }}"></script>
       <script src="{{ asset('js/pages/directories/venues.js?version=1.4.8') }}"></script>      
     @elseif (isset($page) && $page == 'Floors')
@@ -342,7 +342,7 @@
       <script src="{{ asset('js/classes/floor.js?version=1.4.2') }}"></script>
       <script src="{{ asset('js/pages/directories/pathways.js?version=1.4.4') }}"></script>
 
-      <script src="{{ asset('js/classes/building.js?version=1.4.5') }}"></script>
+      <script src="{{ asset('js/classes/building.js?version=1.4.6') }}"></script>
     @elseif (isset($page) && $page == 'Routes')
       <script src="{{ asset('js/classes/route.js?version=1.4.4') }}"></script>
       <script src="{{ asset('js/pages/directories/routes.js?version=1.4.11') }}"></script>

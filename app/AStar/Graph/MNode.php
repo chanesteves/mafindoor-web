@@ -10,10 +10,11 @@ class MNode extends AbstractNode
     private $x;
     private $y;
 
-    public function __construct($x, $y)
+    public function __construct($x, $y, $f)
     {
         $this->x = $x;
         $this->y = $y;
+        $this->f = $f;
     }
 
     /**
@@ -24,14 +25,15 @@ class MNode extends AbstractNode
     {
         $coordinates = explode('x', $node->getID());
 
-        if (count($coordinates) !== 2) {
+        if (count($coordinates) !== 3) {
             throw new \InvalidArgumentException('Invalid node: ' . print_r($node, true));
         }
 
         $x = $coordinates[0];
         $y = $coordinates[1];
+        $f = $coordinates[2];
 
-        return new MNode($x, $y);
+        return new MNode($x, $y, $f);
     }
 
     public function getX()
@@ -44,11 +46,16 @@ class MNode extends AbstractNode
         return $this->y;
     }
 
+    public function getF()
+    {
+        return $this->f;
+    }
+
     /**
      * {@inheritdoc}
      */
     public function getID()
     {
-        return $this->x . 'x' . $this->y;
+        return $this->x . 'x' . $this->y . 'x' . $this->f;
     }
 }

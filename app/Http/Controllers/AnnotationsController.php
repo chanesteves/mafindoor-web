@@ -452,7 +452,14 @@ class AnnotationsController extends Controller
 			$entry_ids[] = $entry->id;
 		}
 
-		Entry::where('annotation_id', $annotation->id)->whereNotIn('id', $entry_ids)->delete();
+		$entries = Entry::where('annotation_id', $annotation->id)->whereNotIn('id', $entry_ids)->get();
+
+		foreach ($entries as $entry) {
+			if ($entry->point)
+				$entry->point->delete();
+
+			$entry->delete();
+		}
 
 		return array('status' => 'OK', 'result' => $annotation);
 	}
