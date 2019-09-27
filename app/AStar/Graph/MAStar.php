@@ -52,6 +52,9 @@ class MAStar extends AStar
 
         $euclideanDistance = sqrt($xFactor + $yFactor);
 
+        if ($euclideanDistance == 0)
+            $euclideanDistance = 1000000;
+
         return $euclideanDistance;
     }
 }

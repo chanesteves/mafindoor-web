@@ -39,10 +39,10 @@ class SequencePrinter
 
     private function getNodeAsString(MNode $node)
     {
-        return "({$node->getX()}, {$node->getY()})";
+        return "({$node->getX()}, {$node->getY()}, {$node->getF()})";
     }
 
-    private function getTotalDistance()
+    public function getTotalDistance()
     {
         if (count($this->sequence) < 2) {
             return 0;
