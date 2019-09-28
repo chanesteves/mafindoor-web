@@ -21,8 +21,8 @@ Route::match(['post', 'get', 'options'], 'auth/ajaxLogin', 'Auth\LoginController
 Route::match(['post', 'get', 'options'], 'auth/ajaxRegister', 'Auth\RegisterController@ajaxRegister')->middleware('auth.api','cors');
 
 Route::match(['post', 'get', 'options'], 'buildings/{building}/ajaxShow', 'BuildingsController@ajaxShow')->middleware('auth.api','cors');
+Route::match(['post', 'get', 'options'], 'buildings/{building}/ajaxShowRoutes', 'BuildingsController@ajaxShowRoutes')->middleware('auth.api','cors');
 Route::match(['post', 'get', 'options'], 'buildings/ajaxShowBuildings', 'BuildingsController@ajaxShowBuildings')->middleware('auth.api','cors');
-Route::match(['post', 'get', 'options'], 'buildings/ajaxShowRoutes', 'BuildingsController@ajaxShowRoutes')->middleware('auth.api','cors');
 
 Route::match(['post', 'get', 'options'], 'userSubCategorySearches/ajaxStore', 'UserSubCategorySearchesController@ajaxStore')->middleware('auth.api','cors');
 
