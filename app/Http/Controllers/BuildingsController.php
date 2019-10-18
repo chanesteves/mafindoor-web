@@ -175,17 +175,31 @@ class BuildingsController extends Controller
 		$sequence = $printer->getSequence();
 
 		$floors = [];
-		$distance = $printer->getTotalDistance();
+		$distance = $printer->getTotalDistance();		
 		foreach ($sequence as $node) {
 			$point = Point::with('floor')->where(array('longitude' => $node->getX(), 'latitude' => $node->getY(), 'floor_id' => $node->getF()))->first();
 
 			if ($point) {
-				if (!isset($floors[$point->floor_id]))
-					$floors[$point->floor_id] = array("points" => [], 'floor' => $point->floor);
+				if (!isset($floors[$point->floor_id])) {
+					$floors[$point->floor_id] = array("points" => [], 'floor' => $point->floor, 'next_floor' => null);
+				}
 
 				$floors[$point->floor_id]["points"][] = $point;
 			}
 		}
+
+		foreach ($floors as $key => $value) {
+			if (count($value->points) < 2)
+				unset($floors[$key]);
+		}
+
+		$prev_floor_id = null;
+		foreach ($floors as $key => $value) {
+           if ($prev_floor_id)
+           		$floors[$prev_floor_id]['next_floor'] = $value->floor;
+
+           $prev_floor_id = $key;
+       }
 
 		return array( 'status' => 'OK', 'floors' => $floors, 'distance' => $distance);
 	}
