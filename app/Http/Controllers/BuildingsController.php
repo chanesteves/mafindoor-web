@@ -189,14 +189,14 @@ class BuildingsController extends Controller
 		}
 
 		foreach ($floors as $key => $value) {
-			if (count($value->points) < 2)
+			if (count($value["points"]) < 2)
 				unset($floors[$key]);
 		}
 
 		$prev_floor_id = null;
 		foreach ($floors as $key => $value) {
            if ($prev_floor_id)
-           		$floors[$prev_floor_id]['next_floor'] = $value->floor;
+           		$floors[$prev_floor_id]['next_floor'] = $value["floor"];
 
            $prev_floor_id = $key;
        }
