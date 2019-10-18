@@ -215,7 +215,7 @@ class BuildingsController extends Controller
            			$floors[$prev_floor_id]['last_annotation'] = $annotation;
            		}
 
-           		$floors[$key]["prev_floor"] = $floors[$prev_floor_id];
+           		$floors[$key]["prev_floor"] = $floors[$prev_floor_id]["floor"];
 
            		$first_point = $floors[$key]["points"][0];
            		$annotation = Annotation::where(array('longitude' => $first_point->longitude, 'latitude' => $first_point->latitude, "floor_id" => $first_point->floor_id))->first();
