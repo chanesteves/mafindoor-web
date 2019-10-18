@@ -177,11 +177,11 @@ class BuildingsController extends Controller
 		$floors = [];
 		$distance = $printer->getTotalDistance();
 		foreach ($sequence as $node) {
-			$point = Point::where(array('longitude' => $node->getX(), 'latitude' => $node->getY(), 'floor_id' => $node->getF()))->first();
+			$point = Point::with('floor')->where(array('longitude' => $node->getX(), 'latitude' => $node->getY(), 'floor_id' => $node->getF()))->first();
 
 			if ($point) {
 				if (!isset($floors[$point->floor_id]))
-					$floors[$point->floor_id] = array("points" => []);
+					$floors[$point->floor_id] = array("points" => [], 'floor_id' => $point->floor_id, 'floor_label' : $point->floor ? $point->floor->label : '');
 
 				$floors[$point->floor_id]["points"][] = $point;
 			}
