@@ -181,7 +181,16 @@ class BuildingsController extends Controller
 
 			if ($point) {
 				if (!isset($floors[$point->floor_id])) {
-					$floors[$point->floor_id] = array("points" => [], 'floor' => $point->floor, 'next_floor' => null);
+					$floors[$point->floor_id] = array(
+														"points" => [], 
+														"floor" => $point->floor, 
+														"next_floor" => null, 
+														"next_floor_via" => "",
+														"last_annotation" => null,
+														"prev_floor" => null, 
+														"prev_floor_via" => "",
+														"first_annotation" => null
+													);
 				}
 
 				$floors[$point->floor_id]["points"][] = $point;
@@ -195,8 +204,27 @@ class BuildingsController extends Controller
 
 		$prev_floor_id = null;
 		foreach ($floors as $key => $value) {
-           if ($prev_floor_id)
+           if ($prev_floor_id) {
            		$floors[$prev_floor_id]['next_floor'] = $value["floor"];
+
+           		$last_point = $floors[$prev_floor_id]["points"][count($floors[$prev_floor_id]["points"]) - 1];
+           		$annotation = Annotation::where(array('longitude' => $last_point->longitude, 'latitude' => $last_point->latitude, "floor_id" => $last_point->floor_id))->first();
+
+           		if ($annotation && $annotation->sub_category) {
+           			$floors[$prev_floor_id]['next_floor_via'] = $annotation->sub_category->name;
+           			$floors[$prev_floor_id]['last_annotation'] = $annotation;
+           		}
+
+           		$floors[$key]["prev_floor"] = $floors[$prev_floor_id];
+
+           		$first_point = $floors[$key]["points"][0];
+           		$annotation = Annotation::where(array('longitude' => $first_point->longitude, 'latitude' => $first_point->latitude, "floor_id" => $first_point->floor_id))->first();
+
+           		if ($annotation && $annotation->sub_category) {
+           			$floors[$key]['prev_floor_via'] = $annotation->sub_category->name;
+           			$floors[$key]['first_annotation'] = $annotation;
+           		}
+           }
 
            $prev_floor_id = $key;
        }
