@@ -181,7 +181,7 @@ class BuildingsController extends Controller
 
 			if ($point) {
 				if (!isset($floors[$point->floor_id]))
-					$floors[$point->floor_id] = array("points" => [], 'floor_id' => $point->floor_id, 'floor_label' : $point->floor ? $point->floor->label : '');
+					$floors[$point->floor_id] = array("points" => [], 'floor_id' => $point->floor_id, 'floor_label' => $point->floor ? $point->floor->label : '');
 
 				$floors[$point->floor_id]["points"][] = $point;
 			}
