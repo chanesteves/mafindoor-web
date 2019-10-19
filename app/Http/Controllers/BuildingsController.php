@@ -133,8 +133,23 @@ class BuildingsController extends Controller
 		if (!$destination)
 			return array('status' => 'ERROR', 'error' => 'Invalid destination.');
 
-		$origin_entry = $origin->entries()->first();
-		$destination_entry = $destination->entries()->first();
+		$origin_entry = null;
+		$destination_entry = null;
+
+		$min_entries_distance = 100;
+
+		foreach ($origin->entries as $o_entry) {
+			foreach ($destination->entries as $d_entry) {
+				$distance = sqrt(pow($o_entry->point->longitude - $d_entry->point->longitude, 2) + pow($o_entry->point->latitude - $d_entry->point->latitude, 2));
+
+				if ($distance < $min_entries_distance) {
+					$min_entries_distance = $distance;
+
+					$origin_entry = $o_entry;
+					$destination_entry = $d_entry;
+				}
+			}
+		}
 
 		if (!$origin_entry)
 			return array('status' => 'ERROR', 'error' => 'Origin has no entry point.');
@@ -726,8 +741,23 @@ class BuildingsController extends Controller
 		if (!$destination)
 			return array('status' => 'ERROR', 'error' => 'Invalid destination.');
 
-		$origin_entry = $origin->entries()->first();
-		$destination_entry = $destination->entries()->first();
+		$origin_entry = null;
+		$destination_entry = null;
+
+		$min_entries_distance = 100;
+
+		foreach ($origin->entries as $o_entry) {
+			foreach ($destination->entries as $d_entry) {
+				$distance = sqrt(pow($o_entry->point->longitude - $d_entry->point->longitude, 2) + pow($o_entry->point->latitude - $d_entry->point->latitude, 2));
+
+				if ($distance < $min_entries_distance) {
+					$min_entries_distance = $distance;
+
+					$origin_entry = $o_entry;
+					$destination_entry = $d_entry;
+				}
+			}
+		}
 
 		if (!$origin_entry)
 			return array('status' => 'ERROR', 'error' => 'Origin has no entry point.');
