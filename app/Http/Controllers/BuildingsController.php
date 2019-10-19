@@ -133,8 +133,23 @@ class BuildingsController extends Controller
 		if (!$destination)
 			return array('status' => 'ERROR', 'error' => 'Invalid destination.');
 
-		$origin_entry = $origin->entries()->first();
-		$destination_entry = $destination->entries()->first();
+		$origin_entry = null;
+		$destination_entry = null;
+
+		$min_entries_distance = 100;
+
+		foreach ($origin->entries as $o_entry) {
+			foreach ($destination->entries as $d_entry) {
+				$distance = sqrt(pow($o_entry->point->longitude - $d_entry->point->longitude, 2) + pow($o_entry->point->latitude - $d_entry->point->latitude, 2));
+
+				if ($distance < $min_entries_distance) {
+					$min_entries_distance = $distance;
+
+					$origin_entry = $o_entry;
+					$destination_entry = $d_entry;
+				}
+			}
+		}
 
 		if (!$origin_entry)
 			return array('status' => 'ERROR', 'error' => 'Origin has no entry point.');
@@ -175,17 +190,59 @@ class BuildingsController extends Controller
 		$sequence = $printer->getSequence();
 
 		$floors = [];
-		$distance = $printer->getTotalDistance();
+		$distance = $printer->getTotalDistance();		
 		foreach ($sequence as $node) {
-			$point = Point::where(array('longitude' => $node->getX(), 'latitude' => $node->getY(), 'floor_id' => $node->getF()))->first();
+			$point = Point::with('floor')->where(array('longitude' => $node->getX(), 'latitude' => $node->getY(), 'floor_id' => $node->getF()))->first();
 
 			if ($point) {
-				if (!isset($floors[$point->floor_id]))
-					$floors[$point->floor_id] = array("points" => []);
+				if (!isset($floors[$point->floor_id])) {
+					$floors[$point->floor_id] = array(
+														"points" => [], 
+														"floor" => $point->floor, 
+														"next_floor" => null, 
+														"next_floor_via" => "",
+														"last_annotation" => null,
+														"prev_floor" => null, 
+														"prev_floor_via" => "",
+														"first_annotation" => null
+													);
+				}
 
 				$floors[$point->floor_id]["points"][] = $point;
 			}
 		}
+
+		foreach ($floors as $key => $value) {
+			if (count($value["points"]) < 2)
+				unset($floors[$key]);
+		}
+
+		$prev_floor_id = null;
+		foreach ($floors as $key => $value) {
+           if ($prev_floor_id) {
+           		$floors[$prev_floor_id]['next_floor'] = $value["floor"];
+
+           		$last_point = $floors[$prev_floor_id]["points"][count($floors[$prev_floor_id]["points"]) - 1];
+           		$annotation = Annotation::where(array('longitude' => $last_point->longitude, 'latitude' => $last_point->latitude, "floor_id" => $last_point->floor_id))->first();
+
+           		if ($annotation && $annotation->sub_category) {
+           			$floors[$prev_floor_id]['next_floor_via'] = $annotation->sub_category->name;
+           			$floors[$prev_floor_id]['last_annotation'] = $annotation;
+           		}
+
+           		$floors[$key]["prev_floor"] = $floors[$prev_floor_id]["floor"];
+
+           		$first_point = $floors[$key]["points"][0];
+           		$annotation = Annotation::where(array('longitude' => $first_point->longitude, 'latitude' => $first_point->latitude, "floor_id" => $first_point->floor_id))->first();
+
+           		if ($annotation && $annotation->sub_category) {
+           			$floors[$key]['prev_floor_via'] = $annotation->sub_category->name;
+           			$floors[$key]['first_annotation'] = $annotation;
+           		}
+           }
+
+           $prev_floor_id = $key;
+       }
 
 		return array( 'status' => 'OK', 'floors' => $floors, 'distance' => $distance);
 	}
@@ -684,8 +741,23 @@ class BuildingsController extends Controller
 		if (!$destination)
 			return array('status' => 'ERROR', 'error' => 'Invalid destination.');
 
-		$origin_entry = $origin->entries()->first();
-		$destination_entry = $destination->entries()->first();
+		$origin_entry = null;
+		$destination_entry = null;
+
+		$min_entries_distance = 100;
+
+		foreach ($origin->entries as $o_entry) {
+			foreach ($destination->entries as $d_entry) {
+				$distance = sqrt(pow($o_entry->point->longitude - $d_entry->point->longitude, 2) + pow($o_entry->point->latitude - $d_entry->point->latitude, 2));
+
+				if ($distance < $min_entries_distance) {
+					$min_entries_distance = $distance;
+
+					$origin_entry = $o_entry;
+					$destination_entry = $d_entry;
+				}
+			}
+		}
 
 		if (!$origin_entry)
 			return array('status' => 'ERROR', 'error' => 'Origin has no entry point.');
