@@ -11,6 +11,7 @@ use View;
 use App\User;
 use App\Building;
 use App\Annotation;
+use App\Route;
 use App\Image;
 use App\Activity;
 use App\Point;
@@ -160,55 +161,90 @@ class BuildingsController extends Controller
 		return $this->getRoute($id, $origin_entry->point, $destination_entry->point);
 	}
 
-	public function getRoute ($id, $from, $to) {
+	public static function getRoute ($id, $from, $to) {
 		$building = Building::find($id);
+		$route_status = '';
 
 		if (!$building)
 			return array('status' => 'ERROR', 'error' => 'Building not found.');
 
-		$links = [];
-		foreach ($building->adjascents as $adjascent) {
-			if ($adjascent->origin && $adjascent->destination) {
-				if (($from->floor_id == $to->floor_id && $adjascent->origin->floor_id == $adjascent->destination->floor_id)
-					|| $from->floor_id != $to->floor_id)
-				$links[] = new Link(new MNode($adjascent->origin->longitude, $adjascent->origin->latitude, $adjascent->origin->floor_id), 
-									new MNode($adjascent->destination->longitude, $adjascent->destination->latitude, $adjascent->destination->floor_id), 
-									$adjascent->distance);
-			}
-		}
-
-		$graph = new Graph($links);
-
-		$start = new MNode($from->longitude, $from->latitude, $from->floor_id);
-		$goal = new MNode($to->longitude, $to->latitude, $to->floor_id);
-
-		$aStar = new MAStar($graph);
-		$solution = $aStar->run($start, $goal);
-
-		$printer = new SequencePrinter($graph, $solution);
-
-		$sequence = $printer->getSequence();
+		$route = Route::where(array('origin_point_id' => $from->id, 'destination_point_id' => $to->id))->first();
 
 		$floors = [];
-		$distance = $printer->getTotalDistance();		
-		foreach ($sequence as $node) {
-			$point = Point::with('floor')->where(array('longitude' => $node->getX(), 'latitude' => $node->getY(), 'floor_id' => $node->getF()))->first();
+		if ($route && $route->turns->count() > 0) {
+			$route_status = 'old';
+			$distance = 0;		
+			$prev_point = null;
+			foreach ($route->turns as $turn) {
+				$point = $turn->point;
+				if ($point) {
+					if (!isset($floors[$point->floor_id])) {
+						$floors[$point->floor_id] = array(
+															"points" => [], 
+															"floor" => $point->floor, 
+															"next_floor" => null, 
+															"next_floor_via" => "",
+															"last_annotation" => null,
+															"prev_floor" => null, 
+															"prev_floor_via" => "",
+															"first_annotation" => null
+														);
+					}
 
-			if ($point) {
-				if (!isset($floors[$point->floor_id])) {
-					$floors[$point->floor_id] = array(
-														"points" => [], 
-														"floor" => $point->floor, 
-														"next_floor" => null, 
-														"next_floor_via" => "",
-														"last_annotation" => null,
-														"prev_floor" => null, 
-														"prev_floor_via" => "",
-														"first_annotation" => null
-													);
+					$floors[$point->floor_id]["points"][] = $point;
 				}
+			}
 
-				$floors[$point->floor_id]["points"][] = $point;
+			if ($prev_point)
+				$distance += sqrt(pow($prev_point->longitude - $point->longitude, 2) + pow($prev_point->latitude - $point->latitude, 2));
+
+			$prev_point = $point;
+		}
+		else {
+			$route_status = 'new';
+			$links = [];
+			foreach ($building->adjascents as $adjascent) {
+				if ($adjascent->origin && $adjascent->destination) {
+					if (($from->floor_id == $to->floor_id && $adjascent->origin->floor_id == $adjascent->destination->floor_id)
+						|| $from->floor_id != $to->floor_id)
+					$links[] = new Link(new MNode($adjascent->origin->longitude, $adjascent->origin->latitude, $adjascent->origin->floor_id), 
+										new MNode($adjascent->destination->longitude, $adjascent->destination->latitude, $adjascent->destination->floor_id), 
+										$adjascent->distance);
+				}
+			}
+
+			$graph = new Graph($links);
+
+			$start = new MNode($from->longitude, $from->latitude, $from->floor_id);
+			$goal = new MNode($to->longitude, $to->latitude, $to->floor_id);
+
+			$aStar = new MAStar($graph);
+			$solution = $aStar->run($start, $goal);
+
+			$printer = new SequencePrinter($graph, $solution);
+
+			$sequence = $printer->getSequence();
+			
+			$distance = $printer->getTotalDistance();		
+			foreach ($sequence as $node) {
+				$point = Point::with('floor')->where(array('longitude' => $node->getX(), 'latitude' => $node->getY(), 'floor_id' => $node->getF()))->first();
+
+				if ($point) {
+					if (!isset($floors[$point->floor_id])) {
+						$floors[$point->floor_id] = array(
+															"points" => [], 
+															"floor" => $point->floor, 
+															"next_floor" => null, 
+															"next_floor_via" => "",
+															"last_annotation" => null,
+															"prev_floor" => null, 
+															"prev_floor_via" => "",
+															"first_annotation" => null
+														);
+					}
+
+					$floors[$point->floor_id]["points"][] = $point;
+				}
 			}
 		}
 
@@ -244,7 +280,7 @@ class BuildingsController extends Controller
            $prev_floor_id = $key;
        }
 
-		return array( 'status' => 'OK', 'floors' => $floors, 'distance' => $distance);
+		return array( 'status' => 'OK', 'floors' => $floors, 'distance' => $distance, 'route_status' => $route_status);
 	}
 
     /*****************/

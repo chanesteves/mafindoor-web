@@ -24,8 +24,10 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        // $schedule->command('inspire')
-        //          ->hourly();
+        $date = date('Ymd');
+        $schedule->command('route:create')
+            ->hourly()->withoutOverlapping()
+            ->appendOutputTo(storage_path() . "/logs/route_create_{$date}.log");
     }
 
     /**

@@ -32,4 +32,9 @@ class Point extends Model
     {
         return $this->belongsToMany('App\Point', 'adjascents', 'origin_id', 'destination_id')->withTimestamps();
     }
+
+    public function routes()
+    {
+        return $this->hasMany('App\Route', 'origin_point_id', 'id');
+    }
 }

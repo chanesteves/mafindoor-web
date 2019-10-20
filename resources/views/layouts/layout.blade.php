@@ -340,7 +340,7 @@
     @elseif (isset($page) && $page == 'Pathways')
       <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v1.4.1/mapbox-gl.js'></script>
       <script src="{{ asset('js/classes/floor.js?version=1.4.2') }}"></script>
-      <script src="{{ asset('js/pages/directories/pathways.js?version=1.4.4') }}"></script>
+      <script src="{{ asset('js/pages/directories/pathways.js?version=1.4.5') }}"></script>
 
       <script src="{{ asset('js/classes/building.js?version=1.4.6') }}"></script>
     @elseif (isset($page) && $page == 'Routes')

@@ -359,7 +359,7 @@ Pathways.prototype.bindPathways = function () {
 
 							    building.showRoute(building_obj, function (data) {        
 							      if (data.status == 'OK') {
-							      	modal.hide();
+							      	modal.show('info', 'fa-info', 'Route', 'This is a' + (data.route_status == 'new' ? '' : 'n') + ' ' + data.route_status + ' route.', { ok : true });
 
 							      	Object.keys(data.floors).forEach(function (e, i) {
 							      		var coords = [];
