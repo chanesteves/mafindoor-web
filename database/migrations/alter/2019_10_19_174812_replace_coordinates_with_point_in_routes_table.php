@@ -15,7 +15,7 @@ class ReplaceCoordinatesWithPointInRoutesTable extends Migration
     {
         Schema::table('routes', function (Blueprint $table) {
             $table->integer('origin_point_id')->default(0)->after('id');
-            $table->integer('destination_point_id')->default(0)->after('origin_point');
+            $table->integer('destination_point_id')->default(0)->after('origin_point_id');
             $table->dropColumn('origin_lat');
             $table->dropColumn('origin_lng');
             $table->dropColumn('destination_lat');
