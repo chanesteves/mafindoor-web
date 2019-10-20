@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use DB;
 use Carbon\Carbon;
 
 use App\Route;
@@ -145,8 +146,13 @@ class CreateRoute extends Command
             if ($origin_annotation)
                 $routed_annotation_ids[] = $origin_annotation->id;
 
-            $unrouted_annotations = Annotation::where('floor_id', $origin_point->floor_id)
-                                                ->whereNotIn('id', $routed_annotation_ids)
+            DB::enableQueryLog();
+
+            $unrouted_annotations = Annotation::select(DB::raw('annotations.*'))
+                                                ->join('floors', 'floors.id', 'floor_id')
+                                                ->join('buildings', 'buildings.id', 'building_id')
+                                                ->whereNotIn('annotations.id', $routed_annotation_ids)
+                                                ->where('building_id', $origin_point->floor->building_id)
                                                 ->get();
 
             if ($unrouted_annotations->count() == 0)
