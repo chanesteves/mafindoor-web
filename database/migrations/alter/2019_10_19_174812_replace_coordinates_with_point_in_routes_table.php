@@ -34,10 +34,10 @@ class ReplaceCoordinatesWithPointInRoutesTable extends Migration
         Schema::table('routes', function (Blueprint $table) {
             $table->double('origin_lat')->default(0);
             $table->double('origin_lng')->default(0);
-            $table->double('destination_lat_id')->default(0);
-            $table->double('destination_lng_id')->default(0);
-            $table->dropColumn('origin_point');
-            $table->dropColumn('destination_point');
+            $table->double('destination_lat')->default(0);
+            $table->double('destination_lng')->default(0);
+            $table->dropColumn('origin_point_id');
+            $table->dropColumn('destination_point_id');
             $table->integer('floor_id');
         });
     }
