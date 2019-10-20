@@ -34,28 +34,28 @@
 
     @if (isset($page) && $page == 'Search')
       <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
-      <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.52.0/mapbox-gl.css' rel='stylesheet' />
+      <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v1.4.1/mapbox-gl.css' rel='stylesheet' />
 
       <link href="{{ asset('css/pages/search.css?version=1.4.18') }}" rel="stylesheet">
     @elseif (isset($page) && $page == 'Dashboard')
       <link href="{{ asset('css/pages/dashboard.css?version=1.4.1') }}" rel="stylesheet">
     @elseif (isset($page) && $page == 'Venues')
-      <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.49.0/mapbox-gl.css' rel='stylesheet' />
+      <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v1.4.1/mapbox-gl.css' rel='stylesheet' />
       <link href="{{ asset('plugins/croppie/croppie.css') }}" rel="stylesheet">
       <link href="{{ asset('plugins/dropzone/dist/dropzone.css') }}" rel="stylesheet">
 
       <link href="{{ asset('css/pages/directories/venues.css?version=1.4.0') }}" rel="stylesheet">
     @elseif (isset($page) && $page == 'Floors')
-      <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.49.0/mapbox-gl.css' rel='stylesheet' />
+      <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v1.4.1/mapbox-gl.css' rel='stylesheet' />
 
       <link href="{{ asset('css/pages/directories/floors.css?version=1.4.1') }}" rel="stylesheet">
     @elseif (isset($page) && $page == 'Annotations')
-      <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.49.0/mapbox-gl.css' rel='stylesheet' />
+      <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v1.4.1/mapbox-gl.css' rel='stylesheet' />
       <link href="{{ asset('plugins/croppie/croppie.css') }}" rel="stylesheet">           
 
       <link href="{{ asset('css/pages/directories/annotations.css?version=1.4.0') }}" rel="stylesheet">
     @elseif (isset($page) && $page == 'Pathways')
-      <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.49.0/mapbox-gl.css' rel='stylesheet' />
+      <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v1.4.1/mapbox-gl.css' rel='stylesheet' />
 
       <link href="{{ asset('css/pages/directories/pathways.css?version=1.4.1') }}" rel="stylesheet">
     @elseif (isset($page) && $page == 'Categories')
@@ -305,7 +305,7 @@
     <script src="{{ asset('js/controls/modal.js?version=1.4.0') }}"></script>
 
     @if (isset($page) && $page == 'Search')
-      <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.52.0/mapbox-gl.js'></script>
+      <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v1.4.1/mapbox-gl.js'></script>
 
       <script src="{{ asset('js/classes/building.js?version=1.4.6') }}"></script>
       <script src="{{ asset('js/classes/floor.js?version=1.4.2') }}"></script>
@@ -315,7 +315,7 @@
     @elseif (isset($page) && $page == 'Dashboard')
       <script src="{{ asset('js/pages/dashboard.js?version=1.4.9') }}"></script>     
     @elseif (isset($page) && $page == 'Venues')      
-      <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.49.0/mapbox-gl.js'></script>
+      <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v1.4.1/mapbox-gl.js'></script>
       <script src="http://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyAY0WNFta5H_dKTZ_f260R39PhMDvu8ETQ"></script>
       <script src="{{ asset('plugins/geocomplete/jquery.geocomplete.js') }}"></script>
 
@@ -327,20 +327,20 @@
       <script src="{{ asset('js/classes/image.js?version=1.4.0') }}"></script>
       <script src="{{ asset('js/pages/directories/venues.js?version=1.4.8') }}"></script>      
     @elseif (isset($page) && $page == 'Floors')
-      <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.49.0/mapbox-gl.js'></script>
+      <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v1.4.1/mapbox-gl.js'></script>
       <script src="{{ asset('js/classes/floor.js?version=1.4.2') }}"></script>
       <script src="{{ asset('js/pages/directories/floors.js?version=1.4.4') }}"></script>
     @elseif (isset($page) && $page == 'Annotations')
-      <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.49.0/mapbox-gl.js'></script>
+      <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v1.4.1/mapbox-gl.js'></script>
       <script src="{{ asset('plugins/bootstrap-fileinput/js/plugins/canvas-to-blob.js') }}"></script>
       <script src="{{ asset('plugins/croppie/croppie.js') }}"></script>      
 
       <script src="{{ asset('js/classes/annotation.js?version=1.4.4') }}"></script>
       <script src="{{ asset('js/pages/directories/annotations.js?version=1.4.13') }}"></script>
     @elseif (isset($page) && $page == 'Pathways')
-      <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.49.0/mapbox-gl.js'></script>
+      <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v1.4.1/mapbox-gl.js'></script>
       <script src="{{ asset('js/classes/floor.js?version=1.4.2') }}"></script>
-      <script src="{{ asset('js/pages/directories/pathways.js?version=1.4.4') }}"></script>
+      <script src="{{ asset('js/pages/directories/pathways.js?version=1.4.5') }}"></script>
 
       <script src="{{ asset('js/classes/building.js?version=1.4.6') }}"></script>
     @elseif (isset($page) && $page == 'Routes')
