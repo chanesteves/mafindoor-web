@@ -26,7 +26,7 @@ class Kernel extends ConsoleKernel
     {
         $date = date('Ymd');
         $schedule->command('route:create')
-            ->hourly()->withoutOverlapping()
+            ->everyMinute()->withoutOverlapping()
             ->appendOutputTo(storage_path() . "/logs/route_create_{$date}.log");
     }
 
