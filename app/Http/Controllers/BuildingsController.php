@@ -249,7 +249,7 @@ class BuildingsController extends Controller
 		}
 
 		foreach ($floors as $key => $value) {
-			if (count($value["points"]) < 2)
+			if (count($value["points"]) < 2 && count($floors) > 2)
 				unset($floors[$key]);
 		}
 
