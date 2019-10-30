@@ -96,12 +96,9 @@ class CreateRoute extends Command
         $deleted_adjascent_destination_ids = Adjascent::withTrashed()
                                                 ->where('deleted_at', '>', 
                                                     Carbon::now()->subMinutes(2)->toDateTimeString()
-                                                )->pluck('destination_id')->toArray();
+                                                )->pluck('destination_id')->toArray();;
 
-        $routes_w_turn_ids = Route::join('turns', 'routes.id', 'route_id')->pluck('routes.id')->toArray();
-        Route::whereNotIn('id', $routes_w_turn_ids)->delete();
-
-        $routes = Route::whereIn('turns.point_id', $deleted_point_ids)
+        $routes = Route::select('routes.*')
                         ->join('turns', 'routes.id', 'route_id')
                         ->get();
 
@@ -112,7 +109,7 @@ class CreateRoute extends Command
             }
 
             foreach ($route->turns as $turn) {
-                if (!$turn->point || in_array($turn->point_id, $deleted_adjascent_origin_ids) || in_array($turn->point_id, $deleted_adjascent_destination_ids)) {
+                if (!$turn->point || in_array($turn->point_id, $deleted_adjascent_origin_ids) || in_array($turn->point_id, $deleted_adjascent_destination_ids) || in_array($turn->point_id, $deleted_point_ids)) {
                     $turn->delete();
                     $route->delete();
                     break;
@@ -197,7 +194,7 @@ class CreateRoute extends Command
         print_r("destination entry id: " . $destination_entry->id . "\n");
         print_r("destination point id: " . $destination_entry->point->id . "\n");
 
-        $result = BuildingsController::getRoute($destination_annotation->floor->building_id, $origin_point, $destination_entry->point);
+        $result = BuildingsController::getRoute($destination_annotation->floor->building_id, $origin_point, $destination_entry->point, '');
 
         if ($result['status'] == 'ERROR') {
             print_r("error encountered while getting route!!!");
