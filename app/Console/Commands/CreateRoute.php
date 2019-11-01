@@ -100,6 +100,7 @@ class CreateRoute extends Command
 
         $routes = Route::select('routes.*')
                         ->join('turns', 'routes.id', 'route_id')
+                        ->limit(100)
                         ->get();
 
         foreach ($routes as $route) {
