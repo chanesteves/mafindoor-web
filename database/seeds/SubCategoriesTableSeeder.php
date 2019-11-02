@@ -15,6 +15,6 @@ class SubCategoriesTableSeeder extends Seeder
     {
         $sub_cat_names = ['Elevator', 'Escalator', 'Stairs'];
 
-        SubCategory::whereIn('name', $sub_cat_names)->delete();
+        SubCategory::whereIn('name', $sub_cat_names)->update(array('floor_trans' => 1));
     }
 }
