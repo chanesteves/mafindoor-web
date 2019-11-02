@@ -13,6 +13,7 @@ use App\Annotation;
 use App\Entry;
 use App\Point;
 use App\Adjascent;
+use App\SubCategory;
 
 use App\Http\Controllers\BuildingsController;
 
@@ -51,6 +52,8 @@ class CreateRoute extends Command
      */
     public function handle()
     {
+        print_r("start!!!");
+
         $deleted_building_ids = Building::withTrashed()
                                         ->where('deleted_at', '>', 
                                             Carbon::now()->subMinutes(2)->toDateTimeString()
@@ -96,13 +99,11 @@ class CreateRoute extends Command
         $deleted_adjascent_destination_ids = Adjascent::withTrashed()
                                                 ->where('deleted_at', '>', 
                                                     Carbon::now()->subMinutes(2)->toDateTimeString()
-                                                )->pluck('destination_id')->toArray();
+                                                )->pluck('destination_id')->toArray();;
 
-        $routes_w_turn_ids = Route::join('turns', 'routes.id', 'route_id')->pluck('routes.id')->toArray();
-        Route::whereNotIn('id', $routes_w_turn_ids)->delete();
-
-        $routes = Route::whereIn('turns.point_id', $deleted_point_ids)
+        $routes = Route::select('routes.*')
                         ->join('turns', 'routes.id', 'route_id')
+                        ->limit(100)
                         ->get();
 
         foreach ($routes as $route) {
@@ -112,7 +113,7 @@ class CreateRoute extends Command
             }
 
             foreach ($route->turns as $turn) {
-                if (!$turn->point || in_array($turn->point_id, $deleted_adjascent_origin_ids) || in_array($turn->point_id, $deleted_adjascent_destination_ids)) {
+                if (!$turn->point || in_array($turn->point_id, $deleted_adjascent_origin_ids) || in_array($turn->point_id, $deleted_adjascent_destination_ids) || in_array($turn->point_id, $deleted_point_ids)) {
                     $turn->delete();
                     $route->delete();
                     break;
@@ -132,6 +133,21 @@ class CreateRoute extends Command
                                     )->pluck('id')->toArray();
         print_r("deleted routes count: " . count($deleted_route_ids) . "\n");
 
+        $processed = false;
+        $vias = SubCategory::where('floor_trans', 1)->pluck('name')->toArray();
+        $vias[] = "";
+        $via_count = 0;
+        do {
+            $processed = $this->createRoute($vias[$via_count]);
+
+            if (!$processed)
+                $via_count++;
+        } while (!$processed && $via_count < count($vias));
+
+        print_r("end!!!");
+    }
+
+    function createRoute ($via) {
         $routed_point_ids = [];
 
         $origin_point = null;
@@ -149,38 +165,54 @@ class CreateRoute extends Command
                                             ->join('entries', 'annotations.id', 'annotation_id')
                                             ->first();
 
-            $routed_annotation_ids = Route::where('origin_point_id', $origin_point->id)
-                                            ->join('points', 'points.id', 'destination_point_id')
-                                            ->join('entries', 'points.id', 'point_id')
-                                            ->pluck('annotation_id')->toArray();
+            if ($via && $via != '')
+                $routed_annotation_ids = Route::where(array('origin_point_id' => $origin_point->id, 'via' => $via))
+                                                ->join('points', 'points.id', 'destination_point_id')
+                                                ->join('entries', 'points.id', 'point_id')
+                                                ->pluck('annotation_id')->toArray();
+            else
+                $routed_annotation_ids = Route::where('origin_point_id', $origin_point->id)
+                                                ->join('points', 'points.id', 'destination_point_id')
+                                                ->join('entries', 'points.id', 'point_id')
+                                                ->pluck('annotation_id')->toArray();
             
             if ($origin_annotation)
                 $routed_annotation_ids[] = $origin_annotation->id;
 
             DB::enableQueryLog();
 
-            $unrouted_annotations = Annotation::select(DB::raw('annotations.*'))
-                                                ->join('floors', 'floors.id', 'floor_id')
-                                                ->join('buildings', 'buildings.id', 'building_id')
-                                                ->whereNotIn('annotations.id', $routed_annotation_ids)
-                                                ->where('building_id', $origin_point->floor->building_id)
-                                                ->get();
+            if ($via && $via != '')
+                $unrouted_annotations = Annotation::select(DB::raw('annotations.*'))
+                                                    ->join('floors', 'floors.id', 'floor_id')
+                                                    ->join('buildings', 'buildings.id', 'building_id')
+                                                    ->whereNotIn('annotations.id', $routed_annotation_ids)
+                                                    ->where('building_id', $origin_point->floor->building_id)
+                                                    ->where('floor_id', '!=', $origin_point->floor_id)
+                                                    ->get();                
+            else
+                $unrouted_annotations = Annotation::select(DB::raw('annotations.*'))
+                                                    ->join('floors', 'floors.id', 'floor_id')
+                                                    ->join('buildings', 'buildings.id', 'building_id')
+                                                    ->whereNotIn('annotations.id', $routed_annotation_ids)
+                                                    ->where('building_id', $origin_point->floor->building_id)
+                                                    ->get();
+
 
             if ($unrouted_annotations->count() == 0)
                 $routed_point_ids[] = $origin_point->id;
         } while ($unrouted_annotations->count() == 0);
 
         if (!$origin_point) {
-            print_r("no points left to process!!!");
-            return;
+            print_r(($via && $via != '' ? '(' . $via . ') ' : '') . "no points left to process!!!");
+            return false;
         }
 
-        print_r("origin point id: " . $origin_point->id . "\n");
-        print_r("routed annotations count: " . count($routed_annotation_ids) . "\n");
-        print_r("unrouted annotations count: " . $unrouted_annotations->count() . "\n");
+        print_r(($via && $via != '' ? '(' . $via . ') ' : '') . "origin point id: " . $origin_point->id . "\n");
+        print_r(($via && $via != '' ? '(' . $via . ') ' : '') . "routed annotations count: " . count($routed_annotation_ids) . "\n");
+        print_r(($via && $via != '' ? '(' . $via . ') ' : '') . "unrouted annotations count: " . $unrouted_annotations->count() . "\n");
 
         $destination_annotation = $unrouted_annotations->first();
-        print_r("destination annotation id: " . $destination_annotation->id . "\n");
+        print_r(($via && $via != '' ? '(' . $via . ') ' : '') . "destination annotation id: " . $destination_annotation->id . "\n");
 
         $destination_entry = null;
         $min_entries_distance = 100;
@@ -194,23 +226,32 @@ class CreateRoute extends Command
             }
         }
 
-        print_r("destination entry id: " . $destination_entry->id . "\n");
-        print_r("destination point id: " . $destination_entry->point->id . "\n");
+        print_r(($via && $via != '' ? '(' . $via . ') ' : '') . "destination entry id: " . $destination_entry->id . "\n");
+        print_r(($via && $via != '' ? '(' . $via . ') ' : '') . "destination point id: " . $destination_entry->point->id . "\n");
 
-        $result = BuildingsController::getRoute($destination_annotation->floor->building_id, $origin_point, $destination_entry->point);
+        $result = BuildingsController::getRoute($destination_annotation->floor->building_id, $origin_point, $destination_entry->point, strtolower($via));
 
         if ($result['status'] == 'ERROR') {
-            print_r("error encountered while getting route!!!");
-            return;
+            print_r(($via && $via != '' ? '(' . $via . ') ' : '') . "error encountered while getting route!!!");
+            return false;
         }
 
-        $route = Route::where(array('origin_point_id' => $origin_point->id, 'destination_point_id' => $destination_entry->point->id))->first();
+        $route = null;
+
+        if ($via && $via != '')
+            $route = Route::where(array('origin_point_id' => $origin_point->id, 'destination_point_id' => $destination_entry->point->id, 'via' => $via))->first();
+        else
+            $route = Route::where(array('origin_point_id' => $origin_point->id, 'destination_point_id' => $destination_entry->point->id))->first();
 
         if (!$route) {
             $route = new Route;
 
             $route->origin_point_id = $origin_point->id;
             $route->destination_point_id = $destination_entry->point->id;
+
+            if ($via && $via != '')
+                $route->via = $via;
+
             $route->save();
         }  
 
@@ -233,8 +274,10 @@ class CreateRoute extends Command
             }
         }
 
-        print_r("route saved!!!\n");
-        print_r("route id: " . $route->id . "\n");
-        print_r("steps count: " . $step . "\n");
+        print_r(($via && $via != '' ? '(' . $via . ') ' : '') . "route saved!!!\n");
+        print_r(($via && $via != '' ? '(' . $via . ') ' : '') . "route id: " . $route->id . "\n");
+        print_r(($via && $via != '' ? '(' . $via . ') ' : '') . "steps count: " . $step . "\n");
+
+        return true;
     }
 }

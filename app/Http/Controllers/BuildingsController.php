@@ -11,6 +11,7 @@ use View;
 use App\User;
 use App\Building;
 use App\Annotation;
+use App\SubCategory;
 use App\Route;
 use App\Image;
 use App\Activity;
@@ -158,17 +159,59 @@ class BuildingsController extends Controller
 		if (!$destination_entry)
 			return array('status' => 'ERROR', 'error' => 'Destination has no entry point.');
 		
-		return $this->getRoute($id, $origin_entry->point, $destination_entry->point);
+		return $this->getRoutes($id, $origin_entry->point, $destination_entry->point);
 	}
 
-	public static function getRoute ($id, $from, $to) {
+	public function showRoute (Request $request, $id) {
+		$origin = Annotation::find($request->origin);
+		$destination = Annotation::find($request->destination);
+
+		if (!$origin)
+			return array('status' => 'ERROR', 'error' => 'Invalid origin.');
+
+		if (!$destination)
+			return array('status' => 'ERROR', 'error' => 'Invalid destination.');
+
+		$origin_entry = null;
+		$destination_entry = null;
+
+		$min_entries_distance = 100;
+
+		foreach ($origin->entries as $o_entry) {
+			foreach ($destination->entries as $d_entry) {
+				$distance = sqrt(pow($o_entry->point->longitude - $d_entry->point->longitude, 2) + pow($o_entry->point->latitude - $d_entry->point->latitude, 2));
+
+				if ($distance < $min_entries_distance) {
+					$min_entries_distance = $distance;
+
+					$origin_entry = $o_entry;
+					$destination_entry = $d_entry;
+				}
+			}
+		}
+
+		if (!$origin_entry)
+			return array('status' => 'ERROR', 'error' => 'Origin has no entry point.');
+
+		if (!$destination_entry)
+			return array('status' => 'ERROR', 'error' => 'Destination has no entry point.');
+		
+		return $this->getRoute($id, $origin_entry->point, $destination_entry->point, $request->via);
+	}
+
+	public static function getRoute ($id, $from, $to, $via) {
 		$building = Building::find($id);
 		$route_status = '';
 
 		if (!$building)
 			return array('status' => 'ERROR', 'error' => 'Building not found.');
 
-		$route = Route::where(array('origin_point_id' => $from->id, 'destination_point_id' => $to->id))->first();
+		$route = Route::where(array('origin_point_id' => $from->id, 'destination_point_id' => $to->id));
+
+		if ($via && $via != '')
+			$route = $route->where('via', $via)->first();
+		else
+			$route = $route->first();
 
 		$floors = [];
 		if ($route && $route->turns->count() > 0) {
@@ -205,9 +248,14 @@ class BuildingsController extends Controller
 			$links = [];
 			foreach ($building->adjascents as $adjascent) {
 				if ($adjascent->origin && $adjascent->destination) {
-					if (($from->floor_id == $to->floor_id && $adjascent->origin->floor_id == $adjascent->destination->floor_id)
-						|| $from->floor_id != $to->floor_id)
-					$links[] = new Link(new MNode($adjascent->origin->longitude, $adjascent->origin->latitude, $adjascent->origin->floor_id), 
+					$adj_via = $adjascent->origin->entry && $adjascent->origin->entry->annotation && $adjascent->origin->entry->annotation->sub_category && $adjascent->origin->entry->annotation->sub_category->floor_trans == 1 ? strtolower($adjascent->origin->entry->annotation->sub_category->name) : '';
+
+					if ($adj_via == '')
+						$adj_via = $adjascent->destination->entry && $adjascent->destination->entry->annotation && $adjascent->destination->entry->annotation->sub_category && $adjascent->destination->entry->annotation->sub_category->floor_trans == 1 ? strtolower($adjascent->destination->entry->annotation->sub_category->name) : '';
+
+					if ((($from->floor_id == $to->floor_id && $adjascent->origin->floor_id == $adjascent->destination->floor_id)
+						|| $from->floor_id != $to->floor_id) && ($adj_via == '' || $via == '' || $adj_via == $via))	
+						$links[] = new Link(new MNode($adjascent->origin->longitude, $adjascent->origin->latitude, $adjascent->origin->floor_id), 
 										new MNode($adjascent->destination->longitude, $adjascent->destination->latitude, $adjascent->destination->floor_id), 
 										$adjascent->distance);
 				}
@@ -222,9 +270,7 @@ class BuildingsController extends Controller
 			$solution = $aStar->run($start, $goal);
 
 			$printer = new SequencePrinter($graph, $solution);
-
 			$sequence = $printer->getSequence();
-			
 			$distance = $printer->getTotalDistance();		
 			foreach ($sequence as $node) {
 				$point = Point::with('floor')->where(array('longitude' => $node->getX(), 'latitude' => $node->getY(), 'floor_id' => $node->getF()))->first();
@@ -249,7 +295,7 @@ class BuildingsController extends Controller
 		}
 
 		foreach ($floors as $key => $value) {
-			if (count($value["points"]) < 2)
+			if (count($value["points"]) < 2 && count($floors) > 2)
 				unset($floors[$key]);
 		}
 
@@ -280,7 +326,22 @@ class BuildingsController extends Controller
            $prev_floor_id = $key;
        }
 
-		return array( 'status' => 'OK', 'floors' => $floors, 'distance' => $distance, 'route_status' => $route_status);
+       if (count($floors) == 0)
+       		return array('status' => 'ERROR', 'error' => 'No route found.');
+
+		return array( 'status' => 'OK', 'route_status' => $route_status, 'via' => $via, 'floors' => $floors, 'distance' => $distance);
+	}
+
+	public function getRoutes($id, $from, $to) {
+		$routes = [];
+
+		$sub_cat_names = SubCategory::where('floor_trans', 1)->pluck('name')->toArray();
+		foreach ($sub_cat_names as $sub_cat_name) {
+			$routes[] = $this->getRoute($id, $from, $to, strtolower($sub_cat_name));
+		}
+		$routes[] = $this->getRoute($id, $from, $to, '');
+
+		return array('status' => 'OK', 'routes' => $routes);
 	}
 
     /*****************/
@@ -801,6 +862,6 @@ class BuildingsController extends Controller
 		if (!$destination_entry)
 			return array('status' => 'ERROR', 'error' => 'Destination has no entry point.');
 		
-		return $this->getRoute($id, $origin_entry->point, $destination_entry->point);
+		return $this->getRoutes($id, $origin_entry->point, $destination_entry->point);
 	}
 }
