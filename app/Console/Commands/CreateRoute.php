@@ -52,7 +52,7 @@ class CreateRoute extends Command
      */
     public function handle()
     {
-        print_r("start!!!");
+        print_r("start!!!\n");
 
         $deleted_building_ids = Building::withTrashed()
                                         ->where('deleted_at', '>', 
@@ -144,7 +144,7 @@ class CreateRoute extends Command
                 $via_count++;
         } while (!$processed && $via_count < count($vias));
 
-        print_r("end!!!");
+        print_r("end!!!\n");
     }
 
     function createRoute ($via) {
