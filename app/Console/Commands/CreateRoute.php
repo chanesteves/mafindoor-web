@@ -250,7 +250,7 @@ class CreateRoute extends Command
             $route->destination_point_id = $destination_entry->point->id;
 
             if ($via && $via != '')
-                $route->via = $via;
+                $route->via = strtolower($via);
 
             $route->save();
         }  
