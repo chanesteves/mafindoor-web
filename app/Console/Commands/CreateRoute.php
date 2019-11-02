@@ -229,11 +229,7 @@ class CreateRoute extends Command
         print_r(($via && $via != '' ? '(' . $via . ') ' : '') . "destination entry id: " . $destination_entry->id . "\n");
         print_r(($via && $via != '' ? '(' . $via . ') ' : '') . "destination point id: " . $destination_entry->point->id . "\n");
 
-<<<<<<< HEAD
-        $result = BuildingsController::getRoute($destination_annotation->floor->building_id, $origin_point, $destination_entry->point, '');
-=======
         $result = BuildingsController::getRoute($destination_annotation->floor->building_id, $origin_point, $destination_entry->point, strtolower($via));
->>>>>>> dev
 
         if ($result['status'] == 'ERROR') {
             print_r(($via && $via != '' ? '(' . $via . ') ' : '') . "error encountered while getting route!!!");
