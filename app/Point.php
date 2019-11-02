@@ -37,4 +37,9 @@ class Point extends Model
     {
         return $this->hasMany('App\Route', 'origin_point_id', 'id');
     }
+
+    public function entry()
+    {
+        return $this->hasOne('App\Entry', 'point_id', 'id');
+    }
 }

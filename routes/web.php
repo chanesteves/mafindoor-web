@@ -77,6 +77,7 @@ Route::post('activities/ajaxStore', 'ActivitiesController@ajaxStore');
 
 Route::get('buildings/exportBuildings', 'BuildingsController@exportBuildings');
 Route::get('buildings/{buliding}/showRoutes', 'BuildingsController@showRoutes');
+Route::get('buildings/{buliding}/showRoute', 'BuildingsController@showRoute');
 Route::get('floors/exportFloors', 'FloorsController@exportFloors');
 Route::get('annotations/exportAnnotations', 'AnnotationsController@exportAnnotations');
 
