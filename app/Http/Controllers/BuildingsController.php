@@ -345,10 +345,10 @@ class BuildingsController extends Controller
 		}
 		else {
 			$route = $this->getRoute($id, $from, $to, '');	
-		}
+			if ($route['status'] == 'OK' && count($route['floors']) > 0)
+				$routes[] = $route;
+		}	
 		
-		if ($route['status'] == 'OK' && count($route['floors']) > 0)
-			$routes[] = $route;
 
 		return array('status' => 'OK', 'routes' => $routes);
 	}
