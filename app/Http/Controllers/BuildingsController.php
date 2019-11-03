@@ -246,6 +246,7 @@ class BuildingsController extends Controller
 		else {
 			$route_status = 'new';
 			$links = [];
+
 			foreach ($building->adjascents as $adjascent) {
 				if ($adjascent->origin && $adjascent->destination) {
 					$adj_via = $adjascent->origin->entry && $adjascent->origin->entry->annotation && $adjascent->origin->entry->annotation->sub_category && $adjascent->origin->entry->annotation->sub_category->floor_trans == 1 ? strtolower($adjascent->origin->entry->annotation->sub_category->name) : '';
@@ -253,11 +254,12 @@ class BuildingsController extends Controller
 					if ($adj_via == '')
 						$adj_via = $adjascent->destination->entry && $adjascent->destination->entry->annotation && $adjascent->destination->entry->annotation->sub_category && $adjascent->destination->entry->annotation->sub_category->floor_trans == 1 ? strtolower($adjascent->destination->entry->annotation->sub_category->name) : '';
 
-					if ((($from->floor_id == $to->floor_id && $adjascent->origin->floor_id == $adjascent->destination->floor_id)
-						|| $from->floor_id != $to->floor_id) && ($adj_via == '' || $via == '' || $adj_via == $via))	
+					if (($from->floor_id == $to->floor_id && $adjascent->origin->floor_id == $adjascent->destination->floor_id)
+						|| ($from->floor_id != $to->floor_id && ($adj_via == '' || $via == '' || $adj_via == $via))) {
 						$links[] = new Link(new MNode($adjascent->origin->longitude, $adjascent->origin->latitude, $adjascent->origin->floor_id), 
 										new MNode($adjascent->destination->longitude, $adjascent->destination->latitude, $adjascent->destination->floor_id), 
-										$adjascent->distance);
+										$adjascent->distance);	
+					}
 				}
 			}
 

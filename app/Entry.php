@@ -27,4 +27,9 @@ class Entry extends Model
     {
         return $this->belongsTo('App\Point', 'point_id', 'id');
     }
+
+    public function annotation()
+    {
+        return $this->belongsTo('App\Annotation', 'annotation_id', 'id');
+    }
 }
