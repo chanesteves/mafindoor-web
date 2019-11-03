@@ -339,7 +339,7 @@ class BuildingsController extends Controller
 			$sub_cat_names = SubCategory::where('floor_trans', 1)->pluck('name')->toArray();
 			foreach ($sub_cat_names as $sub_cat_name) {
 				$route = $this->getRoute($id, $from, $to, strtolower($sub_cat_name));
-				if ($route->status == 'OK' && count($route->floors) > 0)
+				if ($route['status'] == 'OK' && count($route['floors']) > 0)
 					$routes[] = $route;
 			}
 		}
@@ -347,7 +347,7 @@ class BuildingsController extends Controller
 			$route = $this->getRoute($id, $from, $to, '');	
 		}
 		
-		if ($route->status == 'OK' && count($route->floors) > 0)
+		if ($route['status'] == 'OK' && count($route['floors']) > 0)
 			$routes[] = $route;
 
 		return array('status' => 'OK', 'routes' => $routes);
