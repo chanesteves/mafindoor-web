@@ -22,6 +22,7 @@ Route::match(['post', 'get', 'options'], 'auth/ajaxRegister', 'Auth\RegisterCont
 
 Route::match(['post', 'get', 'options'], 'buildings/{building}/ajaxShow', 'BuildingsController@ajaxShow')->middleware('auth.api','cors');
 Route::match(['post', 'get', 'options'], 'buildings/{building}/ajaxShowRoutes', 'BuildingsController@ajaxShowRoutes')->middleware('auth.api','cors');
+Route::match(['post', 'get', 'options'], 'buildings/{building}/ajaxShowRoute', 'BuildingsController@ajaxShowRoute')->middleware('auth.api','cors');
 Route::match(['post', 'get', 'options'], 'buildings/ajaxShowBuildings', 'BuildingsController@ajaxShowBuildings')->middleware('auth.api','cors');
 
 Route::match(['post', 'get', 'options'], 'userSubCategorySearches/ajaxStore', 'UserSubCategorySearchesController@ajaxStore')->middleware('auth.api','cors');
