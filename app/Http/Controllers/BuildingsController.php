@@ -221,6 +221,7 @@ class BuildingsController extends Controller
 			$route = $route->first();
 
 		$floors = [];
+		$distance = 0;
 		if ($route && $route->turns->count() > 0) {
 			$route_status = 'old';
 			$distance = 0;		

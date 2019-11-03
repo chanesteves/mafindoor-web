@@ -248,6 +248,7 @@ class CreateRoute extends Command
 
             $route->origin_point_id = $origin_point->id;
             $route->destination_point_id = $destination_entry->point->id;
+            $route->distance = $result['distance'];
 
             if ($via && $via != '')
                 $route->via = strtolower($via);
