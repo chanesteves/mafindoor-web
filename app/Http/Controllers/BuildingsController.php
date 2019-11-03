@@ -837,7 +837,7 @@ class BuildingsController extends Controller
 	    return array('status' => 'OK', 'result' => $building, 'adjascents' => $adjascents);
 	}
 
-	public function ajaxShowRoute (Request $request, $id, $via) {
+	public function ajaxShowRoute (Request $request, $id) {
 		$origin = Annotation::find($request->origin);
 		$destination = Annotation::find($request->destination);
 
@@ -871,7 +871,7 @@ class BuildingsController extends Controller
 		if (!$destination_entry)
 			return array('status' => 'ERROR', 'error' => 'Destination has no entry point.');
 		
-		return $this->getRoute($id, $origin_entry->point, $destination_entry->point, strtolower($via));
+		return $this->getRoute($id, $origin_entry->point, $destination_entry->point, strtolower($request->via));
 	}
 
 	public function ajaxShowRoutes (Request $request, $id) {
