@@ -329,17 +329,26 @@ class BuildingsController extends Controller
        if (count($floors) == 0)
        		return array('status' => 'ERROR', 'error' => 'No route found.');
 
-		return array( 'status' => 'OK', 'route_status' => $route_status, 'via' => $via, 'floors' => $floors, 'distance' => $distance);
+		return array( 'status' => 'OK', 'route_status' => $route_status, 'via' => ucwords($via), 'floors' => $floors, 'distance' => $distance);
 	}
 
 	public function getRoutes($id, $from, $to) {
 		$routes = [];
 
-		$sub_cat_names = SubCategory::where('floor_trans', 1)->pluck('name')->toArray();
-		foreach ($sub_cat_names as $sub_cat_name) {
-			$routes[] = $this->getRoute($id, $from, $to, strtolower($sub_cat_name));
+		if ($from->floor_id != $to->floor_id) {
+			$sub_cat_names = SubCategory::where('floor_trans', 1)->pluck('name')->toArray();
+			foreach ($sub_cat_names as $sub_cat_name) {
+				$route = $this->getRoute($id, $from, $to, strtolower($sub_cat_name));
+				if ($route->status == 'OK' && count($route->floors) > 0)
+					$routes[] = $route;
+			}
 		}
-		$routes[] = $this->getRoute($id, $from, $to, '');
+		else {
+			$route = $this->getRoute($id, $from, $to, '');	
+		}
+		
+		if ($route->status == 'OK' && count($route->floors) > 0)
+			$routes[] = $route;
 
 		return array('status' => 'OK', 'routes' => $routes);
 	}
