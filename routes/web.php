@@ -31,6 +31,7 @@ Route::post('buildings/{building}/ajaxStoreImages', 'BuildingsController@ajaxSto
 Route::post('buildings/{building}/ajaxStoreImage', 'BuildingsController@ajaxStoreImage');
 Route::post('buildings/{building}/ajaxUpdateAdjascents', 'BuildingsController@ajaxUpdateAdjascents');
 Route::post('buildings/{buliding}/ajaxShowRoutes', 'BuildingsController@ajaxShowRoutes');
+Route::post('buildings/{buliding}/ajaxShowRoute', 'BuildingsController@ajaxShowRoute');
 Route::post('floors/ajaxStore', 'FloorsController@ajaxStore');
 Route::post('floors/{floor}/ajaxUpdate', 'FloorsController@ajaxUpdate');
 Route::post('floors/{floor}/ajaxDestroy', 'FloorsController@ajaxDestroy');

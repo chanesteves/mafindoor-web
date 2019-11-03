@@ -837,6 +837,43 @@ class BuildingsController extends Controller
 	    return array('status' => 'OK', 'result' => $building, 'adjascents' => $adjascents);
 	}
 
+	public function ajaxShowRoute (Request $request, $id, $via) {
+		$origin = Annotation::find($request->origin);
+		$destination = Annotation::find($request->destination);
+
+		if (!$origin)
+			return array('status' => 'ERROR', 'error' => 'Invalid origin.');
+
+		if (!$destination)
+			return array('status' => 'ERROR', 'error' => 'Invalid destination.');
+
+		$origin_entry = null;
+		$destination_entry = null;
+
+		$min_entries_distance = 100;
+
+		foreach ($origin->entries as $o_entry) {
+			foreach ($destination->entries as $d_entry) {
+				$distance = sqrt(pow($o_entry->point->longitude - $d_entry->point->longitude, 2) + pow($o_entry->point->latitude - $d_entry->point->latitude, 2));
+
+				if ($distance < $min_entries_distance) {
+					$min_entries_distance = $distance;
+
+					$origin_entry = $o_entry;
+					$destination_entry = $d_entry;
+				}
+			}
+		}
+
+		if (!$origin_entry)
+			return array('status' => 'ERROR', 'error' => 'Origin has no entry point.');
+
+		if (!$destination_entry)
+			return array('status' => 'ERROR', 'error' => 'Destination has no entry point.');
+		
+		return $this->getRoute($id, $origin_entry->point, $destination_entry->point, strtolower($via));
+	}
+
 	public function ajaxShowRoutes (Request $request, $id) {
 		$origin = Annotation::find($request->origin);
 		$destination = Annotation::find($request->destination);
