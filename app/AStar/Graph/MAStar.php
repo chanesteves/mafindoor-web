@@ -47,14 +47,17 @@ class MAStar extends AStar
         $myStartNode = MNode::fromNode($start);
         $myEndNode = MNode::fromNode($end);
 
-        $xFactor = pow($myStartNode->getX() - $myEndNode->getX(), 2);
-        $yFactor = pow($myStartNode->getY() - $myEndNode->getY(), 2);
+        $lat_from = deg2rad($myStartNode->getY());
+        $lng_from = deg2rad($myStartNode->getX());
+        $lat_to = deg2rad($myEndNode->getY());
+        $lng_to = deg2rad($myEndNode->getX());
 
-        $euclideanDistance = sqrt($xFactor + $yFactor);
+        $lat_delta = $lat_to - $lat_from;
+        $lng_delta = $lng_to - $lng_from;
 
-        if ($euclideanDistance == 0 || $myStartNode->getF() != $myEndNode->getF())
-            $euclideanDistance += 0.001;
-
-        return $euclideanDistance;
+        $angle = 2 * asin(sqrt(pow(sin($lat_delta / 2), 2) +
+            cos($lat_from) * cos($lat_to) * pow(sin($lng_delta / 2), 2)));
+        
+        return $angle * 6378137;
     }
 }

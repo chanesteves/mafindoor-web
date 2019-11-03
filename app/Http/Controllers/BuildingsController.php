@@ -145,11 +145,11 @@ class BuildingsController extends Controller
 		$origin_entry = null;
 		$destination_entry = null;
 
-		$min_entries_distance = 100;
+		$min_entries_distance = 1000000;
 
 		foreach ($origin->entries as $o_entry) {
 			foreach ($destination->entries as $d_entry) {
-				$distance = sqrt(pow($o_entry->point->longitude - $d_entry->point->longitude, 2) + pow($o_entry->point->latitude - $d_entry->point->latitude, 2));
+				$distance = $this->getHaversineGreatCircleDistance($o_entry->point->latitude, $o_entry->point->longitude, $d_entry->point->latitude, $d_entry->point->longitude);
 
 				if ($distance < $min_entries_distance) {
 					$min_entries_distance = $distance;
@@ -182,11 +182,11 @@ class BuildingsController extends Controller
 		$origin_entry = null;
 		$destination_entry = null;
 
-		$min_entries_distance = 100;
+		$min_entries_distance = 1000000;
 
 		foreach ($origin->entries as $o_entry) {
 			foreach ($destination->entries as $d_entry) {
-				$distance = sqrt(pow($o_entry->point->longitude - $d_entry->point->longitude, 2) + pow($o_entry->point->latitude - $d_entry->point->latitude, 2));
+				$distance = $this->getHaversineGreatCircleDistance($o_entry->point->latitude, $o_entry->point->longitude, $d_entry->point->latitude, $d_entry->point->longitude);
 
 				if ($distance < $min_entries_distance) {
 					$min_entries_distance = $distance;
@@ -246,7 +246,7 @@ class BuildingsController extends Controller
 			}
 
 			if ($prev_point)
-				$distance += sqrt(pow($prev_point->longitude - $point->longitude, 2) + pow($prev_point->latitude - $point->latitude, 2));
+				$distance += $this->getHaversineGreatCircleDistance($prev_point->latitude, $prev_point->longitude, $point->latitude, $point->longitude);
 
 			$prev_point = $point;
 		}
@@ -360,6 +360,21 @@ class BuildingsController extends Controller
 		
 
 		return array('status' => 'OK', 'routes' => $routes);
+	}
+
+	public function getHaversineGreatCircleDistance ($lat_from, $lng_from, $lat_to, $lng_to, $earth_rad = 6378137) {
+		$lat_from = deg2rad($lat_from);
+		$lng_from = deg2rad($lng_from);
+		$lat_to = deg2rad($lat_to);
+		$lng_to = deg2rad($lng_to);
+
+		$lat_delta = $lat_to - $lat_from;
+		$lng_delta = $lng_to - $lng_from;
+
+		$angle = 2 * asin(sqrt(pow(sin($lat_delta / 2), 2) +
+		    cos($lat_from) * cos($lat_to) * pow(sin($lng_delta / 2), 2)));
+		
+		return $angle * $earth_rad;
 	}
 
     /*****************/
@@ -798,7 +813,7 @@ class BuildingsController extends Controller
 	    	if (!$origin || !$destination)
 	    		return;
 
-	    	$distance = sqrt(pow($origin->longitude - $destination->longitude, 2) + pow($origin->latitude - $destination->latitude, 2));
+	    	$distance = $this->getHaversineGreatCircleDistance($origin->latitude, $origin->longitude, $destination->latitude, $destination->longitude);
 			
 	    	if ($origin->floor_id != $destination->floor_id)
 				$distance += 0.001;
@@ -896,11 +911,11 @@ class BuildingsController extends Controller
 		$origin_entry = null;
 		$destination_entry = null;
 
-		$min_entries_distance = 100;
+		$min_entries_distance = 1000000;
 
 		foreach ($origin->entries as $o_entry) {
 			foreach ($destination->entries as $d_entry) {
-				$distance = sqrt(pow($o_entry->point->longitude - $d_entry->point->longitude, 2) + pow($o_entry->point->latitude - $d_entry->point->latitude, 2));
+				$distance = $this->getHaversineGreatCircleDistance($o_entry->point->latitude, $o_entry->point->longitude, $d_entry->point->latitude, $d_entry->point->longitude);
 
 				if ($distance < $min_entries_distance) {
 					$min_entries_distance = $distance;
