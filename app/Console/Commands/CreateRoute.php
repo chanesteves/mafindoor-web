@@ -107,7 +107,7 @@ class CreateRoute extends Command
                         ->get();
 
         foreach ($routes as $route) {
-            if ($route->turns->count() == 0) {
+            if ($route->turns->count() == 0 || $route->distance < 1) {
                 $route->delete();
                 continue;
             }
