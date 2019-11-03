@@ -32,6 +32,13 @@ use Illuminate\Http\Request;
 
 class BuildingsController extends Controller
 {
+
+	public function __construct()
+	{
+		ini_set('max_execution_time', 60000000000);
+		ini_set('memory_limit', -1);
+	}
+
 	/**
 	 * Display the specified resource.
 	 *
