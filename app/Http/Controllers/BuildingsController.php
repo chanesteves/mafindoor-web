@@ -433,7 +433,7 @@ class BuildingsController extends Controller
 		if (!$user)
 			$user = Auth::user();
 
-		$building = Building::with('images', 'floors', 'floors.annotations', 'floors.annotations.sub_category', 'floors.annotations.sub_category.user_searches', 'floors.annotations.sub_category.category', 'floors.annotations.floor')->find($id);
+		$building = Building::with('images', 'floors', 'floors.annotations', 'floors.annotations.sub_category', 'floors.annotations.sub_category.user_searches', 'floors.annotations.sub_category.category', 'floors.annotations.floor', 'floors.points')->find($id);
 
 		$activity = new Activity;
 
