@@ -906,8 +906,9 @@ class BuildingsController extends Controller
 	public function ajaxShowRoutes (Request $request, $id) {
 		$origin = Annotation::find($request->origin);
 		$destination = Annotation::find($request->destination);
+		$origin_point = Point::find($request->origin_point);
 
-		if (!$origin)
+		if (!$origin && !$origin_point)
 			return array('status' => 'ERROR', 'error' => 'Invalid origin.');
 
 		if (!$destination)
@@ -918,25 +919,40 @@ class BuildingsController extends Controller
 
 		$min_entries_distance = 1000000;
 
-		foreach ($origin->entries as $o_entry) {
+		if ($origin && !$origin_point) {
+			foreach ($origin->entries as $o_entry) {
+				foreach ($destination->entries as $d_entry) {
+					$distance = $this->getHaversineGreatCircleDistance($o_entry->point->latitude, $o_entry->point->longitude, $d_entry->point->latitude, $d_entry->point->longitude);
+
+					if ($distance < $min_entries_distance) {
+						$min_entries_distance = $distance;
+
+						$origin_entry = $o_entry;
+						$destination_entry = $d_entry;
+
+						$origin_point = $o_entry->point;
+					}
+				}
+			}
+		}
+		else if ($origin_point) {
 			foreach ($destination->entries as $d_entry) {
-				$distance = $this->getHaversineGreatCircleDistance($o_entry->point->latitude, $o_entry->point->longitude, $d_entry->point->latitude, $d_entry->point->longitude);
+				$distance = $this->getHaversineGreatCircleDistance($origin_point->latitude, $origin_point->longitude, $d_entry->point->latitude, $d_entry->point->longitude);
 
 				if ($distance < $min_entries_distance) {
 					$min_entries_distance = $distance;
 
-					$origin_entry = $o_entry;
 					$destination_entry = $d_entry;
 				}
 			}
 		}
 
-		if (!$origin_entry)
+		if (!$origin_entry && !$origin_point)
 			return array('status' => 'ERROR', 'error' => 'Origin has no entry point.');
 
 		if (!$destination_entry)
 			return array('status' => 'ERROR', 'error' => 'Destination has no entry point.');
 		
-		return $this->getRoutes($id, $origin_entry->point, $destination_entry->point);
+		return $this->getRoutes($id, $origin_point, $destination_entry->point);
 	}
 }
