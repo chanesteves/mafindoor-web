@@ -6,6 +6,7 @@ use DB;
 use Carbon\Carbon;
 
 use App\Route;
+use App\NoRoute;
 use App\Turn;
 use App\Building;
 use App\Floor;
@@ -153,6 +154,7 @@ class CreateRoute extends Command
         $origin_point = null;
         $routed_annotation_ids = [];
         $unrouted_annotation_ids = [];
+        $no_route_annotation_ids = [];
         $unrouted_annotations = collect();
         do {
             $origin_point = Point::whereNotIn('id', $routed_point_ids)->first();
@@ -175,17 +177,21 @@ class CreateRoute extends Command
                                                 ->join('points', 'points.id', 'destination_point_id')
                                                 ->join('entries', 'points.id', 'point_id')
                                                 ->pluck('annotation_id')->toArray();
+
+            if ($via && $via != '')
+                $no_route_annotation_ids = NoRoute::where(array('origin_point_id' => $origin_point->id, 'via' => $via))
+                                                ->pluck('destination_annotation_id')->toArray();
+            else
+                $no_route_annotation_ids = Route::where('origin_point_id', $origin_point->id)
+                                                ->pluck('destination_annotation_id')->toArray();
             
-            if ($origin_annotation)
-                $routed_annotation_ids[] = $origin_annotation->id;
-
-            DB::enableQueryLog();
-
             if ($via && $via != '')
                 $unrouted_annotations = Annotation::select(DB::raw('annotations.*'))
                                                     ->join('floors', 'floors.id', 'floor_id')
                                                     ->join('buildings', 'buildings.id', 'building_id')
                                                     ->whereNotIn('annotations.id', $routed_annotation_ids)
+                                                    ->whereNotIn('annotations.id', $no_route_annotation_ids)
+                                                    ->where('annotations.id', '!=', $origin_annotation->id)
                                                     ->where('building_id', $origin_point->floor->building_id)
                                                     ->where('floor_id', '!=', $origin_point->floor_id)
                                                     ->get();                
@@ -194,6 +200,8 @@ class CreateRoute extends Command
                                                     ->join('floors', 'floors.id', 'floor_id')
                                                     ->join('buildings', 'buildings.id', 'building_id')
                                                     ->whereNotIn('annotations.id', $routed_annotation_ids)
+                                                    ->whereNotIn('annotations.id', $no_route_annotation_ids)
+                                                    ->where('annotations.id', '!=', $origin_annotation->id)
                                                     ->where('building_id', $origin_point->floor->building_id)
                                                     ->get();
 
@@ -226,6 +234,33 @@ class CreateRoute extends Command
             }
         }
 
+        if (!$destination_entry || !$destination_entry->point) {
+            print_r(($via && $via != '' ? '(' . $via . ') ' : '') . "destination annotation has no entry point");
+
+            $no_route = NoRoute::where(array('origin_point_id' => $origin_point->id, 'destination_annotation_id' => $destination_annotation->id, 'via' => $via));
+
+            if ($origin_point->entry && $origin_point->entry->annotation)
+                $no_route = $no_route->where('origin_annotation_id', $origin_point->entry->annotation->id)->first();
+            else
+                $no_route = $no_route->first();
+
+            if (!$no_route) {
+                $no_route = new NoRoute;
+
+                $no_route->origin_point_id = $origin_point->id;
+
+                if ($origin_point->entry && $origin_point->entry->annotation)
+                    $no_route->origin_annotation_id = $origin_point->entry->annotation->id;
+
+                $no_route->destination_annotation_id = $destination_annotation->id;
+                $no_route->via = $via;
+                $no_route->reason = 'no entry point';
+                $no_route->save();
+            }
+
+            return false;
+        }
+
         print_r(($via && $via != '' ? '(' . $via . ') ' : '') . "destination entry id: " . $destination_entry->id . "\n");
         print_r(($via && $via != '' ? '(' . $via . ') ' : '') . "destination point id: " . $destination_entry->point->id . "\n");
 
@@ -233,6 +268,24 @@ class CreateRoute extends Command
 
         if ($result['status'] == 'ERROR') {
             print_r(($via && $via != '' ? '(' . $via . ') ' : '') . "error encountered while getting route!!!");
+
+            $no_route = NoRoute::where(array('origin_point_id' => $origin_point->id, 'destination_point_id' => $destination_entry->point->id, 'via' => $via))->first();
+
+            if (!$no_route) {
+                $no_route = new NoRoute;
+
+                $no_route->origin_point_id = $origin_point->id;
+                $no_route->destination_point_id = $destination_entry->point->id;                
+            }
+
+            if ($origin_point->entry && $origin_point->entry->annotation)
+                $no_route->origin_annotation_id = $origin_point->entry->annotation->id;
+            
+            $no_route->destination_annotation_id = $destination_annotation->id;
+            $no_route->via = $via;
+            $no_route->reason = 'error';
+            $no_route->save();
+
             return false;
         }
 
@@ -273,6 +326,29 @@ class CreateRoute extends Command
 
                 $step++;
             }
+        }
+
+        if (!$route) {
+            print_r(($via && $via != '' ? '(' . $via . ') ' : '') . "no route found!!!");
+
+             $no_route = NoRoute::where(array('origin_point_id' => $origin_point->id, 'destination_point_id' => $destination_entry->point->id, 'via' => $via))->first();
+
+            if (!$no_route) {
+                $no_route = new NoRoute;
+
+                $no_route->origin_point_id = $origin_point->id;
+                $no_route->destination_point_id = $destination_entry->point->id;                
+            }
+
+            if ($origin_point->entry && $origin_point->entry->annotation)
+                    $no_route->origin_annotation_id = $origin_point->entry->annotation->id;
+
+            $no_route->destination_annotation_id = $destination_annotation->id;
+            $no_route->via = $via;
+            $no_route->reason = 'no route';
+            $no_route->save();
+
+            return false;
         }
 
         print_r(($via && $via != '' ? '(' . $via . ') ' : '') . "route saved!!!\n");

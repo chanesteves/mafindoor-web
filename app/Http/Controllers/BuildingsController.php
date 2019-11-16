@@ -13,6 +13,7 @@ use App\Building;
 use App\Annotation;
 use App\SubCategory;
 use App\Route;
+use App\NoRoute;
 use App\Turn;
 use App\Image;
 use App\Activity;
@@ -369,8 +370,21 @@ class BuildingsController extends Controller
 	        }
        }
 
-       if (count($floors) == 0)
+       if (count($floors) == 0) {
+       		$no_route = NoRoute::where(array('origin_point_id' => $from->id, 'destination_point_id' => $to->id, 'via' => $via))->first();
+
+            if (!$no_route) {
+                $no_route = new NoRoute;
+
+                $no_route->origin_point_id = $from->id;
+                $no_route->destination_point_id = $to->id;                
+                $no_route->via = $via;
+                $no_route->reason = 'no route';
+                $no_route->save();
+            }
+
        		return array('status' => 'ERROR', 'error' => 'No route found.');
+       }
 
 		return array( 'status' => 'OK', 'route_status' => $route_status, 'via' => ucwords($via), 'floors' => $floors, 'distance' => $distance);
 	}
