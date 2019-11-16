@@ -274,6 +274,9 @@ class BuildingsController extends Controller
 			$prev_point = $point;
 		}
 		else {
+			if ($route)
+				$route->delete();
+
 			$route_status = 'new';
 			$links = [];
 
@@ -358,57 +361,54 @@ class BuildingsController extends Controller
            $prev_floor_id = $key;
        }
 
-       if ($route_status == 'new' && count($floors) > 0) {
-       		if (!$route)
-       			$route = new Route;
+       if ($route_status == 'new') {
+       		if (count($floors) > 0) {
+	       		if (!$route)
+	       			$route = new Route;
 
-            $route->origin_point_id = $from->id;
-            $route->destination_point_id = $to->id;
-            $route->distance = $distance;
+	            $route->origin_point_id = $from->id;
+	            $route->destination_point_id = $to->id;
+	            $route->distance = $distance;
 
-            if ($via && $via != '')
-                $route->via = strtolower($via);
+	            if ($via && $via != '')
+	                $route->via = strtolower($via);
 
-            $route->save();
+	            $route->save();
 
-            $step = 0;
-	        foreach ($floors as $key => $value) {
-	            foreach ($value['points'] as $point) {
-	                $turn = Turn::where(array('point_id' => $point->id, 'route_id' => $route->id))->first();
+	            $step = 0;
+		        foreach ($floors as $key => $value) {
+		            foreach ($value['points'] as $point) {
+		                $turn = Turn::where(array('point_id' => $point->id, 'route_id' => $route->id))->first();
 
-	                if (!$turn) {
-	                    $turn = new Turn;
+		                if (!$turn) {
+		                    $turn = new Turn;
 
-	                    $turn->point_id = $point->id;
-	                    $turn->route_id = $route->id;
-	                }
+		                    $turn->point_id = $point->id;
+		                    $turn->route_id = $route->id;
+		                }
 
-	                $turn->step = $step;
-	                $turn->save();
+		                $turn->step = $step;
+		                $turn->save();
 
-	                $step++;
+		                $step++;
+		            }
+		        }
+		    }
+		    else {
+		    	$no_route = NoRoute::where(array('origin_point_id' => $from->id, 'destination_point_id' => $to->id, 'via' => $via))->first();
+
+	            if (!$no_route) {
+	                $no_route = new NoRoute;
+
+	                $no_route->origin_point_id = $from->id;
+	                $no_route->destination_point_id = $to->id;                
+	                $no_route->via = $via;
+	                $no_route->reason = 'no route';
+	                $no_route->save();
 	            }
-	        }
-       }
-       else {
-       		if ($route)
-       			$route->delete();
-       }
 
-       if (count($floors) == 0) {
-       		$no_route = NoRoute::where(array('origin_point_id' => $from->id, 'destination_point_id' => $to->id, 'via' => $via))->first();
-
-            if (!$no_route) {
-                $no_route = new NoRoute;
-
-                $no_route->origin_point_id = $from->id;
-                $no_route->destination_point_id = $to->id;                
-                $no_route->via = $via;
-                $no_route->reason = 'no route';
-                $no_route->save();
-            }
-
-       		return array('status' => 'ERROR', 'error' => 'No route found.');
+	       		return array('status' => 'ERROR', 'error' => 'No route found.');
+		    }
        }
 
 		return array( 'status' => 'OK', 'route_status' => $route_status, 'via' => ucwords($via), 'floors' => $floors, 'distance' => $distance);
