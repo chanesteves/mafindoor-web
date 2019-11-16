@@ -13,6 +13,7 @@ use App\Building;
 use App\Annotation;
 use App\SubCategory;
 use App\Route;
+use App\Turn;
 use App\Image;
 use App\Activity;
 use App\Point;
@@ -334,6 +335,38 @@ class BuildingsController extends Controller
            }
 
            $prev_floor_id = $key;
+       }
+
+       if ($route_status == 'new') {
+       		$route = new Route;
+
+            $route->origin_point_id = $from->id;
+            $route->destination_point_id = $to->id;
+            $route->distance = $distance;
+
+            if ($via && $via != '')
+                $route->via = strtolower($via);
+
+            $route->save();
+
+            $step = 0;
+	        foreach ($floors as $key => $value) {
+	            foreach ($value['points'] as $point) {
+	                $turn = Turn::where(array('point_id' => $point->id, 'route_id' => $route->id))->first();
+
+	                if (!$turn) {
+	                    $turn = new Turn;
+
+	                    $turn->point_id = $point->id;
+	                    $turn->route_id = $route->id;
+	                }
+
+	                $turn->step = $step;
+	                $turn->save();
+
+	                $step++;
+	            }
+	        }
        }
 
        if (count($floors) == 0)
