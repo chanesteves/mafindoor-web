@@ -369,9 +369,10 @@ class BuildingsController extends Controller
 	                $step++;
 	            }
 	        }
-
-	        if ($step == 0)
-	        	$route->delete();
+       }
+       else {
+       		if ($route)
+       			$route->delete();
        }
 
        if (count($floors) == 0) {
