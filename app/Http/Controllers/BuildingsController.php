@@ -339,7 +339,8 @@ class BuildingsController extends Controller
        }
 
        if ($route_status == 'new' && count($floors) > 0) {
-       		$route = new Route;
+       		if (!$route)
+       			$route = new Route;
 
             $route->origin_point_id = $from->id;
             $route->destination_point_id = $to->id;
@@ -368,6 +369,9 @@ class BuildingsController extends Controller
 	                $step++;
 	            }
 	        }
+
+	        if ($step == 0)
+	        	$route->delete();
        }
 
        if (count($floors) == 0) {
