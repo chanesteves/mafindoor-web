@@ -338,7 +338,7 @@ class BuildingsController extends Controller
            $prev_floor_id = $key;
        }
 
-       if ($route_status == 'new') {
+       if ($route_status == 'new' && count($floors) > 0) {
        		$route = new Route;
 
             $route->origin_point_id = $from->id;
