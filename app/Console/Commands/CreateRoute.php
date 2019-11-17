@@ -191,19 +191,20 @@ class CreateRoute extends Command
                                                     ->join('buildings', 'buildings.id', 'building_id')
                                                     ->whereNotIn('annotations.id', $routed_annotation_ids)
                                                     ->whereNotIn('annotations.id', $no_route_annotation_ids)
-                                                    ->where('annotations.id', '!=', $origin_annotation->id)
                                                     ->where('building_id', $origin_point->floor->building_id)
-                                                    ->where('floor_id', '!=', $origin_point->floor_id)
-                                                    ->get();                
+                                                    ->where('floor_id', '!=', $origin_point->floor_id);               
             else
                 $unrouted_annotations = Annotation::select(DB::raw('annotations.*'))
                                                     ->join('floors', 'floors.id', 'floor_id')
                                                     ->join('buildings', 'buildings.id', 'building_id')
                                                     ->whereNotIn('annotations.id', $routed_annotation_ids)
                                                     ->whereNotIn('annotations.id', $no_route_annotation_ids)
-                                                    ->where('annotations.id', '!=', $origin_annotation->id)
-                                                    ->where('building_id', $origin_point->floor->building_id)
-                                                    ->get();
+                                                    ->where('building_id', $origin_point->floor->building_id);
+
+            if ($origin_annotation)
+                $unrouted_annotations = $unrouted_annotations->where('annotations.id', '!=', $origin_annotation->id)->get();
+            else
+                $unrouted_annotations = $unrouted_annotations->get();
 
 
             if ($unrouted_annotations->count() == 0)
