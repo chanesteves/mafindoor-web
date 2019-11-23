@@ -92,6 +92,8 @@ class CreateRoute extends Command
                                     )->pluck('id')->toArray();
         print_r("deleted points count: " . count($deleted_point_ids) . "\n");
 
+        print_r($deleted_point_ids);
+
         $deleted_adjascent_origin_ids = Adjascent::withTrashed()
                                                 ->where('deleted_at', '>', 
                                                     Carbon::now()->subMinutes(2)->toDateTimeString()
@@ -100,21 +102,12 @@ class CreateRoute extends Command
         $deleted_adjascent_destination_ids = Adjascent::withTrashed()
                                                 ->where('deleted_at', '>', 
                                                     Carbon::now()->subMinutes(2)->toDateTimeString()
-                                                )->pluck('destination_id')->toArray();;
+                                                )->pluck('destination_id')->toArray();
 
-        $routes = Route::select('routes.*')
-                        ->join('turns', 'routes.id', 'route_id')
-                        ->whereIn('point_id', $deleted_adjascent_destination_ids)
-                        ->orWhereIn('point_id', $deleted_adjascent_origin_ids)
-                        ->orWhereIn('point_id', $deleted_point_ids)
-                        ->get();
-
-        foreach ($routes as $route) {
-            foreach ($route->turns as $turn) {
-                $turn->delete();                    
-            }
-            $route->delete();
-        }
+        Turn::whereIn('point_id', $deleted_adjascent_destination_ids)
+            ->orWhereIn('point_id', $deleted_adjascent_origin_ids)
+            ->orWhereIn('point_id', $deleted_point_ids)
+            ->delete();
 
         $deleted_turn_ids = Turn::withTrashed()
                                 ->where('deleted_at', '>', 
@@ -122,7 +115,12 @@ class CreateRoute extends Command
                                 )->pluck('id')->toArray();
         print_r("deleted turns count: " . count($deleted_turn_ids) . "\n");
 
-        $deleted_route_ids = Turn::withTrashed()
+        Route::select('routes.*')
+            ->join('turns', 'routes.id', 'route_id')
+            ->whereIn('turns.id', $deleted_turn_ids)
+            ->delete();
+
+        $deleted_route_ids = Route::withTrashed()
                                     ->where('deleted_at', '>', 
                                         Carbon::now()->subMinutes(2)->toDateTimeString()
                                     )->pluck('id')->toArray();
