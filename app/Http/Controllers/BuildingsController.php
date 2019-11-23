@@ -892,8 +892,8 @@ class BuildingsController extends Controller
 
 	    	$distance = $this->getHaversineGreatCircleDistance($origin->latitude, $origin->longitude, $destination->latitude, $destination->longitude);
 			
-	    	if ($origin->floor_id != $destination->floor_id)
-				$distance += 0.001;
+	    	if ($origin->floor_id != $destination->floor_id && $origin->floor && $destination->floor)
+				$distance += abs($origin->floor->altitude - $destination->floor->altitude);
 
 	    	$adjascent = null;
 
@@ -950,12 +950,12 @@ class BuildingsController extends Controller
 
 		$origin_entry = null;
 		$destination_entry = null;
-
-		$min_entries_distance = 100;
+		
+		$min_entries_distance = 1000000;
 
 		foreach ($origin->entries as $o_entry) {
 			foreach ($destination->entries as $d_entry) {
-				$distance = sqrt(pow($o_entry->point->longitude - $d_entry->point->longitude, 2) + pow($o_entry->point->latitude - $d_entry->point->latitude, 2));
+				$distance = $this->getHaversineGreatCircleDistance($o_entry->point->latitude, $o_entry->point->longitude, $d_entry->point->latitude, $d_entry->point->longitude);
 
 				if ($distance < $min_entries_distance) {
 					$min_entries_distance = $distance;
