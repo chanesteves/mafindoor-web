@@ -304,6 +304,9 @@ class BuildingsController extends Controller
 				}
 			}
 
+			if (count($links) == 0)
+				return array('status' => 'ERROR', 'error' => 'No route found.');
+
 			$graph = new Graph($links);
 
 			$start = new MNode($from->longitude, $from->latitude, $from->floor_id);
