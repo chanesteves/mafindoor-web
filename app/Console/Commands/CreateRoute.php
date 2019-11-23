@@ -92,8 +92,6 @@ class CreateRoute extends Command
                                     )->pluck('id')->toArray();
         print_r("deleted points count: " . count($deleted_point_ids) . "\n");
 
-        print_r($deleted_point_ids);
-
         $deleted_adjascent_origin_ids = Adjascent::withTrashed()
                                                 ->where('deleted_at', '>', 
                                                     Carbon::now()->subMinutes(2)->toDateTimeString()
@@ -109,16 +107,13 @@ class CreateRoute extends Command
             ->orWhereIn('point_id', $deleted_point_ids)
             ->delete();
 
-        $deleted_turn_ids = Turn::withTrashed()
+        $deleted_turn_route_ids = Turn::withTrashed()
                                 ->where('deleted_at', '>', 
                                     Carbon::now()->subMinutes(2)->toDateTimeString()
-                                )->pluck('id')->toArray();
-        print_r("deleted turns count: " . count($deleted_turn_ids) . "\n");
+                                )->pluck('route_id')->toArray();
+        print_r("deleted turns count: " . count($deleted_turn_route_ids) . "\n");
 
-        Route::select('routes.*')
-            ->join('turns', 'routes.id', 'route_id')
-            ->whereIn('turns.id', $deleted_turn_ids)
-            ->delete();
+        Route::whereIn('id', $deleted_turn_route_ids)->delete();
 
         $deleted_route_ids = Route::withTrashed()
                                     ->where('deleted_at', '>', 
