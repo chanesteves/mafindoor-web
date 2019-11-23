@@ -104,9 +104,9 @@ class CreateRoute extends Command
 
         $routes = Route::select('routes.*')
                         ->join('turns', 'routes.id', 'route_id')
-                        ->whereIn('points.id', $deleted_adjascent_destination_ids)
-                        ->orWhereIn('points.id', $deleted_adjascent_origin_ids)
-                        ->orWhereIn('points.id', $deleted_point_ids)
+                        ->whereIn('points_id', $deleted_adjascent_destination_ids)
+                        ->orWhereIn('points_id', $deleted_adjascent_origin_ids)
+                        ->orWhereIn('points_id', $deleted_point_ids)
                         ->get();
 
         foreach ($routes as $route) {
