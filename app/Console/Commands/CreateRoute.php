@@ -104,22 +104,16 @@ class CreateRoute extends Command
 
         $routes = Route::select('routes.*')
                         ->join('turns', 'routes.id', 'route_id')
-                        ->limit(100)
+                        ->whereIn('points.id', $deleted_adjascent_destination_ids)
+                        ->orWhereIn('points.id', $deleted_adjascent_origin_ids)
+                        ->orWhereIn('points.id', $deleted_point_ids)
                         ->get();
 
         foreach ($routes as $route) {
-            if ($route->turns->count() == 0 || $route->distance < 1) {
-                $route->delete();
-                continue;
-            }
-
             foreach ($route->turns as $turn) {
-                if (!$turn->point || in_array($turn->point_id, $deleted_adjascent_origin_ids) || in_array($turn->point_id, $deleted_adjascent_destination_ids) || in_array($turn->point_id, $deleted_point_ids)) {
-                    $turn->delete();
-                    $route->delete();
-                    break;
-                }
+                $turn->delete();                    
             }
+            $route->delete();
         }
 
         $deleted_turn_ids = Turn::withTrashed()
