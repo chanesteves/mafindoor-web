@@ -287,9 +287,17 @@ class BuildingsController extends Controller
 					if ($adj_via == '')
 						$adj_via = $adjascent->destination->entry && $adjascent->destination->entry->annotation && $adjascent->destination->entry->annotation->sub_category && $adjascent->destination->entry->annotation->sub_category->floor_trans == 1 ? strtolower($adjascent->destination->entry->annotation->sub_category->name) : '';
 
-					if (($from->floor_id == $to->floor_id && $adjascent->origin->floor_id == $adjascent->destination->floor_id)
-						|| ($from->floor_id != $to->floor_id && ($adj_via == '' || $via == '' || $adj_via == $via))) {
+					if ($from->floor_id == $to->floor_id && $adjascent->origin->floor_id == $adjascent->destination->floor_id) {
 						$links[] = new Link(new MNode($adjascent->origin->longitude, $adjascent->origin->latitude, $adjascent->origin->floor_id), 
+										new MNode($adjascent->destination->longitude, $adjascent->destination->latitude, $adjascent->destination->floor_id), 
+										$adjascent->distance);	
+					}
+					else if ($from->floor_id != $to->floor_id && ($adj_via == '' || $via == '' || $adj_via == $via) && $from->floor && $to->floor && $adjascent->destination->floor) {
+						$orig_distance = abs($from->floor->altitude - $to->floor->altitude);
+						$adja_distance = abs($adjascent->destination->floor->altitude - $to->floor->altitude);
+
+						if ($adja_distance <= $orig_distance)
+							$links[] = new Link(new MNode($adjascent->origin->longitude, $adjascent->origin->latitude, $adjascent->origin->floor_id), 
 										new MNode($adjascent->destination->longitude, $adjascent->destination->latitude, $adjascent->destination->floor_id), 
 										$adjascent->distance);	
 					}
@@ -950,7 +958,7 @@ class BuildingsController extends Controller
 
 		$origin_entry = null;
 		$destination_entry = null;
-		
+
 		$min_entries_distance = 1000000;
 
 		foreach ($origin->entries as $o_entry) {
