@@ -294,9 +294,10 @@ class BuildingsController extends Controller
 					}
 					else if ($from->floor_id != $to->floor_id && ($adj_via == '' || $via == '' || $adj_via == $via) && $from->floor && $to->floor && $adjascent->destination->floor) {
 						$orig_distance = abs($from->floor->altitude - $to->floor->altitude);
-						$adja_distance = abs($adjascent->destination->floor->altitude - $from->floor->altitude);
+						$adjt_distance = abs($adjascent->destination->floor->altitude - $to->floor->altitude);
+						$adjf_distance = abs($adjascent->destination->floor->altitude - $from->floor->altitude);
 
-						if ($adja_distance <= $orig_distance)
+						if ($adjt_distance <= $orig_distance && $adjf_distance <= $orig_distance)
 							$links[] = new Link(new MNode($adjascent->origin->longitude, $adjascent->origin->latitude, $adjascent->origin->floor_id), 
 										new MNode($adjascent->destination->longitude, $adjascent->destination->latitude, $adjascent->destination->floor_id), 
 										$adjascent->distance);	
