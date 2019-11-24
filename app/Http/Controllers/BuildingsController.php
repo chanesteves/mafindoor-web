@@ -320,6 +320,7 @@ class BuildingsController extends Controller
 			$sequence = $printer->getSequence();
 			$distance = $printer->getTotalDistance();		
 
+			$prev_floor_id = null;
 			$point_count = 0;
 			$prev_point = null;
 
@@ -328,6 +329,7 @@ class BuildingsController extends Controller
 
 				if ($point && $point->floor) {
 					if (!isset($floors[$point->floor_id])) {
+						$point_count = 0;
 						$floors[$point->floor_id] = array(
 															"points" => [], 
 															"floor" => $point->floor, 
@@ -344,7 +346,10 @@ class BuildingsController extends Controller
 						$point->prev_point = [$prev_point->longitude, $prev_point->latitude, $prev_point->floor->altitude];
 						$prev_point->next_point = [$point->longitude, $point->latitude, $point->floor->altitude];
 
-						$floors[$point->floor_id]["points"][$point_count - 1] = $prev_point;
+						if ($point_count > 0)
+							$floors[$point->floor_id]["points"][$point_count - 1] = $prev_point;
+						else
+							$floors[$prev_point->floor_id]["points"][count($floors[$prev_point->floor_id]["points"]) - 1] = $prev_point;
 					}
 
 					$floors[$point->floor_id]["points"][] = $point;
