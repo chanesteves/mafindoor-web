@@ -327,19 +327,19 @@ class BuildingsController extends Controller
 				$point = Point::with('floor')->where(array('longitude' => $node->getX(), 'latitude' => $node->getY(), 'floor_id' => $node->getF()))->first();
 
 				if ($prev_point) {
-					$point->prev_point = {
-						"id" => $prev_point->id,
-						"longitude" => $prev_point->longitude,
-						"latitude" => $prev_point->latitude,
-						"altitude" => $prev_point->altitude
-					};
+					$point->prev_point = array(
+												"id" => $prev_point->id,
+												"longitude" => $prev_point->longitude,
+												"latitude" => $prev_point->latitude,
+												"altitude" => $prev_point->altitude
+											);
 
-					$prev_point->next_point = {
-						"id" => $point->id,
-						"longitude" => $point->longitude,
-						"latitude" => $point->latitude,
-						"altitude" => $point->altitude
-					};
+					$prev_point->next_point = array(
+												"id" => $point->id,
+												"longitude" => $point->longitude,
+												"latitude" => $point->latitude,
+												"altitude" => $point->altitude
+											);
 
 					if ($point_count > 0)
 						$points[$point_count - 1] = $prev_point;
