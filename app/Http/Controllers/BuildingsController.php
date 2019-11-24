@@ -319,10 +319,6 @@ class BuildingsController extends Controller
 			$printer = new SequencePrinter($graph, $solution);
 			$sequence = $printer->getSequence();
 			$distance = $printer->getTotalDistance();		
-
-			$point_count = 0;
-			$prev_point = null;
-
 			foreach ($sequence as $node) {
 				$point = Point::with('floor')->where(array('longitude' => $node->getX(), 'latitude' => $node->getY(), 'floor_id' => $node->getF()))->first();
 
@@ -340,38 +336,15 @@ class BuildingsController extends Controller
 														);
 					}
 
-					if ($prev_point) {
-						$point->prev_point = $prev_point;
-						$prev_point->next_point = $point;
-
-						$floors[$point->floor_id]["points"][$point_count - 1] = $prev_point;
-					}
-
 					$floors[$point->floor_id]["points"][] = $point;
-					$point_count++;
-
-					$prev_point = $point;
 				}
 			}
 		}
 
 		foreach ($floors as $key => $value) {
-			$p_count = 0;
-			foreach ($value["points"] as $point) {
-				if ($point->prev_point && $point->longitude == $point->prev_point->longitude
-										&& $point->latitude == $point->prev_point->latitude
-					&& $point->next_point && $point->longitude == $point->next_point->longitude
-										&& $point->latitude == $point->next_point->latitude)
-					array_splice($value["points"], $p_count, 1);
-
-				$p_count++;
-			}
-
 			if (count($value["points"]) < 2 && count($floors) > 2)
 				unset($floors[$key]);
 		}
-
-		return array( 'status' => 'OK', 'route_status' => 'new', 'via' => ucwords($via), 'floors' => $floors, 'distance' => 0);
 
 		$prev_floor_id = null;
 		foreach ($floors as $key => $value) {
@@ -387,9 +360,6 @@ class BuildingsController extends Controller
            		}
 
            		$floors[$key]["prev_floor"] = $floors[$prev_floor_id]["floor"];
-
-           		if (!array_key_exists(0, $floors[$key]["points"]))
-           			return array( 'status' => 'OK', 'route_status' => 'new', 'via' => ucwords($via), 'floors' => $floors, 'distance' => 0);
 
            		$first_point = $floors[$key]["points"][0];
            		$annotation = Annotation::where(array('longitude' => $first_point->longitude, 'latitude' => $first_point->latitude, "floor_id" => $first_point->floor_id))->first();
