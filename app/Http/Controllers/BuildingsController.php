@@ -351,10 +351,10 @@ class BuildingsController extends Controller
 
 			$point_count = 0;
 			foreach ($points as $point) {
-				if ($point->prev_point && $point->longitude == $point->prev_point->longitude
-										&& $point->latitude == $point->prev_point->latitude
-					&& $point->next_point && $point->longitude == $point->next_point->longitude
-										&& $point->latitude == $point->next_point->latitude)
+				if ($point->prev_point && $point->longitude == $point->prev_point["longitude"]
+										&& $point->latitude == $point->prev_point["latitude"]
+					&& $point->next_point && $point->longitude == $point->next_point["longitude"]
+										&& $point->latitude == $point->next_point["latitude"])
 					array_splice($points, $point_count, 1);
 
 				$point_count++;
