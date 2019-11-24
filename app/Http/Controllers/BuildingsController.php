@@ -371,6 +371,8 @@ class BuildingsController extends Controller
 				unset($floors[$key]);
 		}
 
+		return array( 'status' => 'OK', 'route_status' => 'new', 'via' => ucwords($via), 'floors' => $floors, 'distance' => 0);
+
 		$prev_floor_id = null;
 		foreach ($floors as $key => $value) {
            if ($prev_floor_id) {
