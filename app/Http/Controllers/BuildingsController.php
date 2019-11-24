@@ -306,7 +306,7 @@ class BuildingsController extends Controller
 			}
 
 			if (count($links) == 0)
-				return array('status' => 'ERROR', 'error' => 'No route found.', 'via' => $via);
+				return array('status' => 'ERROR', 'error' => 'No route found.');
 
 			$graph = new Graph($links);
 
@@ -360,10 +360,10 @@ class BuildingsController extends Controller
 
 			$p_count = 0;
 			foreach ($value["points"] as $point) {
-				if ($point->prev_point && $point->longitude == $point->prev_point[0]
-										&& $point->latitude == $point->prev_point[1]
-					&& $point->next_point && $point->longitude == $point->next_point[0]
-										&& $point->latitude == $point->next_point[1])
+				if (array_key_exists("prev_point", $point) && $point->longitude == $point["prev_point"][0]
+										&& $point->latitude == $point["prev_point"][1]
+					&& array_key_exists("next_point", $point) && $point->longitude == $point["next_point"][0]
+										&& $point->latitude == $point["next_point"][1])
 					array_splice($value["points"], $p_count, 1);
 
 				$p_count++;
