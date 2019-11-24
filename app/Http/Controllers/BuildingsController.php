@@ -319,6 +319,10 @@ class BuildingsController extends Controller
 			$printer = new SequencePrinter($graph, $solution);
 			$sequence = $printer->getSequence();
 			$distance = $printer->getTotalDistance();		
+
+			$point_count = 0;
+			$prev_point = null;
+
 			foreach ($sequence as $node) {
 				$point = Point::with('floor')->where(array('longitude' => $node->getX(), 'latitude' => $node->getY(), 'floor_id' => $node->getF()))->first();
 
@@ -336,7 +340,17 @@ class BuildingsController extends Controller
 														);
 					}
 
+					if ($prev_point) {
+						$point->prev_point = $prev_point;
+						$prev_point->next_point = $point;
+
+						$floors[$point->floor_id]["points"][$point_count - 1] = $prev_point;
+					}
+
 					$floors[$point->floor_id]["points"][] = $point;
+					$point_count++;
+
+					$prev_point = $point;
 				}
 			}
 		}
