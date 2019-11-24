@@ -357,7 +357,7 @@ class BuildingsController extends Controller
 
 		foreach ($floors as $key => $value) {
 			if (is_object($value["points"]))
-				$value["points"] = (array) $value["points"];
+				$floors[$key]["points"] = (array) $value["points"];
 				
 		}
 
