@@ -356,9 +356,7 @@ class BuildingsController extends Controller
 		}
 
 		foreach ($floors as $key => $value) {
-			if (count(array_filter(array_keys($value["points"]), 'is_string')) > 0)
-				$floors[$key]["points"] = array_values($value["points"]);
-				
+			$floors[$key]["points"] = array_values($value["points"]);				
 		}
 
 		return array( 'status' => 'OK', 'route_status' => 'new', 'via' => ucwords($via), 'floors' => $floors, 'distance' => 0);
