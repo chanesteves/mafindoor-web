@@ -356,14 +356,10 @@ class BuildingsController extends Controller
 		}
 
 		foreach ($floors as $key => $value) {
-			$floors[$key]["points"] = array_values($value["points"]);				
-		}
+			$floors[$key]["points"] = array_values($value["points"]);		
 
-		return array( 'status' => 'OK', 'route_status' => 'new', 'via' => ucwords($via), 'floors' => $floors, 'distance' => 0);
-
-		foreach ($floors as $key => $value) {
 			if (count($value["points"]) < 2 && count($floors) > 2)
-				unset($floors[$key]);
+				unset($floors[$key]);		
 		}
 
 		$prev_floor_id = null;
