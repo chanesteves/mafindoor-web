@@ -341,8 +341,8 @@ class BuildingsController extends Controller
 					}
 
 					if ($prev_point) {
-						$point->prev_point = $prev_point;
-						$prev_point->next_point = $point;
+						$point["prev_point"] = $prev_point;
+						$prev_point["next_point"] = $point;
 
 						$floors[$point->floor_id]["points"][$point_count - 1] = $prev_point;
 					}
