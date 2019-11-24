@@ -356,15 +356,15 @@ class BuildingsController extends Controller
 		}
 
 		foreach ($floors as $key => $value) {
-			$value["points"] = array_values($value["points"]);		
+			$floors[$key]["points"] = array_values($value["points"]);		
 
 			$p_count = 0;
-			foreach ($value["points"] as $point) {
+			foreach ($floors[$key]["points"] as $point) {
 				if (array_key_exists("prev_point", $point) && $point->longitude == $point["prev_point"][0]
 										&& $point->latitude == $point["prev_point"][1]
 					&& array_key_exists("next_point", $point) && $point->longitude == $point["next_point"][0]
 										&& $point->latitude == $point["next_point"][1])
-					array_splice($value["points"], $p_count, 1);
+					array_splice($floors[$key]["points"], $p_count, 1);
 
 				$p_count++;
 			}
