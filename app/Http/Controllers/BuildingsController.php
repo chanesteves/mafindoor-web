@@ -361,7 +361,7 @@ class BuildingsController extends Controller
 										&& $p_value->latitude == $p_value->prev_point->latitude
 					&& $p_value->next_point && $p_value->longitude == $p_value->next_point->longitude
 										&& $p_value->latitude == $p_value->next_point->latitude)
-					unset($value["points"][$p_key]);
+					array_splice($value["points"], $p_key, 1);
 			}
 
 			if (count($value["points"]) < 2 && count($floors) > 2)
