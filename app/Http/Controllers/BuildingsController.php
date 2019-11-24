@@ -355,6 +355,12 @@ class BuildingsController extends Controller
 			}
 		}
 
+		foreach ($floors as $key => $value) {
+			if (is_object($value["points"]))
+				$value["points"] = (array) $value["points"];
+				
+		}
+
 		return array( 'status' => 'OK', 'route_status' => 'new', 'via' => ucwords($via), 'floors' => $floors, 'distance' => 0);
 
 		foreach ($floors as $key => $value) {
