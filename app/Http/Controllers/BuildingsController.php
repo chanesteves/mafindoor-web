@@ -341,8 +341,8 @@ class BuildingsController extends Controller
 					}
 
 					if ($prev_point && $prev_point->floor) {
-						$point["prev_point"] = [$prev_point->longitude, $prev_point->latitude, $prev_point->floor->altitude];
-						$prev_point["next_point"] = [$point->longitude, $point->latitude, $point->floor->altitude];
+						$point->prev_point = [$prev_point->longitude, $prev_point->latitude, $prev_point->floor->altitude];
+						$prev_point->next_point = [$point->longitude, $point->latitude, $point->floor->altitude];
 
 						$floors[$point->floor_id]["points"][$point_count - 1] = $prev_point;
 					}
@@ -360,10 +360,10 @@ class BuildingsController extends Controller
 
 			$p_count = 0;
 			foreach ($floors[$key]["points"] as $point) {
-				if (array_key_exists("prev_point", $point) && $point->longitude == $point["prev_point"][0]
-										&& $point->latitude == $point["prev_point"][1]
-					&& array_key_exists("next_point", $point) && $point->longitude == $point["next_point"][0]
-										&& $point->latitude == $point["next_point"][1])
+				if ($point->prev_point && $point->longitude == $point->prev_point[0]
+										&& $point->latitude == $point->prev_point[1]
+					&& $point->next_point && $point->longitude == $point->next_point[0]
+										&& $point->latitude == $point->next_point[1])
 					array_splice($floors[$key]["points"], $p_count, 1);
 
 				$p_count++;
