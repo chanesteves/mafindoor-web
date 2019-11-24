@@ -358,6 +358,17 @@ class BuildingsController extends Controller
 		foreach ($floors as $key => $value) {
 			$floors[$key]["points"] = array_values($value["points"]);		
 
+			$p_count = 0;
+			foreach ($value["points"] as $point) {
+				if ($point->prev_point && $point->longitude == $point->prev_point[0]
+										&& $point->latitude == $point->prev_point[1]
+					&& $point->next_point && $point->longitude == $point->next_point[0]
+										&& $point->latitude == $point->next_point[1])
+					array_splice($value["points"], $p_count, 1);
+
+				$p_count++;
+			}
+
 			if (count($value["points"]) < 2 && count($floors) > 2)
 				unset($floors[$key]);		
 		}
