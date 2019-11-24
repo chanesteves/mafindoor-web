@@ -297,13 +297,15 @@ class BuildingsController extends Controller
 						$adjt_distance = abs($adjascent->destination->floor->altitude - $to->floor->altitude);
 						$adjf_distance = abs($adjascent->destination->floor->altitude - $from->floor->altitude);
 
-						if (($adjt_distance <= $orig_distance && $adjf_distance <= $orig_distance) || $via == '')
+						if (($adjt_distance <= $orig_distance && $adjf_distance <= $orig_distance) || !$via || $via == '')
 							$links[] = new Link(new MNode($adjascent->origin->longitude, $adjascent->origin->latitude, $adjascent->origin->floor_id), 
 										new MNode($adjascent->destination->longitude, $adjascent->destination->latitude, $adjascent->destination->floor_id), 
 										$adjascent->distance);
 					}
 				}
 			}
+
+			return $links;
 
 			if (count($links) == 0)
 				return array('status' => 'ERROR', 'error' => 'No route found.');
