@@ -215,23 +215,33 @@ class BuildingsController extends Controller
 		if (!$building)
 			return array('status' => 'ERROR', 'error' => 'Building not found.');
 
-		$no_route = NoRoute::where(array('origin_point_id' => $from->id, 'destination_point_id' => $to->id, 'via' => $via))->first();
+		$no_route = NoRoute::where(array('origin_point_id' => $from->id, 'destination_point_id' => $to->id));
+
+		if ($via && $via != '')
+			$no_route = $no_route->where('via', $via)->first();
+		else
+			$no_route = $no_route->first();
 
 		if ($no_route) {
-			$route = Route::where(array('origin_point_id' => $from->id, 'destination_point_id' => $to->id, 'via' => $via))->first();
+			$route = Route::where(array('origin_point_id' => $from->id, 'destination_point_id' => $to->id));
+
+			if ($via && $via != '')
+				$route = $route->where('via', $via)->first();
+			else
+				$route = $route->first();
 
 			if ($route) {
 				if ($route->distance == 0) {
 					$route->delete();
 
-					return array('status' => 'ERROR', 'error' => 'No route found1.');
+					return array('status' => 'ERROR', 'error' => 'No route found.');
 				}
 				else {
 					$no_route->delete();
 				}
 			}
 			else {
-				return array('status' => 'ERROR', 'error' => 'No route found2.');
+				return array('status' => 'ERROR', 'error' => 'No route found.', 'no_route' => $no_route);
 			}
 		}
 
@@ -306,7 +316,7 @@ class BuildingsController extends Controller
 			}
 
 			if (count($links) == 0)
-				return array('status' => 'ERROR', 'error' => 'No route found3.');
+				return array('status' => 'ERROR', 'error' => 'No route found.');
 
 			$graph = new Graph($links);
 
@@ -458,7 +468,7 @@ class BuildingsController extends Controller
 	                $no_route->save();
 	            }
 
-	       		return array('status' => 'ERROR', 'error' => 'No route found4.');
+	       		return array('status' => 'ERROR', 'error' => 'No route found.');
 		    }
        }
 
