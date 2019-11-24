@@ -356,12 +356,15 @@ class BuildingsController extends Controller
 		}
 
 		foreach ($floors as $key => $value) {
-			foreach ($value["points"] as $p_key => $p_value) {
-				if ($p_value->prev_point && $p_value->longitude == $p_value->prev_point->longitude
-										&& $p_value->latitude == $p_value->prev_point->latitude
-					&& $p_value->next_point && $p_value->longitude == $p_value->next_point->longitude
-										&& $p_value->latitude == $p_value->next_point->latitude)
-					array_splice($value["points"], $p_key, 1);
+			$p_count = 0;
+			foreach ($value["points"] as $point) {
+				if ($point->prev_point && $point->longitude == $point->prev_point->longitude
+										&& $point->latitude == $point->prev_point->latitude
+					&& $point->next_point && $point->longitude == $point->next_point->longitude
+										&& $point->latitude == $point->next_point->latitude)
+					array_splice($value["points"], $p_count, 1);
+
+				$p_count++;
 			}
 
 			if (count($value["points"]) < 2 && count($floors) > 2)
@@ -382,6 +385,9 @@ class BuildingsController extends Controller
            		}
 
            		$floors[$key]["prev_floor"] = $floors[$prev_floor_id]["floor"];
+
+           		if (!array_key_exists(0, $floors[$key]["points"]))
+           			return $floors;
 
            		$first_point = $floors[$key]["points"][0];
            		$annotation = Annotation::where(array('longitude' => $first_point->longitude, 'latitude' => $first_point->latitude, "floor_id" => $first_point->floor_id))->first();
