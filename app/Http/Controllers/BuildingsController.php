@@ -224,14 +224,14 @@ class BuildingsController extends Controller
 				if ($route->distance == 0) {
 					$route->delete();
 
-					return array('status' => 'ERROR', 'error' => 'No route found.');
+					return array('status' => 'ERROR', 'error' => 'No route found1.');
 				}
 				else {
 					$no_route->delete();
 				}
 			}
 			else {
-				return array('status' => 'ERROR', 'error' => 'No route found.');
+				return array('status' => 'ERROR', 'error' => 'No route found2.');
 			}
 		}
 
@@ -306,7 +306,7 @@ class BuildingsController extends Controller
 			}
 
 			if (count($links) == 0)
-				return array('status' => 'ERROR', 'error' => 'No route found.');
+				return array('status' => 'ERROR', 'error' => 'No route found3.');
 
 			$graph = new Graph($links);
 
@@ -458,7 +458,7 @@ class BuildingsController extends Controller
 	                $no_route->save();
 	            }
 
-	       		return array('status' => 'ERROR', 'error' => 'No route found.');
+	       		return array('status' => 'ERROR', 'error' => 'No route found4.');
 		    }
        }
 
