@@ -326,7 +326,7 @@ class BuildingsController extends Controller
 			foreach ($sequence as $node) {
 				$point = Point::with('floor')->where(array('longitude' => $node->getX(), 'latitude' => $node->getY(), 'floor_id' => $node->getF()))->first();
 
-				if ($point) {
+				if ($point && $floor->floor) {
 					if (!isset($floors[$point->floor_id])) {
 						$floors[$point->floor_id] = array(
 															"points" => [], 
@@ -340,9 +340,9 @@ class BuildingsController extends Controller
 														);
 					}
 
-					if ($prev_point) {
-						$point["prev_point"] = [$prev_point->longitude, $prev_point->latitude];
-						$prev_point["next_point"] = [$point->longitude, $point->latitude];
+					if ($prev_point && $prev_point->floor) {
+						$point["prev_point"] = [$prev_point->longitude, $prev_point->latitude, $prev_point->floor->altitude];
+						$prev_point["next_point"] = [$point->longitude, $point->latitude, $point->floor->altitude];
 
 						$floors[$point->floor_id]["points"][$point_count - 1] = $prev_point;
 					}
