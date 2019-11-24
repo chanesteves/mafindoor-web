@@ -356,7 +356,7 @@ class BuildingsController extends Controller
 		}
 
 		foreach ($floors as $key => $value) {
-			$floors[$key]["points"] = array_values($value["points"]);		
+			$value["points"] = array_values($value["points"]);		
 
 			$p_count = 0;
 			foreach ($value["points"] as $point) {
