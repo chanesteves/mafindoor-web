@@ -320,16 +320,49 @@ class BuildingsController extends Controller
 			$sequence = $printer->getSequence();
 			$distance = $printer->getTotalDistance();		
 
-			$prev_floor_id = null;
 			$point_count = 0;
 			$prev_point = null;
-
+			$points = [];
 			foreach ($sequence as $node) {
 				$point = Point::with('floor')->where(array('longitude' => $node->getX(), 'latitude' => $node->getY(), 'floor_id' => $node->getF()))->first();
 
+				if ($prev_point) {
+					$point->prev_point = {
+						"id" => $prev_point->id,
+						"longitude" => $prev_point->longitude,
+						"latitude" => $prev_point->latitude,
+						"altitude" => $prev_point->altitude
+					};
+
+					$prev_point->next_point = {
+						"id" => $point->id,
+						"longitude" => $point->longitude,
+						"latitude" => $point->latitude,
+						"altitude" => $point->altitude
+					};
+
+					if ($point_count > 0)
+						$points[$point_count - 1] = $prev_point;
+				}
+
+				$points[] = $point;
+				$prev_point = $point;
+			}
+
+			$point_count = 0;
+			foreach ($points as $point) {
+				if ($point->prev_point && $point->longitude == $point->prev_point->longitude
+										&& $point->latitude == $point->prev_point->latitude
+					&& $point->next_point && $point->longitude == $point->next_point->longitude
+										&& $point->latitude == $point->next_point->latitude)
+					array_splice($points, $p_count, 1);
+
+				$p_count++;
+			}
+
+			foreach ($points as $point) {
 				if ($point && $point->floor) {
 					if (!isset($floors[$point->floor_id])) {
-						$point_count = 0;
 						$floors[$point->floor_id] = array(
 															"points" => [], 
 															"floor" => $point->floor, 
@@ -342,38 +375,12 @@ class BuildingsController extends Controller
 														);
 					}
 
-					if ($prev_point && $prev_point->floor) {
-						$point->prev_point = [$prev_point->longitude, $prev_point->latitude, $prev_point->floor->altitude];
-						$prev_point->next_point = [$point->longitude, $point->latitude, $point->floor->altitude];
-
-						if ($point_count > 0)
-							$floors[$point->floor_id]["points"][$point_count - 1] = $prev_point;
-						else
-							$floors[$prev_point->floor_id]["points"][count($floors[$prev_point->floor_id]["points"]) - 1] = $prev_point;
-					}
-
 					$floors[$point->floor_id]["points"][] = $point;
-					$point_count++;
-
-					$prev_point = $point;
 				}
 			}
 		}
 
 		foreach ($floors as $key => $value) {
-			$floors[$key]["points"] = array_values($value["points"]);		
-
-			$p_count = 0;
-			foreach ($floors[$key]["points"] as $point) {
-				if ($point->prev_point && $point->longitude == $point->prev_point[0]
-										&& $point->latitude == $point->prev_point[1]
-					&& $point->next_point && $point->longitude == $point->next_point[0]
-										&& $point->latitude == $point->next_point[1])
-					array_splice($floors[$key]["points"], $p_count, 1);
-
-				$p_count++;
-			}
-
 			if (count($value["points"]) < 2 && count($floors) > 2)
 				unset($floors[$key]);		
 		}
