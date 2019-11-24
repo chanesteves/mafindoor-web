@@ -355,9 +355,9 @@ class BuildingsController extends Controller
 										&& $point->latitude == $point->prev_point->latitude
 					&& $point->next_point && $point->longitude == $point->next_point->longitude
 										&& $point->latitude == $point->next_point->latitude)
-					array_splice($points, $p_count, 1);
+					array_splice($points, $point_count, 1);
 
-				$p_count++;
+				$point_count++;
 			}
 
 			foreach ($points as $point) {
