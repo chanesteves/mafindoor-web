@@ -387,7 +387,7 @@ class BuildingsController extends Controller
            		$floors[$key]["prev_floor"] = $floors[$prev_floor_id]["floor"];
 
            		if (!array_key_exists(0, $floors[$key]["points"]))
-           			return $floors;
+           			return array( 'status' => 'OK', 'route_status' => 'new', 'via' => ucwords($via), 'floors' => $floors, 'distance' => 0);
 
            		$first_point = $floors[$key]["points"][0];
            		$annotation = Annotation::where(array('longitude' => $first_point->longitude, 'latitude' => $first_point->latitude, "floor_id" => $first_point->floor_id))->first();
