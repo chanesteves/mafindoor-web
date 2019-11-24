@@ -305,10 +305,8 @@ class BuildingsController extends Controller
 				}
 			}
 
-			return $links;
-
 			if (count($links) == 0)
-				return array('status' => 'ERROR', 'error' => 'No route found.');
+				return array('status' => 'ERROR', 'error' => 'No route found.', 'via' => $via);
 
 			$graph = new Graph($links);
 
