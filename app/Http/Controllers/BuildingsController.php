@@ -247,6 +247,7 @@ class BuildingsController extends Controller
 		if ($route && $route->turns->count() > 0) {
 			$route_status = 'old';
 			$distance = 0;		
+			$point_count = 0;
 			$prev_point = null;
 			foreach ($route->turns as $turn) {
 				$point = $turn->point;
@@ -268,7 +269,7 @@ class BuildingsController extends Controller
 
 					if ($point_count > 0)
 						$points[$point_count - 1] = $prev_point;
-						
+
 					$distance += $this->getHaversineGreatCircleDistance($prev_point->latitude, $prev_point->longitude, $point->latitude, $point->longitude);
 				}
 
