@@ -361,11 +361,11 @@ class BuildingsController extends Controller
 				$point_count++;
 			}
 
-			$floor_key = 0;
+			$floor_key = uniqid();
 			$prev_floor_id = null;
 			foreach ($points as $point) {
 				if ($prev_floor_id && $prev_floor_id != $point->floor_id)
-					$floor_key++;
+					$floor_key = uniqid();
 
 				if (!isset($floors[$floor_key])) {
 					$floors[$floor_key] = array(
