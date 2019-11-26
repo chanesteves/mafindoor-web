@@ -360,23 +360,26 @@ class BuildingsController extends Controller
 				$point_count++;
 			}
 
+			$floor_key = 0;
+			$prev_floor_id = null;
 			foreach ($points as $point) {
-				if ($point && $point->floor) {
-					if (!isset($floors[$point->floor_id])) {
-						$floors[$point->floor_id] = array(
-															"points" => [], 
-															"floor" => $point->floor, 
-															"next_floor" => null, 
-															"next_floor_via" => "",
-															"last_annotation" => null,
-															"prev_floor" => null, 
-															"prev_floor_via" => "",
-															"first_annotation" => null
-														);
-					}
-
-					$floors[$point->floor_id]["points"][] = $point;
+				if (!$prev_floor_id || $prev_floor_id != $point->floor_id) {
+					$floors[$floor_key] = array(
+												"points" => [], 
+												"floor" => $point->floor, 
+												"next_floor" => null, 
+												"next_floor_via" => "",
+												"last_annotation" => null,
+												"prev_floor" => null, 
+												"prev_floor_via" => "",
+												"first_annotation" => null
+											);
 				}
+
+				$floors[$floor_key]["points"][] = $point;
+
+				$prev_floor_id = $point->floor_id;
+				$floor_key++;
 			}
 		}
 
