@@ -347,6 +347,7 @@ class BuildingsController extends Controller
 
 				$points[] = $point;
 				$prev_point = $point;
+				$point_count++;
 			}
 
 			$point_count = 0;
@@ -365,7 +366,7 @@ class BuildingsController extends Controller
 			foreach ($points as $point) {
 				if ($prev_floor_id && $prev_floor_id != $point->floor_id)
 					$floor_key++;
-				
+
 				if (!isset($floors[$floor_key])) {
 					$floors[$floor_key] = array(
 												"points" => [], 
