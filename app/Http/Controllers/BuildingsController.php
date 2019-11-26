@@ -363,6 +363,9 @@ class BuildingsController extends Controller
 			$floor_key = 0;
 			$prev_floor_id = null;
 			foreach ($points as $point) {
+				if ($prev_floor_id && $prev_floor_id != $point->floor_id)
+					$floor_key++;
+				
 				if (!isset($floors[$floor_key])) {
 					$floors[$floor_key] = array(
 												"points" => [], 
@@ -377,10 +380,6 @@ class BuildingsController extends Controller
 				}
 
 				$floors[$floor_key]["points"][] = $point;
-
-				if ($prev_floor_id && $prev_floor_id != $point->floor_id)
-					$floor_key++;
-
 				$prev_floor_id = $point->floor_id;				
 			}
 		}
