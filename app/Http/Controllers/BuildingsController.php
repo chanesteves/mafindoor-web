@@ -287,7 +287,7 @@ class BuildingsController extends Controller
 					if ($adj_via == '')
 						$adj_via = $adjascent->destination->entry && $adjascent->destination->entry->annotation && $adjascent->destination->entry->annotation->sub_category && $adjascent->destination->entry->annotation->sub_category->floor_trans == 1 ? strtolower($adjascent->destination->entry->annotation->sub_category->name) : '';
 
-					if ($from->floor_id == $to->floor_id && $adjascent->origin->floor_id == $adjascent->destination->floor_id) {
+					if (($from->floor_id == $to->floor_id && $adjascent->origin->floor_id == $adjascent->destination->floor_id) || !$via || $via == '') {
 						$links[] = new Link(new MNode($adjascent->origin->longitude, $adjascent->origin->latitude, $adjascent->origin->floor_id), 
 										new MNode($adjascent->destination->longitude, $adjascent->destination->latitude, $adjascent->destination->floor_id), 
 										$adjascent->distance);	
@@ -361,9 +361,8 @@ class BuildingsController extends Controller
 			}
 
 			$floor_key = 0;
-			$prev_floor_id = null;
 			foreach ($points as $point) {
-				if (!$prev_floor_id || $prev_floor_id != $point->floor_id) {
+				if (!isset($floors[$floor_key])) {
 					$floors[$floor_key] = array(
 												"points" => [], 
 												"floor" => $point->floor, 
@@ -374,12 +373,10 @@ class BuildingsController extends Controller
 												"prev_floor_via" => "",
 												"first_annotation" => null
 											);
+					$floor_key++;
 				}
 
-				$floors[$floor_key]["points"][] = $point;
-
-				$prev_floor_id = $point->floor_id;
-				$floor_key++;
+				$floors[$floor_key - 1]["points"][] = $point;
 			}
 		}
 
