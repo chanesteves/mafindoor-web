@@ -250,28 +250,67 @@ class BuildingsController extends Controller
 			$prev_point = null;
 			foreach ($route->turns as $turn) {
 				$point = $turn->point;
-				if ($point) {
-					if (!isset($floors[$point->floor_id])) {
-						$floors[$point->floor_id] = array(
-															"points" => [], 
-															"floor" => $point->floor, 
-															"next_floor" => null, 
-															"next_floor_via" => "",
-															"last_annotation" => null,
-															"prev_floor" => null, 
-															"prev_floor_via" => "",
-															"first_annotation" => null
-														);
-					}
 
-					$floors[$point->floor_id]["points"][] = $point;
+				if ($prev_point) {
+					$point->prev_point = array(
+												"id" => $prev_point->id,
+												"longitude" => $prev_point->longitude,
+												"latitude" => $prev_point->latitude,
+												"altitude" => $prev_point->altitude
+											);
+
+					$prev_point->next_point = array(
+												"id" => $point->id,
+												"longitude" => $point->longitude,
+												"latitude" => $point->latitude,
+												"altitude" => $point->altitude
+											);
+
+					if ($point_count > 0)
+						$points[$point_count - 1] = $prev_point;
+						
+					$distance += $this->getHaversineGreatCircleDistance($prev_point->latitude, $prev_point->longitude, $point->latitude, $point->longitude);
 				}
+
+				$points[] = $point;
+				$prev_point = $point;
+				$point_count++;
 			}
 
-			if ($prev_point)
-				$distance += $this->getHaversineGreatCircleDistance($prev_point->latitude, $prev_point->longitude, $point->latitude, $point->longitude);
+			$point_count = 0;
+			foreach ($points as $point) {
+				if ($point->prev_point && $point->longitude == $point->prev_point["longitude"]
+										&& $point->latitude == $point->prev_point["latitude"]
+					&& $point->next_point && $point->longitude == $point->next_point["longitude"]
+										&& $point->latitude == $point->next_point["latitude"])
+					array_splice($points, $point_count, 1);
 
-			$prev_point = $point;
+				$point_count++;
+			}
+
+			$floor_key = uniqid();
+			$prev_floor_id = null;
+			foreach ($points as $point) {
+				if ($prev_floor_id && $prev_floor_id != $point->floor_id)
+					$floor_key = uniqid();
+
+				if (!isset($floors[$floor_key])) {
+					$point->floor->reference = $floor_key;
+					$floors[$floor_key] = array(
+												"points" => [], 
+												"floor" => $point->floor, 
+												"next_floor" => null, 
+												"next_floor_via" => "",
+												"last_annotation" => null,
+												"prev_floor" => null, 
+												"prev_floor_via" => "",
+												"first_annotation" => null
+											);					
+				}
+
+				$floors[$floor_key]["points"][] = $point;
+				$prev_floor_id = $point->floor_id;				
+			}
 		}
 		else {
 			if ($route)
