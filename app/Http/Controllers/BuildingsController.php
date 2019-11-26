@@ -368,6 +368,7 @@ class BuildingsController extends Controller
 					$floor_key = uniqid();
 
 				if (!isset($floors[$floor_key])) {
+					$point->floor->reference = $floor_key;
 					$floors[$floor_key] = array(
 												"points" => [], 
 												"floor" => $point->floor, 
