@@ -270,7 +270,7 @@ class BuildingsController extends Controller
 					if ($point_count > 0)
 						$points[$point_count - 1] = $prev_point;
 
-					$distance += self->getHaversineGreatCircleDistance($prev_point->latitude, $prev_point->longitude, $point->latitude, $point->longitude);
+					$distance += self::getHaversineGreatCircleDistance($prev_point->latitude, $prev_point->longitude, $point->latitude, $point->longitude);
 				}
 
 				$points[] = $point;
@@ -537,7 +537,7 @@ class BuildingsController extends Controller
 		return array('status' => 'OK', 'routes' => $routes);
 	}
 
-	public function getHaversineGreatCircleDistance ($lat_from, $lng_from, $lat_to, $lng_to, $earth_rad = 6378137) {
+	public static function getHaversineGreatCircleDistance ($lat_from, $lng_from, $lat_to, $lng_to, $earth_rad = 6378137) {
 		$lat_from = deg2rad($lat_from);
 		$lng_from = deg2rad($lng_from);
 		$lat_to = deg2rad($lat_to);
