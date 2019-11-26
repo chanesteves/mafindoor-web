@@ -361,6 +361,7 @@ class BuildingsController extends Controller
 			}
 
 			$floor_key = 0;
+			$prev_floor_id = null;
 			foreach ($points as $point) {
 				if (!isset($floors[$floor_key])) {
 					$floors[$floor_key] = array(
@@ -372,11 +373,15 @@ class BuildingsController extends Controller
 												"prev_floor" => null, 
 												"prev_floor_via" => "",
 												"first_annotation" => null
-											);
-					$floor_key++;
+											);					
 				}
 
-				$floors[$floor_key - 1]["points"][] = $point;
+				$floors[$floor_key]["points"][] = $point;
+
+				if ($prev_floor_id && $prev_floor_id != $point->floor_id)
+					$floor_key++;
+
+				$prev_floor_id = $point->floor_id;				
 			}
 		}
 
