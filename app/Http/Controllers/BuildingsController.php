@@ -534,12 +534,8 @@ class BuildingsController extends Controller
 		}
 		else {
 			$route = $this->getRoute($id, $from, $to, 'none');
-			if ($route['status'] == 'OK' && count($route['floors']) > 0) {
+			if ($route['status'] == 'OK' && count($route['floors']) > 0)
 				$routes[] = $route;
-
-				if ($route['route_status'] == 'new')
-					break;
-			}
 		}
 		
 		if (count($routes) == 0) {
