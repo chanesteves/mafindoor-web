@@ -209,6 +209,8 @@ class BuildingsController extends Controller
 	}
 
 	public static function getRoute ($id, $from, $to, $via) {
+		$now = date('Y-m-d H:i:s');
+
 		$building = Building::find($id);
 		$route_status = '';
 
@@ -245,6 +247,9 @@ class BuildingsController extends Controller
 		$floors = [];
 		$distance = 0;
 		if ($route && $route->turns->count() > 0) {
+			$route->called_at = $now;
+			$route->save();
+
 			$route_status = 'old';
 			$distance = 0;		
 			$point_count = 0;
