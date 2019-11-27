@@ -123,7 +123,8 @@ class CreateRoute extends Command
 
         $processed = false;
         $vias = SubCategory::where('floor_trans', 1)->pluck('name')->toArray();
-        $vias[] = "";
+        $vias[] = "none";
+        $vias[] = "any";
         $via_count = 0;
         do {
             $processed = $this->createRoute($vias[$via_count]);
