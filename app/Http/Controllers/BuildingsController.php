@@ -402,8 +402,8 @@ class BuildingsController extends Controller
 					&& $point->next_point && $point->longitude == $point->next_point["longitude"]
 										&& $point->latitude == $point->next_point["latitude"])
 					array_splice($points, $point_count, 1);
-
-				$point_count++;
+				else
+					$point_count++;
 			}
 
 			$floor_key = uniqid();
