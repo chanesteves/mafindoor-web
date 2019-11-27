@@ -13,7 +13,9 @@ class AddCalledAtToRoutesTable extends Migration
      */
     public function up()
     {
-        //
+        Schema::table('routes', function (Blueprint $table) {
+            $table->timestamp('called_at')->nullable()->after('distance');
+        });
     }
 
     /**
@@ -23,6 +25,8 @@ class AddCalledAtToRoutesTable extends Migration
      */
     public function down()
     {
-        //
+        Schema::table('routes', function (Blueprint $table) {
+            $table->dropColumn('called_at');
+        });
     }
 }
