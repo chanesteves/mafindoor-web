@@ -471,6 +471,7 @@ class BuildingsController extends Controller
 	            $route->origin_point_id = $from->id;
 	            $route->destination_point_id = $to->id;
 	            $route->distance = $distance;
+	            $route->called_at = $now;
 
 	            if ($via && $via != '')
 	                $route->via = strtolower($via);
