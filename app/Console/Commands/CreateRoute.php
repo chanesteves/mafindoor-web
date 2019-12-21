@@ -215,11 +215,13 @@ class CreateRoute extends Command
         $min_entries_distance = 100;
 
         foreach ($destination_annotation->entries as $d_entry) {
-            $distance = sqrt(pow($origin_point->longitude - $d_entry->point->longitude, 2) + pow($origin_point->latitude - $d_entry->point->latitude, 2));
+            if ($d_entry->point) {
+                $distance = sqrt(pow($origin_point->longitude - $d_entry->point->longitude, 2) + pow($origin_point->latitude - $d_entry->point->latitude, 2));
 
-            if ($distance < $min_entries_distance) {
-                $min_entries_distance = $distance;
-                $destination_entry = $d_entry;
+                if ($distance < $min_entries_distance) {
+                    $min_entries_distance = $distance;
+                    $destination_entry = $d_entry;
+                }
             }
         }
 
